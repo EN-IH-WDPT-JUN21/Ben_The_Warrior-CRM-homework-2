@@ -1,7 +1,6 @@
 package com.ironhack.homework_2.utils;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.Collections;
 
 public class Printer {
@@ -50,10 +49,16 @@ public class Printer {
 
 
   public static void printCenterString(String text, int width, String borderStyle, String contentStyle) {
-    if (text.length() > width - 4) {      //split text to other rows
-      text = text.substring(0, width - 4);
-      System.out.println(printWarning() + "String must fit the program width of " + PROGRAM_WIDTH + " characters.");
+
+    String newText = divideText(text, width - 1);
+
+    while (!newText.equals(text.trim())) {
+      printCenterString(newText, width, borderStyle, contentStyle);
+      text = text.trim().substring(newText.length());
+      newText = divideText(text, width - 1);
     }
+
+
     StringBuilder str = new StringBuilder(borderStyle + " " + ANSI_RESET + contentStyle);
     int emptySpaces = width - text.length() - 2;
     boolean even = emptySpaces % 2 == 0;
@@ -92,19 +97,25 @@ public class Printer {
   }
 
   public static void printLine(String text) {
-
-
     printLeftString(text, 4, PROGRAM_WIDTH, BORDER_COLOR, "");
   }
+
 
   public static String divideText(String text, int emptySpaces) {
     if (text.trim().length() <= emptySpaces) return text.trim();
     String[] textArray = text.trim().split(" ");
+
+    // Return entire words of text that fit into empty spaces:
     StringBuilder smallText = new StringBuilder();
     int countLength = 0;
     for (String word : textArray) {
-      countLength = word.length() + 1;
-      if (countLength > emptySpaces) return smallText.toString();
+      // check if word length is greater than empty space and first word.
+      // If yes it will return only the part that fits and "-".
+      if (word.length() > emptySpaces && countLength == 0) return word.substring(0, emptySpaces - 2) + "-";
+
+      // Count words length and adds word to output text until it surpasses the empty spaces. Returns when full
+      countLength += word.length() + 1;
+      if (countLength > emptySpaces) return smallText.toString().trim();
       smallText.append(word).append(" ");
     }
     return "";
@@ -122,9 +133,9 @@ public class Printer {
   public static void clearCommandLine() throws IOException, InterruptedException {
     // Clear in Intellij
     System.out.println("==========================================================================================");
-    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
-    // TODO [JA] - Need to test both in diferent OS
+    // TODO [JA] - Need to test both in different OS
     // Method 1
     System.out.print("\033[H\033[2J");
     System.out.flush();
