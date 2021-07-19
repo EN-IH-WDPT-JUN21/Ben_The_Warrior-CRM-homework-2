@@ -44,41 +44,4 @@ class PrinterTest {
 
 
 
-
-  @Test
-  void printCenterString() {
-  }
-
-  @Test
-  void printLeftString() {
-  }
-
-  @Test
-  void printProgramTitle() {
-  }
-
-  @Test
-  void printEmptyLine() {
-  }
-
-  @Test
-  void printFullLine() {
-  }
-
-  @Test
-  void printLine() {
-  }
-
-
-  @Test
-  void printWarning() {
-  }
-
-  @Test
-  void printError() {
-  }
-
-  @Test
-  void clearCommandLine() {
-  }
 }

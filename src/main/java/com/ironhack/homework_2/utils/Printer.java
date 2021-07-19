@@ -45,20 +45,19 @@ public class Printer {
   public static final String ANSI_BRIGHT_BG_CYAN = "\u001B[106m";
   public static final String ANSI_BRIGHT_BG_WHITE = "\u001B[107m";
 
-  private static final String BORDER_COLOR = ANSI_BG_YELLOW;
+  private static final String BORDER_COLOR = ANSI_BG_WHITE;
 
 
   public static void printCenterString(String text, int width, String borderStyle, String contentStyle) {
-
+    // Divide the text if it is larger than program width. Uses recursion!
     String newText = divideText(text, width - 1);
-
     while (!newText.equals(text.trim())) {
       printCenterString(newText, width, borderStyle, contentStyle);
       text = text.trim().substring(newText.length());
       newText = divideText(text, width - 1);
     }
 
-
+    // Prints the given text centered by defining empty space and dividing it by 2 for each side. Stylizes the text.
     StringBuilder str = new StringBuilder(borderStyle + " " + ANSI_RESET + contentStyle);
     int emptySpaces = width - text.length() - 2;
     boolean even = emptySpaces % 2 == 0;
@@ -70,10 +69,15 @@ public class Printer {
   }
 
   public static void printLeftString(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
-    if (text.length() > width - leftSpaces - 4) {
-      text = text.substring(0, width - leftSpaces - 4);
-      System.out.println(printWarning() + "String must fit the program width of " + PROGRAM_WIDTH + " characters.");
+    // Divide the text if it is larger than program width. Uses recursion!
+    String newText = divideText(text, width - leftSpaces - 1);
+    while (!newText.equals(text.trim())) {
+      printLeftString(newText, leftSpaces, width, borderStyle, contentStyle);
+      text = text.trim().substring(newText.length());
+      newText = divideText(text, width - leftSpaces - 1);
     }
+
+    // Prints the given text centered by defining empty space and dividing it by 2 for each side. Stylizes the text.
     StringBuilder str = new StringBuilder(borderStyle + " " + ANSI_RESET + contentStyle);
     int rightSpaces = width - text.length() - leftSpaces - 2;
     str.append(String.join("", Collections.nCopies(leftSpaces, " ")));
@@ -110,8 +114,8 @@ public class Printer {
     int countLength = 0;
     for (String word : textArray) {
       // check if word length is greater than empty space and first word.
-      // If yes it will return only the part that fits and "-".
-      if (word.length() > emptySpaces && countLength == 0) return word.substring(0, emptySpaces - 2) + "-";
+      // If yes it will return only the part that fits.
+      if (word.length() > emptySpaces && countLength == 0) return word.substring(0, emptySpaces - 1);
 
       // Count words length and adds word to output text until it surpasses the empty spaces. Returns when full
       countLength += word.length() + 1;
