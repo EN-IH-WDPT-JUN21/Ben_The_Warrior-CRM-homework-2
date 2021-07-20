@@ -80,7 +80,6 @@ public class JsonDatabaseUtility {
     }
     //first version from already created lead
     public void addLead(Lead lead){
-        //error because lead has UUID not Integer
         Integer id=lead.getId();
         leadHash.putIfAbsent(id, lead);
     }
@@ -88,7 +87,6 @@ public class JsonDatabaseUtility {
     public void addLead(String name, String phoneNumber, String email, String companyName){
         Lead newLead= new Lead(name, phoneNumber, email, companyName);
         Integer id = setIdForNewLead(leadHash)+1;
-        //error because lead has UUID not Integer
         newLead.setId(id);
         leadHash.putIfAbsent(id, newLead);
     }
@@ -125,7 +123,6 @@ public class JsonDatabaseUtility {
     // ==================== Adds new Contact to HashMap for Contacts====================
     //first version from already created contact
     public void addContact(Contact contact){
-        //error because contact has UUID not Integer
         Integer id=contact.getId();
         contactHash.putIfAbsent(id, contact);
     }
@@ -136,7 +133,6 @@ public class JsonDatabaseUtility {
                 leadToConvert.getPhoneNumber(),
                 leadToConvert.getEmail(),
                 leadToConvert.getCompanyName());
-        //error because contact has UUID not Integer
         newContact.setId(id);
         contactHash.putIfAbsent(id, newContact);
     }
