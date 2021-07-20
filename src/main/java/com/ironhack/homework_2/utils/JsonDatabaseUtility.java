@@ -60,12 +60,19 @@ public class JsonDatabaseUtility {
     }
 
     // ==================== Adds new Lead to HashMap for Leads====================
-    //count of elements in HashMap for Leads to get new ID (plus checks if this number is not used)
+    //count of elements in HashMap for Leads nad Contacts (as they are converted into Contacts to get new ID (plus checks if this number is not used)
     public Integer setIdForNewLead (Map<Integer, Lead> leadHash){
-        Integer currentSize=leadHash.size();
-        for (Integer id : leadHash.keySet()) {
-            if(id>currentSize){
-                currentSize=id;
+        Integer currentLeadSize=leadHash.size();
+        Integer currentContactSize=contactHash.size();
+        Integer currentSize= currentLeadSize + currentContactSize;
+        for (Integer idLead : leadHash.keySet()) {
+            if(idLead>currentSize){
+                currentSize=idLead;
+            }
+        }
+        for (Integer idContact : contactHash.keySet()) {
+            if(idContact>currentSize){
+                currentSize=idContact;
             }
         }
         return currentSize;
@@ -80,7 +87,7 @@ public class JsonDatabaseUtility {
     //second version with creating new lead
     public void addLead(String name, String phoneNumber, String email, String companyName){
         Lead newLead= new Lead(name, phoneNumber, email, companyName);
-        Integer id = setIdForNewLead(leadHash);
+        Integer id = setIdForNewLead(leadHash)+1;
         //error because lead has UUID not Integer
         newLead.setId(id);
         leadHash.putIfAbsent(id, newLead);
@@ -93,7 +100,7 @@ public class JsonDatabaseUtility {
     // ====================  List of all Leads’ id and name ====================
     public void showLeads(){
         if(leadHash.size()>0){
-            System.out.println("List of all Leads’ id and name");
+            Printer.print("List of all Leads’ id and name");
             for (Lead lead : leadHash.values()) {
                 Printer.print("id: " + lead.getId() + ", name: "+lead.getName());
             }
