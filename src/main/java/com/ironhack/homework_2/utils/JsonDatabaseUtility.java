@@ -197,4 +197,29 @@ public class JsonDatabaseUtility {
 //        removeLead(id);
     }
 
+    public static void changeStatus(Status status, int id){
+
+    }
+
+    public static void convertLead(Integer id, Product product, int quantity, Industry industry, int employeeCount, String city, String country){
+
+    }
+
+    public static Lead lookupLead(int id){
+        return null;
+    }
+
+    public static void showLeads(){
+
+    }
+
+    public static int addOpportunity(Product product, int quantity){
+        return 0;
+    }
+    public static int addAccount(Industry industry, int numEmployees, String city, String country){
+        return 0;
+    }
+    public static int addLead(String name, String phoneNumber, String email, String companyName){
+        return 0;
+    }
 }
