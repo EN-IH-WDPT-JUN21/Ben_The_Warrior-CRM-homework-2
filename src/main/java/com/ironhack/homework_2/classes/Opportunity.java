@@ -49,4 +49,8 @@ public class Opportunity {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public UUID getId() {
+        return id;
+    }
 }
