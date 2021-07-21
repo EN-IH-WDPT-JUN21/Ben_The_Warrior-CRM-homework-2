@@ -7,7 +7,6 @@ import com.ironhack.homework_2.enums.Status;
 
 import java.util.HashMap;
 import java.util.Map;
-
 public class JsonDatabaseUtility {
     private Map<Integer, Lead> leadHash = new HashMap<>();
     private Map<Integer, Contact> contactHash = new HashMap<>();
@@ -197,29 +196,29 @@ public class JsonDatabaseUtility {
 //        removeLead(id);
     }
 
-    public static void changeStatus(Status status, int id){
-
+    public JsonDatabaseUtility() {
     }
 
-    public static void convertLead(Integer id, Product product, int quantity, Industry industry, int employeeCount, String city, String country){
-
+    public void updateStatus(Status status, int id){
     }
 
-    public static Lead lookupLead(int id){
+    public void convertLead(Integer id, Product product, int quantity, Industry industry, int employeeCount, String city, String country){
+    }
+
+    public Lead lookupLead(int id){
         return null;
     }
 
-    public static void showLeads(){
+    public void showLeads(){
+    }
+
+    public void addOpportunity(Product product, int quantity){
+    }
+
+    public void addAccount(Industry industry, int numEmployees, String city, String country){
 
     }
 
-    public static int addOpportunity(Product product, int quantity){
-        return 0;
-    }
-    public static int addAccount(Industry industry, int numEmployees, String city, String country){
-        return 0;
-    }
-    public static int addLead(String name, String phoneNumber, String email, String companyName){
-        return 0;
+    public void addLead(String name, String phoneNumber, String email, String companyName){
     }
 }

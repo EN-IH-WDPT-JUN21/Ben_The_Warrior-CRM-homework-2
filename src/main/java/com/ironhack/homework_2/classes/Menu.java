@@ -3,23 +3,25 @@ package com.ironhack.homework_2.classes;
 import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
+import com.ironhack.homework_2.utils.JsonDatabaseUtility;
 
 import java.util.Scanner;
 
-import static com.ironhack.homework_2.utils.JsonDatabaseUtility.*;
 import static com.ironhack.homework_2.utils.Printer.print;
 import static com.ironhack.homework_2.utils.Utils.*;
 
 public class Menu {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final JsonDatabaseUtility  db = new JsonDatabaseUtility();
 
     public static boolean isValidCommand(String command){
         String[] commandWords = command.trim().toLowerCase().split(" ");
         if (commandWords.length > 1){
             switch (commandWords[0]){
                 case "new":
+                    return commandWords[1].equals("lead");
                 case "show":
-                    return commandWords.length == 2;
+                    return commandWords[1].equals("leads");
                 case "lookup":
                     if (commandWords.length == 3){
                         switch (commandWords[1]){
@@ -43,7 +45,7 @@ public class Menu {
                     return false;
             }
         }else{
-            if ("help".equals(commandWords[0])) {
+            if (commandWords[0].equals("help")) {
                 return true;
             }
             return false;
@@ -64,13 +66,12 @@ public class Menu {
                         break;
                     case "show":
                         if (inputArray[1].equals("leads")){
-                            showLeads();
+                            db.showLeads();
                         }
                         break;
                     case "lookup":
                         if (inputArray[1].equals("lead")){
-                            if (validNumber(inputArray[2]))
-                            print(lookupLead(Integer.parseInt(inputArray[2])).toString());
+                            print(db.lookupLead(Integer.parseInt(inputArray[2])).toString());
                         }
                         break;
                     case "convert":
@@ -78,7 +79,7 @@ public class Menu {
                         break;
                     case "close_won":
                     case "close_lost":
-                        changeStatus(Status.valueOf(inputArray[0].toUpperCase()), Integer.parseInt(inputArray[1]));
+                        db.updateStatus(Status.valueOf(inputArray[0].toUpperCase()), Integer.parseInt(inputArray[1]));
                         break;
                     case "help":
                         print("List of available commands:\n" +
@@ -108,16 +109,16 @@ public class Menu {
         String city = promptString("Please provide the organization's city","");
         String country = promptString("Please provide the organization's country","");
 
-        convertLead(id, product, quantity, industry, employeeCount, city, country);
+        db.convertLead(id, product, quantity, industry, employeeCount, city, country);
     }
 
-    private static int promptLead() {
+    private static void promptLead() {
         // name, phoneNumber, email, and companyName
         String name = promptString("Please provide the name to be associated with the lead", "name");
         String phoneNumber = promptString("Please provide the phone number to associate with the lead", "phone");
         String email = promptString("Please provide the email to associate with the lead", "email");
         String companyName = promptString("Please provide the name of the company to associate with the lead", "");
-        return addLead(name, phoneNumber, email, companyName);
+        db.addLead(name, phoneNumber, email, companyName);
     }
 
     private static Product promptProduct(String prompt){
