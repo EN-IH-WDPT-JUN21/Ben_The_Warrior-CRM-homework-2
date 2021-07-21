@@ -19,9 +19,9 @@ public class Menu {
         if (commandWords.length > 1){
             switch (commandWords[0]){
                 case "new":
-                    return commandWords[1].equals("lead");
+                    return commandWords[1].equals("lead") && commandWords.length == 2;
                 case "show":
-                    return commandWords[1].equals("leads");
+                    return commandWords[1].equals("leads") && commandWords.length == 2;
                 case "lookup":
                     if (commandWords.length == 3){
                         switch (commandWords[1]){
@@ -34,10 +34,6 @@ public class Menu {
                     }
                     return false;
                 case "convert":
-                    if (commandWords.length == 3 && commandWords[1].equals("lead")){
-                        return validNumber(commandWords[2]);
-                    }
-                    return false;
                 case "close_won":
                 case "close_lost":
                     return validNumber(commandWords[1]);
