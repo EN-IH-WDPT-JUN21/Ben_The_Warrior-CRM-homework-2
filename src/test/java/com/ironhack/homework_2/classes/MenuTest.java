@@ -30,9 +30,4 @@ class MenuTest {
         assertFalse(Menu.isValidCommand("close won 1"));
         assertFalse(Menu.isValidCommand("show"));
     }
-
-
-    @Test
-    void computeCommand() {
-    }
 }
