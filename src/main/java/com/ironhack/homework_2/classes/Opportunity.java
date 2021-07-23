@@ -57,6 +57,7 @@ public class Opportunity {
 
     @Override
     public String toString() {
-        return "Id: " + id + ", Product: " + product + ", Quantity: " + quantity + ", Decision Maker: " + decisionMaker.getName() + ", Status: " + status;
+        return "Id: " + id + ", Product: " + product + ", Quantity: " + quantity + ", Decision Maker: " +
+            decisionMaker.getName() + ", Status: " + status;
     }
 }

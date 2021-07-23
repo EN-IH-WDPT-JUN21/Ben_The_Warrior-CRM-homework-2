@@ -77,4 +77,9 @@ public class Account {
         return opportunityList;
     }
 
+    @Override
+    public String toString() {
+        return "Id: " + id + ", Industry: " + industry + ", Number of Employees: " + employeeCount + ", City: " + city +
+            ", Country: " + country + ", Contacts: " + contactList.get(0).getName() + ", Opportunities: " + opportunityList.get(0).getProduct();
+    }
 }
