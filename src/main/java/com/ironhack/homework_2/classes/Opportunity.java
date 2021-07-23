@@ -60,4 +60,5 @@ public class Opportunity {
         return "Id: " + id + ", Product: " + product + ", Quantity: " + quantity + ", Decision Maker: " +
             decisionMaker.getName() + ", Status: " + status;
     }
+  
 }

@@ -3,7 +3,7 @@ package com.ironhack.homework_2.classes;
 import java.util.UUID;
 
 public class Lead {
-    private UUID id;
+    private Integer id;
     private String name;
     private String phoneNumber;
     private String email;
@@ -16,11 +16,11 @@ public class Lead {
         setCompanyName(companyName);
     }
 
-    public UUID getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
