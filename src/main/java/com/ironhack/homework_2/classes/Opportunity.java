@@ -19,6 +19,10 @@ public class Opportunity {
         setStatus(status);
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public Product getProduct() {
         return product;
     }

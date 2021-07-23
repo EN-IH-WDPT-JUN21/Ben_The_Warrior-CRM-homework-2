@@ -1,6 +1,9 @@
 package com.ironhack.homework_2.utils;
 
 import com.ironhack.homework_2.classes.Account;
+import com.ironhack.homework_2.classes.Contact;
+import com.ironhack.homework_2.classes.Lead;
+import com.ironhack.homework_2.classes.Opportunity;
 import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
@@ -608,5 +611,88 @@ public class Printer {
         printFullLine();
     }
 
+    public static void printOpportunityInfo(Opportunity opportunity) {
+        printProgramTitle();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        print(HIGHLIGHT_COLOR + "Opportunity ID - " + opportunity.getId() + HIGHLIGHT_COLOR);
+        printEmptyLine();
+        print("Product: " + INSERT_HIGHLIGHT_COLOR + opportunity.getProduct() + ANSI_RESET);
+        printEmptyLine();
+        print("Quantity: " + INSERT_HIGHLIGHT_COLOR + opportunity.getQuantity() + ANSI_RESET);
+        printEmptyLine();
+        print("Contact Name: " + INSERT_HIGHLIGHT_COLOR + opportunity.getDecisionMaker() + ANSI_RESET); // it can be the lead name if complicated we can delete
+        printEmptyLine();
+        print("Status: " + INSERT_HIGHLIGHT_COLOR + opportunity.getStatus() + ANSI_RESET);
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        print(HIGHLIGHT_COLOR + "ENTER - Go Back" + HIGHLIGHT_COLOR);
+        printEmptyLine();
+        printEmptyLine();
+        printFullLine();
+    }
+
+    public static void printContactInfo(Contact contact) {
+        printProgramTitle();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        print(HIGHLIGHT_COLOR + "Contact ID - " + contact.getId() + HIGHLIGHT_COLOR);
+        printEmptyLine();
+        print("Name: " + INSERT_HIGHLIGHT_COLOR + contact.getName() + ANSI_RESET);
+        printEmptyLine();
+        print("Email: " + INSERT_HIGHLIGHT_COLOR + contact.getEmail() + ANSI_RESET);
+        printEmptyLine();
+        print("Phone Number: " + INSERT_HIGHLIGHT_COLOR + contact.getPhoneNumber() + ANSI_RESET); // it can be the lead name if complicated we can delete
+        printEmptyLine();
+        print("Company Name: " + INSERT_HIGHLIGHT_COLOR + contact.getCompanyName() + ANSI_RESET);
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        print(HIGHLIGHT_COLOR + "ENTER - Go Back" + HIGHLIGHT_COLOR);
+        printEmptyLine();
+        printEmptyLine();
+        printFullLine();
+    }
+
+    public static void printLeadInfo(Lead lead) {
+        printProgramTitle();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        print(HIGHLIGHT_COLOR + "Lead ID - " + lead.getId() + HIGHLIGHT_COLOR);
+        printEmptyLine();
+        print("Name: " + INSERT_HIGHLIGHT_COLOR + lead.getName() + ANSI_RESET);
+        printEmptyLine();
+        print("Email: " + INSERT_HIGHLIGHT_COLOR + lead.getEmail() + ANSI_RESET);
+        printEmptyLine();
+        print("Phone Number: " + INSERT_HIGHLIGHT_COLOR + lead.getPhoneNumber() + ANSI_RESET);
+        printEmptyLine();
+        print("Company Name: " + INSERT_HIGHLIGHT_COLOR + lead.getCompanyName() + ANSI_RESET);
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        printEmptyLine();
+        print("Other commands:  " + HIGHLIGHT_COLOR + "/help  /back" + ANSI_RESET);
+        printEmptyLine();
+        printEmptyLine();
+        print(HIGHLIGHT_COLOR + "Insert Lead Company Name: " + HIGHLIGHT_COLOR);
+        printEmptyLine();
+        printEmptyLine();
+        printFullLine();
+    }
 
 }
