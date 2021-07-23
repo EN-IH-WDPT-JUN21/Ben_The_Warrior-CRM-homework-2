@@ -17,12 +17,13 @@ public class Account {
 
     public Account(Industry industry, int employeeCount, String city, String country, Contact contact, Opportunity opportunity){
         setId(UUID.randomUUID());
+        setIndustry(industry);
         setEmployeeCount(employeeCount);
         setCity(city);
         setCountry(country);
-        ArrayList<Contact> contactList = new ArrayList<Contact>();
+        contactList = new ArrayList<Contact>();
         contactList.add(contact);
-        ArrayList<Opportunity> opportunityList = new ArrayList<Opportunity>();
+        opportunityList = new ArrayList<Opportunity>();
         opportunityList.add(opportunity);
     }
 
