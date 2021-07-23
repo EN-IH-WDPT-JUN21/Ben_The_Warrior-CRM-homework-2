@@ -9,7 +9,7 @@ public class Contact {
     private String email;
     private String companyName;
 
-    public Contact(String name, String phoneNumber, String email, String companyName){
+    public Contact(String name, String phoneNumber, String email, String companyName) {
         setName(name);
         setPhoneNumber(phoneNumber);
         setEmail(email);
@@ -54,5 +54,10 @@ public class Contact {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    @Override
+    public String toString() {
+        return "Id: " + id + ", Name: " + name + ", Email: " + email + ", Phone: " + phoneNumber + ", Company: " + companyName;
     }
 }

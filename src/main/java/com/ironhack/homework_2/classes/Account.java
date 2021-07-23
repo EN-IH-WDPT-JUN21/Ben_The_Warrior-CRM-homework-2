@@ -1,4 +1,5 @@
 package com.ironhack.homework_2.classes;
+
 import com.ironhack.homework_2.enums.*;
 
 import java.util.ArrayList;
@@ -15,14 +16,15 @@ public class Account {
     private ArrayList<Contact> contactList;
     private ArrayList<Opportunity> opportunityList;
 
-    public Account(Industry industry, int employeeCount, String city, String country, Contact contact, Opportunity opportunity){
+    public Account(Industry industry, int employeeCount, String city, String country, Contact contact, Opportunity opportunity) {
         setId(UUID.randomUUID());
+        setIndustry(industry);
         setEmployeeCount(employeeCount);
         setCity(city);
         setCountry(country);
-        ArrayList<Contact> contactList = new ArrayList<Contact>();
+        contactList = new ArrayList<Contact>();
         contactList.add(contact);
-        ArrayList<Opportunity> opportunityList = new ArrayList<Opportunity>();
+        opportunityList = new ArrayList<Opportunity>();
         opportunityList.add(opportunity);
     }
 
@@ -75,4 +77,9 @@ public class Account {
         return opportunityList;
     }
 
+    @Override
+    public String toString() {
+        return "Id: " + id + ", Industry: " + industry + ", Number of Employees: " + employeeCount + ", City: " + city +
+            ", Country: " + country + ", Contacts: " + contactList.get(0).getName() + ", Opportunities: " + opportunityList.get(0).getProduct();
+    }
 }
