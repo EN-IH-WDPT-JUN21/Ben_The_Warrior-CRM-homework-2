@@ -2,11 +2,10 @@ package com.ironhack.homework_2.classes;
 
 import com.ironhack.homework_2.enums.*;
 
-import java.util.UUID;
 
 
 public class Opportunity {
-    private UUID id;
+    private Integer id;
     private Product product;
     private int quantity;
     private Contact decisionMaker;
@@ -18,8 +17,11 @@ public class Opportunity {
         setDecisionMaker(decisionMaker);
         setStatus(status);
     }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public UUID getId() {
+    public Integer getId() {
         return id;
     }
 
