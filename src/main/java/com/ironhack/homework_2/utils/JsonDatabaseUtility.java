@@ -95,29 +95,31 @@ public class JsonDatabaseUtility {
         leadHash.remove(id);
     }
     // ====================  List of all Leads’ id and name ====================
-    public void showLeads(){
+    public Integer showLeads(){
         if(leadHash.size()>0){
             Printer.print("List of all Leads’ id and name");
             for (Lead lead : leadHash.values()) {
                 Printer.print("id: " + lead.getId() + ", name: "+lead.getName());
             }
         }else{
-            Printer.print("List of Leads is empty");
+            Printer.print("Warning: List of Leads is empty");
         }
+        return leadHash.size();
     }
     // ====================  An individual Lead’s details by id ====================
-    public void lookupLeadId(Integer id){
-        if(leadHash.get(id).getName().isEmpty()){
-            Printer.print("There is no Lead with this ID");
+    public Integer lookupLeadId(Integer id){
+        Integer found=0;
+        if(!leadHash.containsKey(id)){
+            Printer.print("Warning: There is no Lead with Id: " +id);
             for (Lead lead : leadHash.values()) {
                 Printer.print("id: " + lead.getId() + ", name: "+lead.getName());
             }
         }else{
             Lead selectedLead=leadHash.get(id);
-            Printer.print("Details of Lead with ID: " + id + "are: name:" + selectedLead.getName() +", phoneNumber:" +
-                    selectedLead.getPhoneNumber() + ", e-mail: " + selectedLead.getEmail() +
-                    ", company name: " + selectedLead.getCompanyName());
+            Printer.print("Details of Lead with Id: " + selectedLead.toString());
+            found++;
         }
+        return found;
     }
     // ==================== Adds new Contact to HashMap for Contacts====================
     //first version from already created contact
@@ -188,7 +190,7 @@ public class JsonDatabaseUtility {
     }
 
 
-    // ==================== Converts Lead -> calls: addOpportunity, addAccount, addContact, removeLead====================
+    // ==================== Converts Lead -> calls: addOpportunity, addAccount, addContact, removeLead (in addContact method)====================
     public void convertLead(Integer id, Product product, int quantity, Industry industry, int employeeCount, String city, String country){
         addContact(id);
         Contact decisionMaker=contactHash.get(id);
@@ -197,4 +199,107 @@ public class JsonDatabaseUtility {
 //        removeLead(id);
     }
 
+    // ====================  List of all Opportunities’ id and details ====================
+    public Integer showOpportunities(){
+        if(opportunityHash.size()>0){
+            Printer.print("List of all Opportunities’ id and details:");
+            for (Opportunity opportunity : opportunityHash.values()) {
+                Printer.print(opportunity.toString());
+            }
+        }else{
+            Printer.print("Warning: List of Opportunities is empty");
+        }
+        return opportunityHash.size();
+    }
+    // ====================  An individual Opportunity’s details by id ====================
+    public Integer lookupOpportunityId(Integer id){
+        Integer found=0;
+        if(!opportunityHash.containsKey(id)){
+            Printer.print("Warning: There is no Opportunity with Id: " + id);
+            showOpportunities();
+        }else{
+            Opportunity selectedOpportunity=opportunityHash.get(id);
+            Printer.print("Details of selected Opportunity: " + selectedOpportunity.toString());
+            found++;
+        }
+        return found;
+    }
+    // ==================== Opportunity change status into close-lost====================
+    public Integer closeLostId(Integer id){
+        Integer changed=0;
+        if(!opportunityHash.containsKey(id)){
+            Printer.print("Warning: There is no Opportunity with Id: " + id);
+            showOpportunities();
+        }else{
+            Opportunity selectedOpportunity=opportunityHash.get(id);
+            selectedOpportunity.setStatus(Status.CLOSED_LOST);
+            Printer.print("Status of Opportunity with id: " + selectedOpportunity.getId() + " was changed into close-lost");
+            changed++;
+        }
+        return changed;
+    }
+    // ==================== Opportunity change status into close-won====================
+    public Integer closeWonId(Integer id){
+        Integer changed=0;
+        if(!opportunityHash.containsKey(id)){
+            Printer.print("Warning: There is no Opportunity with Id: " + id);
+            showOpportunities();
+        }else{
+            Opportunity selectedOpportunity=opportunityHash.get(id);
+            selectedOpportunity.setStatus(Status.CLOSED_WON);
+            Printer.print("Status of Opportunity with id: " + selectedOpportunity.getId() + " was changed into close-won");
+            changed++;
+        }
+        return changed;
+    }
+    // ====================  List of all Accounts’ id and details ====================
+    public Integer showAccounts(){
+        if(accountHash.size()>0){
+            Printer.print("List of all Accounts’ id and details:");
+            for (Account account : accountHash.values()) {
+                Printer.print(account.toString());
+            }
+        }else{
+            Printer.print("Warning: List of Accounts is empty");
+        }
+        return accountHash.size();
+    }
+    // ====================  An individual Account’s details by id ====================
+    public Integer lookupAccountId(Integer id){
+        Integer found=0;
+        if(!accountHash.containsKey(id)){
+            Printer.print("Warning: There is no Account with Id: " + id);
+            showAccounts();
+        }else{
+            Account selectedAccount=accountHash.get(id);
+            Printer.print("Details of selected Account: " + selectedAccount.toString());
+            found++;
+        }
+        return found;
+    }
+    // ====================  List of all Contacts’ id and details ====================
+    public Integer showContacts(){
+        if(contactHash.size()>0){
+            Printer.print("List of all Contacts’ id and details:");
+            for (Contact contact : contactHash.values()) {
+                Printer.print(contact.toString());
+            }
+        }else{
+            Printer.print("Warning: List of Contacts is empty");
+        }
+        return contactHash.size();
+    }
+    // ====================  An individual Contact’s details by id ====================
+    public Integer lookupContactId(Integer id){
+        Integer found=0;
+        if(!contactHash.containsKey(id)){
+            Printer.print("Warning: There is no Contact with Id: " + id);
+            showContacts();
+        }else{
+            Contact selectedContact=contactHash.get(id);
+            Printer.print("Details of selected Contact: " + selectedContact.toString());
+            found++;
+        }
+        return found;
+    }
 }

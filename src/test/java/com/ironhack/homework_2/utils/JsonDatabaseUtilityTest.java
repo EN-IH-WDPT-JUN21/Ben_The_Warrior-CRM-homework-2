@@ -5,6 +5,7 @@ import com.ironhack.homework_2.classes.Lead;
 import com.ironhack.homework_2.classes.Opportunity;
 import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
+import com.ironhack.homework_2.enums.Status;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,42 +23,6 @@ class JsonDatabaseUtilityTest {
     void setUp() {
         jsonDatabaseUtility= new JsonDatabaseUtility();
 
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
-    @Test
-    void getLeadHashTest() {
-    }
-
-    @Test
-    void setLeadHashTest() {
-    }
-
-    @Test
-    void getContactHashTest() {
-    }
-
-    @Test
-    void setContactHashTest() {
-    }
-
-    @Test
-    void getOpportunityHashTest() {
-    }
-
-    @Test
-    void setOpportunityHashTest() {
-    }
-
-    @Test
-    void getAccountHashTest() {
-    }
-
-    @Test
-    void setAccountHashTest() {
     }
 
     @Test
@@ -102,9 +67,12 @@ class JsonDatabaseUtilityTest {
 
     @Test
     void showLeadsTest() {
+        Printer.print("Leads before: ");
+        assertEquals(0,jsonDatabaseUtility.showLeads());
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
         jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
-        jsonDatabaseUtility.showLeads();
+        Printer.print("Leads after: ");
+        assertEquals(2,jsonDatabaseUtility.showLeads());
 
     }
 
@@ -112,7 +80,9 @@ class JsonDatabaseUtilityTest {
     void lookupLeadIdTest() {
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
         jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
-        jsonDatabaseUtility.lookupLeadId(2);
+        assertEquals(1, jsonDatabaseUtility.lookupLeadId(2));
+        //        for not existing id warning
+        assertEquals(0, jsonDatabaseUtility.lookupLeadId(3));
     }
 
     @Test
@@ -193,5 +163,130 @@ class JsonDatabaseUtilityTest {
         assertEquals(-1, leadHashSizeAfter-leadHashSizeBefore);
         assertEquals(1, opportunityHashSizeAfter-opportunityHashSizeBefore);
         assertEquals(1, accountHashSizeAfter-accountHashSizeBefore);
+    }
+
+    @Test
+    void showOpportunitiesTest() {
+        Printer.print("Opportunities before: ");
+        assertEquals(0, jsonDatabaseUtility.showOpportunities());
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.addContact(1);
+        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        jsonDatabaseUtility.addOpportunity(Product.HYBRID, 12, contact1);
+// second opportunity
+        jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
+        jsonDatabaseUtility.addContact(2);
+        Contact contact2=jsonDatabaseUtility.getContactHash().get(2);
+        jsonDatabaseUtility.addOpportunity(Product.FLATBED, 3, contact2);
+        Printer.print("Opportunities after: ");
+        assertEquals(2, jsonDatabaseUtility.showOpportunities());
+
+    }
+    @Test
+    void lookupOpportunityIdTest() {
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.addContact(1);
+        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        jsonDatabaseUtility.addOpportunity(Product.HYBRID, 12, contact1);
+// second opportunity
+        jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
+        jsonDatabaseUtility.addContact(2);
+        Contact contact2=jsonDatabaseUtility.getContactHash().get(2);
+        jsonDatabaseUtility.addOpportunity(Product.FLATBED, 3, contact2);
+        assertEquals(1, jsonDatabaseUtility.lookupOpportunityId(2));
+        //        for not existing id warning
+        assertEquals(0, jsonDatabaseUtility.lookupOpportunityId(3));
+    }
+
+    @Test
+    void closeLostIdTest() {
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.addContact(1);
+        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        jsonDatabaseUtility.addOpportunity(Product.HYBRID, 12, contact1);
+        Opportunity opportunity= jsonDatabaseUtility.getOpportunityHash().get(1);
+        assertEquals(1, jsonDatabaseUtility.closeLostId(1));
+        assertEquals(Status.CLOSED_LOST, opportunity.getStatus());
+//        for not existing id warning
+        assertEquals(0, jsonDatabaseUtility.closeLostId(2));
+    }
+
+    @Test
+    void closeWonIdTest() {
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.addContact(1);
+        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        jsonDatabaseUtility.addOpportunity(Product.HYBRID, 12, contact1);
+        Opportunity opportunity= jsonDatabaseUtility.getOpportunityHash().get(1);
+        assertEquals(1, jsonDatabaseUtility.closeWonId(1));
+        assertEquals(Status.CLOSED_WON, opportunity.getStatus());
+        //        for not existing id only warning
+        assertEquals(0, jsonDatabaseUtility.closeWonId(2));
+    }
+
+    @Test
+    void showAccountsTest() {
+        Printer.print("Accounts before: ");
+        assertEquals(0, jsonDatabaseUtility.showAccounts());
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.addContact(1);
+        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        jsonDatabaseUtility.addOpportunity(Product.HYBRID, 12, contact1);
+        Opportunity opportunity1=jsonDatabaseUtility.getOpportunityHash().get(1);
+        jsonDatabaseUtility.addAccount(Industry.MEDICAL, 12, "Warsaw", "Poland", contact1, opportunity1);
+// second account
+        jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
+        jsonDatabaseUtility.addContact(2);
+        Contact contact2=jsonDatabaseUtility.getContactHash().get(2);
+        jsonDatabaseUtility.addOpportunity(Product.FLATBED, 3, contact2);
+        Opportunity opportunity2=jsonDatabaseUtility.getOpportunityHash().get(2);
+        jsonDatabaseUtility.addAccount(Industry.ECOMMERCE, 32, "London", "UK", contact2, opportunity2);
+        Printer.print("Accounts after: ");
+        assertEquals(2, jsonDatabaseUtility.showAccounts());
+
+    }
+    @Test
+    void lookupAccountIdTest() {
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.addContact(1);
+        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        jsonDatabaseUtility.addOpportunity(Product.HYBRID, 12, contact1);
+        Opportunity opportunity1=jsonDatabaseUtility.getOpportunityHash().get(1);
+        jsonDatabaseUtility.addAccount(Industry.MEDICAL, 12, "Warsaw", "Poland", contact1, opportunity1);
+// second account
+        jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
+        jsonDatabaseUtility.addContact(2);
+        Contact contact2=jsonDatabaseUtility.getContactHash().get(2);
+        jsonDatabaseUtility.addOpportunity(Product.FLATBED, 3, contact2);
+        Opportunity opportunity2=jsonDatabaseUtility.getOpportunityHash().get(2);
+        jsonDatabaseUtility.addAccount(Industry.ECOMMERCE, 32, "London", "UK", contact2, opportunity2);
+        assertEquals(1, jsonDatabaseUtility.lookupAccountId(2));
+        //        for not existing id warning
+        assertEquals(0, jsonDatabaseUtility.lookupAccountId(3));
+    }
+    @Test
+    void showContactsTest() {
+        Printer.print("Contacts before: ");
+        assertEquals(0, jsonDatabaseUtility.showContacts());
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.addContact(1);
+// second contact
+        jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
+        jsonDatabaseUtility.addContact(2);
+        Printer.print("Contacts after: ");
+        assertEquals(2, jsonDatabaseUtility.showContacts());
+
+    }
+
+    @Test
+    void lookupContactIdTest() {
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.addContact(1);
+ // second account
+        jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
+        jsonDatabaseUtility.addContact(2);
+        assertEquals(1, jsonDatabaseUtility.lookupContactId(2));
+        //        for not existing id warning
+        assertEquals(0, jsonDatabaseUtility.lookupContactId(3));
     }
 }
