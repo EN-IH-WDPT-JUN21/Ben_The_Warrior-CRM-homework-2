@@ -4,11 +4,10 @@ import com.ironhack.homework_2.enums.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 public class Account {
-    private UUID id;
+    private Integer id;
     private Industry industry;
     private int employeeCount;
     private String city;
@@ -17,7 +16,7 @@ public class Account {
     private ArrayList<Opportunity> opportunityList;
 
     public Account(Industry industry, int employeeCount, String city, String country, Contact contact, Opportunity opportunity) {
-        setId(UUID.randomUUID());
+        setId(id);
         setIndustry(industry);
         setEmployeeCount(employeeCount);
         setCity(city);
@@ -28,11 +27,11 @@ public class Account {
         opportunityList.add(opportunity);
     }
 
-    public UUID getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

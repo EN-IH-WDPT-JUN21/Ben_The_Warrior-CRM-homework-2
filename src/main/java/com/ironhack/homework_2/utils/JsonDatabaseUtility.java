@@ -7,20 +7,19 @@ import com.ironhack.homework_2.enums.Status;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class JsonDatabaseUtility {
     private Map<Integer, Lead> leadHash = new HashMap<>();
     private Map<Integer, Contact> contactHash = new HashMap<>();
-    private Map<UUID, Opportunity> opportunityHash = new HashMap<>();
-    private Map<UUID, Account> accountHash = new HashMap<>();
+    private Map<Integer, Opportunity> opportunityHash = new HashMap<>();
+    private Map<Integer, Account> accountHash = new HashMap<>();
 
     // ========== CONSTRUCTORS ==========
     public JsonDatabaseUtility() {
     }
 
     public JsonDatabaseUtility(Map<Integer, Lead> leadHash, Map<Integer, Contact> contactHash,
-                               Map<UUID, Opportunity> opportunityHash, Map<UUID, Account> accountHash) {
+                               Map<Integer, Opportunity> opportunityHash, Map<Integer, Account> accountHash) {
         setLeadHash(leadHash);
         setContactHash(contactHash);
         setOpportunityHash(opportunityHash);
@@ -43,19 +42,19 @@ public class JsonDatabaseUtility {
         this.contactHash = contactHash;
     }
 
-    public Map<UUID, Opportunity> getOpportunityHash() {
+    public Map<Integer, Opportunity> getOpportunityHash() {
         return opportunityHash;
     }
 
-    public void setOpportunityHash(Map<UUID, Opportunity> opportunityHash) {
+    public void setOpportunityHash(Map<Integer, Opportunity> opportunityHash) {
         this.opportunityHash = opportunityHash;
     }
 
-    public Map<UUID, Account> getAccountHash() {
+    public Map<Integer, Account> getAccountHash() {
         return accountHash;
     }
 
-    public void setAccountHash(Map<UUID, Account> accountHash) {
+    public void setAccountHash(Map<Integer, Account> accountHash) {
         this.accountHash = accountHash;
     }
 
@@ -135,30 +134,56 @@ public class JsonDatabaseUtility {
                 leadToConvert.getCompanyName());
         newContact.setId(id);
         contactHash.putIfAbsent(id, newContact);
+        if(contactHash.get(id).getName().equals(leadToConvert.getName())){
+        removeLead(id);}
     }
     // ==================== Adds new Opportunity to HashMap for Opportunities====================
+    //count of elements in HashMap for Opportunities (plus checks if this number is not used)
+    public Integer setIdForNewOpportunity (Map<Integer, Opportunity> opportunityHash){
+        Integer currentOpportunitySize=opportunityHash.size();
+        for (Integer idOpportunity : opportunityHash.keySet()) {
+            if(idOpportunity>currentOpportunitySize){
+                currentOpportunitySize=idOpportunity;
+            }
+        }
+        return currentOpportunitySize;
+
+    }
     //first version from already created opportunity
     public void addOpportunity(Opportunity opportunity){
-        UUID id=opportunity.getId();
+        Integer id=opportunity.getId();
         opportunityHash.putIfAbsent(id, opportunity);
     }
     //second version with creating new opportunity
     public Opportunity addOpportunity(Product product, int quantity, Contact decisionMaker){
         Opportunity newOpportunity= new Opportunity( product, quantity, decisionMaker, Status.OPEN);
-        UUID id = newOpportunity.getId();
+        Integer id = setIdForNewOpportunity(opportunityHash)+1;
+        newOpportunity.setId(id);
         opportunityHash.putIfAbsent(id, newOpportunity);
         return newOpportunity;
     }
     // ==================== Adds new Account to HashMap for Accounts====================
+    //count of elements in HashMap for Accounts (plus checks if this number is not used)
+    public Integer setIdForNewAccount (Map<Integer, Account> accountHash){
+        Integer currentAccountSize=accountHash.size();
+        for (Integer idAccount : accountHash.keySet()) {
+            if(idAccount>currentAccountSize){
+                currentAccountSize=idAccount;
+            }
+        }
+        return currentAccountSize;
+
+    }
     //first version from already created account
     public void addAccount(Account account){
-        UUID id=account.getId();
+        Integer id=account.getId();
         accountHash.put(id, account);
     }
     //second version with creating new account
     public void addAccount(Industry industry, int employeeCount, String city, String country, Contact contact, Opportunity opportunity){
         Account newAccount= new Account(industry, employeeCount, city, country, contact, opportunity);
-        UUID id = newAccount.getId();
+        Integer id = setIdForNewAccount(accountHash)+1;
+        newAccount.setId(id);
         accountHash.putIfAbsent(id, newAccount);
     }
 
@@ -169,7 +194,7 @@ public class JsonDatabaseUtility {
         Contact decisionMaker=contactHash.get(id);
         Opportunity newOpportunity=addOpportunity(product, quantity, decisionMaker);
         addAccount(industry, employeeCount, city, country, decisionMaker, newOpportunity);
-        removeLead(id);
+//        removeLead(id);
     }
 
 }
