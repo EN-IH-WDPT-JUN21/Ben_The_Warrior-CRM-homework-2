@@ -15,8 +15,10 @@ public class Printer {
     // Maybe create a Enum called color pallet?     // TODO [JA] - Create enum with values? Maybe delete the ones not in use
     private static final JPanel panel = new JPanel();
 
-    private static final int PROGRAM_WIDTH = 100;
+    private static final int PROGRAM_WIDTH = 150;
     private static final int PROGRAM_HEIGHT = 23;
+    private static final int BORDER_WIDTH = 2;
+    private static final int BORDER_TO_TEXT_SPACES = 4;
 
     private static final String ANSI_RESET = "\u001B[0m";
     // ==================== Text Colors ====================
@@ -84,7 +86,7 @@ public class Printer {
     }
 
     public static void print(String text) {
-        printLeftString(text, 4, PROGRAM_WIDTH, BORDER_COLOR, "");
+        printLeftString(text, BORDER_TO_TEXT_SPACES, PROGRAM_WIDTH, BORDER_COLOR, "");
     }
 
     public static void print(String text, int margin) {
@@ -176,7 +178,7 @@ public class Printer {
     // Uses recursion to print the different lines. (uses aux method -> divideText(text, maxWidth) )
     public static void printLeftString(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
         // Divide the text if it is larger than program width.
-        String newText = divideText(text, width - leftSpaces - 3);
+        String newText = divideText(text, width - leftSpaces * 2);
         // Recursion!
         while (!newText.equals(text.trim())) {  //loops while it is larger than width
             printLeftString(newText, leftSpaces, width, borderStyle, contentStyle);  //prints first line
@@ -208,7 +210,7 @@ public class Printer {
         for (String word : textArray) {
             // check if word length is greater than empty space and first word.
             // If yes it will return only the part that fits.
-            if (word.length() > emptySpaces && countLength == 0) return word.substring(0, emptySpaces - 1);
+            if (word.length() > emptySpaces && countLength == 0) return word.substring(0, emptySpaces - BORDER_WIDTH * 2);
 
             // Count words length and adds word to output text until it surpasses the empty spaces. Returns when full
             countLength += word.length() + 1;
@@ -216,6 +218,11 @@ public class Printer {
             smallText.append(word).append(" ");
         }
         return "";
+    }
+
+    public static int textDividedInto(String text){
+        text = text.replace(HIGHLIGHT_COLOR,"").replace(ANSI_RESET,"").replace(INSERT_HIGHLIGHT_COLOR, "");
+        return (text.trim().length() / (PROGRAM_WIDTH - 2*BORDER_WIDTH - 2*BORDER_TO_TEXT_SPACES)) + 1;
     }
 
     public static void warningMessage(String message){
