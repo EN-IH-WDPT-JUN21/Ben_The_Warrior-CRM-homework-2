@@ -7,8 +7,7 @@ import com.ironhack.homework_2.utils.JsonDatabaseUtility;
 import com.ironhack.homework_2.utils.Printer;
 import com.ironhack.homework_2.utils.PrinterMenu;
 
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 import static com.ironhack.homework_2.utils.Utils.*;
 
@@ -51,16 +50,16 @@ public class Menu {
             case "show":
                 switch (inputArray[1]){
                     case "leads":
-
+                        showLeadsMenu();
                         break;
                     case "opportunities":
-
+                        showOpportunitiesMenu();
                         break;
                     case "contacts":
-
+                        showContactsMenu();
                         break;
                     case "accounts":
-
+                        showAccountsMenu();
                         break;
                 }
                 break;
@@ -131,19 +130,249 @@ public class Menu {
         return true;
     }
 
-    private static void showObjectsMenu(Map<Integer, Object> objectMap) {
-        /*int page = 0;
-        boolean hasMorePages = PrinterMenu.printMultipleObjects(objectMap, page);
-        boolean running = true;
-        while (running){
-            if (hasMorePages && page != 0){
+    private static void showLeadsMenu() {
+        int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
+        int currentIndex = 0;
+        int currentPage = 0;
+        TreeMap<Integer,Lead> leadTreeMap = new TreeMap<>(db.getLeadHash());
+        List<ArrayList<Lead>> listListLead = new ArrayList<>();
+        listListLead.add(new ArrayList<>());
+        Set<Map.Entry<Integer, Lead>> entryLeadSet = leadTreeMap.entrySet();
 
-            }else if (hasMorePages){
-
-            }else {
-
+        // for-each loop
+        for(Map.Entry<Integer, Lead> entry : entryLeadSet) {
+            if (currentIndex++ < maxElements){
+                listListLead.get(currentPage).add(entry.getValue());
+            }else{
+                listListLead.add(new ArrayList<>());
+                listListLead.get(++currentPage).add(entry.getValue());
             }
-        }*/
+        }
+        currentPage = 0;
+        int numPages = listListLead.size();
+        int decision;
+        while(true){
+            PrinterMenu.showLeads(listListLead.get(currentPage), currentPage == 0, currentPage + 1 == numPages);
+            if(listListLead.size() > 1){
+                if (currentPage == 0){
+                    decision = promptMultipleDecisions("next","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else if (currentPage + 1 == numPages){
+                    decision = promptMultipleDecisions("previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage--;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else{
+                    decision = promptMultipleDecisions("next","previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            currentPage--;
+                        case 2:
+                            return;
+                    }
+                }
+            }else{
+                promptDecision("enter");
+                return;
+            }
+        }
+    }
+    private static void showOpportunitiesMenu(){
+        int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
+        int currentIndex = 0;
+        int currentPage = 0;
+        TreeMap<Integer,Opportunity> opportunityTreeMap = new TreeMap<>(db.getOpportunityHash());
+        List<ArrayList<Opportunity>> listListOpportunity = new ArrayList<>();
+        listListOpportunity.add(new ArrayList<>());
+        Set<Map.Entry<Integer, Opportunity>> entryOpportunitySet = opportunityTreeMap.entrySet();
+
+        // for-each loop
+        for(Map.Entry<Integer, Opportunity> entry : entryOpportunitySet) {
+            if (currentIndex++ < maxElements){
+                listListOpportunity.get(currentPage).add(entry.getValue());
+            }else{
+                listListOpportunity.add(new ArrayList<>());
+                listListOpportunity.get(++currentPage).add(entry.getValue());
+            }
+        }
+        currentPage = 0;
+        int numPages = listListOpportunity.size();
+        int decision;
+        while(true){
+            PrinterMenu.showOpportunities(listListOpportunity.get(currentPage), currentPage == 0, currentPage + 1 == numPages);
+            if(listListOpportunity.size() > 1){
+                if (currentPage == 0){
+                    decision = promptMultipleDecisions("next","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else if (currentPage + 1 == numPages){
+                    decision = promptMultipleDecisions("previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage--;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else{
+                    decision = promptMultipleDecisions("next","previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            currentPage--;
+                        case 2:
+                            return;
+                    }
+                }
+            }else{
+                promptDecision("enter");
+                return;
+            }
+        }
+    }
+    private static void showAccountsMenu(){
+        int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
+        int currentIndex = 0;
+        int currentPage = 0;
+        TreeMap<Integer,Account> accountTreeMap = new TreeMap<>(db.getAccountHash());
+        List<ArrayList<Account>> listListAccount = new ArrayList<>();
+        listListAccount.add(new ArrayList<>());
+        Set<Map.Entry<Integer, Account>> entryAccountSet = accountTreeMap.entrySet();
+
+        // for-each loop
+        for(Map.Entry<Integer, Account> entry : entryAccountSet) {
+            if (currentIndex++ < maxElements){
+                listListAccount.get(currentPage).add(entry.getValue());
+            }else{
+                listListAccount.add(new ArrayList<>());
+                listListAccount.get(++currentPage).add(entry.getValue());
+            }
+        }
+        currentPage = 0;
+        int numPages = listListAccount.size();
+        int decision;
+        while(true){
+            PrinterMenu.showAccounts(listListAccount.get(currentPage), currentPage == 0, currentPage + 1 == numPages);
+            if(listListAccount.size() > 1){
+                if (currentPage == 0){
+                    decision = promptMultipleDecisions("next","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else if (currentPage + 1 == numPages){
+                    decision = promptMultipleDecisions("previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage--;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else{
+                    decision = promptMultipleDecisions("next","previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            currentPage--;
+                        case 2:
+                            return;
+                    }
+                }
+            }else{
+                promptDecision("enter");
+                return;
+            }
+        }
+    }
+    private static void showContactsMenu(){
+        int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
+        int currentIndex = 0;
+        int currentPage = 0;
+        TreeMap<Integer,Contact> contactTreeMap = new TreeMap<>(db.getContactHash());
+        List<ArrayList<Contact>> listListContact = new ArrayList<>();
+        listListContact.add(new ArrayList<>());
+        Set<Map.Entry<Integer, Contact>> entryContactSet = contactTreeMap.entrySet();
+
+        // for-each loop
+        for(Map.Entry<Integer, Contact> entry : entryContactSet) {
+            if (currentIndex++ < maxElements){
+                listListContact.get(currentPage).add(entry.getValue());
+            }else{
+                listListContact.add(new ArrayList<>());
+                listListContact.get(++currentPage).add(entry.getValue());
+            }
+        }
+        currentPage = 0;
+        int numPages = listListContact.size();
+        int decision;
+        while(true){
+            PrinterMenu.showContacts(listListContact.get(currentPage), currentPage == 0, currentPage + 1 == numPages);
+            if(listListContact.size() > 1){
+                if (currentPage == 0){
+                    decision = promptMultipleDecisions("next","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else if (currentPage + 1 == numPages){
+                    decision = promptMultipleDecisions("previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage--;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else{
+                    decision = promptMultipleDecisions("next","previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            currentPage--;
+                        case 2:
+                            return;
+                    }
+                }
+            }else{
+                promptDecision("enter");
+                return;
+            }
+        }
+    }
+
+    private static void showObjectsMenu(ArrayList<Object> objectList) {
+
     }
 
     private static void promptConvert(int id) {
@@ -213,21 +442,20 @@ public class Menu {
         return false;
     }
 
-    private static int promptAccountDecision(){
+    private static int promptMultipleDecisions(String... choices){
+        if (choices.length == 0){
+            throw new IllegalArgumentException();
+        }
         String input;
-        do {
+        while(true){
             input = scanner.nextLine().trim().toLowerCase();
-            switch (input) {
-                case "":
-                    return 0;
-                case "opportunity":
-                    return 1;
-                case "contact":
-                    return 2;
-                case "both":
-                    return 4;
+            for (int i = 0; i < choices.length; i++) {
+                if (input.equals(choices[i].trim().toLowerCase())){
+                    return i;
+                }
             }
-        } while (true);
+
+        }
     }
 
     private static Product promptProduct() {
