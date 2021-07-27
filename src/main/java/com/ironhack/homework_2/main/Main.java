@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.ironhack.homework_2.classes.Account;
-import com.ironhack.homework_2.classes.Contact;
-import com.ironhack.homework_2.classes.Lead;
-import com.ironhack.homework_2.classes.Opportunity;
+import com.ironhack.homework_2.classes.*;
 import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
@@ -19,7 +16,7 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
 
 
-        // ======================================== PrinterMenu testing ========================================
+        /*// ======================================== PrinterMenu testing ========================================
         Printer.printWarning();
         PrinterMenu.clearCommandLine();
         Printer.printError();
@@ -54,8 +51,8 @@ public class Main {
         PrinterMenu.printLeadInfo(l);
         PrinterMenu.printContactInfo(c);
         PrinterMenu.printOpportunityInfo(o);
-        PrinterMenu.printAccountInfo(a);
+        PrinterMenu.printAccountInfo(a);*/
 
-
+        Menu.mainMenu();
     }
 }

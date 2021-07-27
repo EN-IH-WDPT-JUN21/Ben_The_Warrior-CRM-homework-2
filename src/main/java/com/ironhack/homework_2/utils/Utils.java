@@ -40,4 +40,51 @@ public class Utils {
     public static boolean validString(String str){
         return true;
     }
+
+
+    // Check for the command syntax in terms of number of parameters and validity of parameters
+    public static boolean isValidCommand(String command){
+
+        String[] commandWords = command.trim().toLowerCase().split(" ");
+        if (commandWords.length > 1){
+            switch (commandWords[0]){
+                case "new":
+                    return commandWords[1].equals("lead") && commandWords.length == 2;
+                case "show":
+                    switch (commandWords[1]){
+                        case "leads":
+                        case "opportunities":
+                        case "accounts":
+                        case "contacts":
+                            return commandWords.length == 2;
+                    }
+                case "lookup":
+                    if (commandWords.length == 3){
+                        switch (commandWords[1]){
+                            case "lead":
+                            case "opportunity":
+                            case "account":
+                            case "contact":
+                                return validNumber(commandWords[2]);
+                        }
+                    }
+                    return false;
+                case "convert":
+                case "close_won":
+                case "close_lost":
+                    return validNumber(commandWords[1]);
+                default:
+                    return false;
+            }
+        }else{
+            switch (commandWords[0]) {
+                case "help":
+                case "exit":
+                case "save":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    }
 }

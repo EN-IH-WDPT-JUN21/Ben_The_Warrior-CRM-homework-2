@@ -7,6 +7,8 @@ import com.ironhack.homework_2.enums.Status;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
 public class JsonDatabaseUtility {
     private Map<Integer, Lead> leadHash = new HashMap<>();
     private Map<Integer, Contact> contactHash = new HashMap<>();
@@ -105,19 +107,54 @@ public class JsonDatabaseUtility {
         }
     }
     // ====================  An individual Lead’s details by id ====================
-    public void lookupLeadId(Integer id){
-        if(leadHash.get(id).getName().isEmpty()){
-            Printer.print("There is no Lead with this ID");
+    public Lead lookupLeadId(Integer id){
+        if(!hasLead(id)){
+            Printer.warningMessage("There is no Lead with id " + id);
             for (Lead lead : leadHash.values()) {
                 Printer.print("id: " + lead.getId() + ", name: "+lead.getName());
             }
+            return null;
         }else{
-            Lead selectedLead=leadHash.get(id);
-            Printer.print("Details of Lead with ID: " + id + "are: name:" + selectedLead.getName() +", phoneNumber:" +
-                    selectedLead.getPhoneNumber() + ", e-mail: " + selectedLead.getEmail() +
-                    ", company name: " + selectedLead.getCompanyName());
+            return leadHash.get(id);
         }
     }
+
+    public Opportunity lookupOpportunityId(int id) {
+        if(!hasOpportunity(id)){
+            Printer.warningMessage("There is no Opportunity with this ID");
+            for (Opportunity opportunity : opportunityHash.values()) {
+                Printer.print("id: " + opportunity.getId() + ", name: "+opportunity.getDecisionMaker().getName());
+            }
+            return null;
+        }else{
+            return opportunityHash.get(id);
+        }
+    }
+
+    public Contact lookupContactId(int id) {
+        if(!hasContact(id)){
+            Printer.warningMessage("There is no Contact with this ID");
+            for (Contact contact : contactHash.values()) {
+                Printer.print("id: " + contact.getId() + ", name: "+contact.getName());
+            }
+            return null;
+        }else{
+            return contactHash.get(id);
+        }
+    }
+
+    public Account lookupAccountId(int id) {
+        if(!hasAccount(id)){
+            Printer.warningMessage("There is no Account with this ID");
+            for (Account account : accountHash.values()) {
+                Printer.print("id: " + account.getId() + account.toString());
+            }
+            return null;
+        }else{
+            return accountHash.get(id);
+        }
+    }
+
     // ==================== Adds new Contact to HashMap for Contacts====================
     //first version from already created contact
     public void addContact(Contact contact){
@@ -132,6 +169,7 @@ public class JsonDatabaseUtility {
                 leadToConvert.getEmail(),
                 leadToConvert.getCompanyName());
         newContact.setId(id);
+
         contactHash.putIfAbsent(id, newContact);
         if(contactHash.get(id).getName().equals(leadToConvert.getName())){
         removeLead(id);}
@@ -186,7 +224,6 @@ public class JsonDatabaseUtility {
         accountHash.putIfAbsent(id, newAccount);
     }
 
-
     // ==================== Converts Lead -> calls: addOpportunity, addAccount, addContact, removeLead====================
     public void convertLead(Integer id, Product product, int quantity, Industry industry, int employeeCount, String city, String country){
         addContact(id);
@@ -196,20 +233,37 @@ public class JsonDatabaseUtility {
 //        removeLead(id);
     }
 
-    public JsonDatabaseUtility() {
+    public boolean hasLead(int id){
+        if(leadHash.get(id) == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public boolean hasContact(int id){
+        if(leadHash.get(id) == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    public boolean hasAccount(int id){
+        if(leadHash.get(id) == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    public boolean hasOpportunity(int id){
+        if(leadHash.get(id) == null){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     public void updateStatus(Status status, int id){
-    }
-
-    public void convertLead(Integer id, Product product, int quantity, Industry industry, int employeeCount, String city, String country){
-    }
-
-    public Lead lookupLead(int id){
-        return null;
-    }
-
-    public void showLeads(){
     }
 
     public void addOpportunity(Product product, int quantity){
@@ -219,6 +273,12 @@ public class JsonDatabaseUtility {
 
     }
 
-    public void addLead(String name, String phoneNumber, String email, String companyName){
+    public void showOpportunities() {
+    }
+
+    public void showContacts() {
+    }
+
+    public void showAccounts() {
     }
 }

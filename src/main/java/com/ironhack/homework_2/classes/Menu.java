@@ -4,169 +4,224 @@ import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
 import com.ironhack.homework_2.utils.JsonDatabaseUtility;
+import com.ironhack.homework_2.utils.Printer;
+import com.ironhack.homework_2.utils.PrinterMenu;
 
 import java.util.Scanner;
 
-import static com.ironhack.homework_2.utils.Printer.print;
 import static com.ironhack.homework_2.utils.Utils.*;
 
 public class Menu {
     private static final Scanner scanner = new Scanner(System.in);
-    private static final JsonDatabaseUtility  db = new JsonDatabaseUtility();
+    private static final JsonDatabaseUtility db = new JsonDatabaseUtility();
+    // Variable to check if the user asked for the available commands
+    private static boolean showHelp;
 
-    public static boolean isValidCommand(String command){
-        String[] commandWords = command.trim().toLowerCase().split(" ");
-        if (commandWords.length > 1){
-            switch (commandWords[0]){
-                case "new":
-                    return commandWords[1].equals("lead") && commandWords.length == 2;
-                case "show":
-                    return commandWords[1].equals("leads") && commandWords.length == 2;
-                case "lookup":
-                    if (commandWords.length == 3){
-                        switch (commandWords[1]){
-                            case "lead":
-                            case "opportunity":
-                            case "account":
-                            case "contact":
-                                return validNumber(commandWords[2]);
-                        }
-                    }
-                    return false;
-                case "convert":
-                case "close_won":
-                case "close_lost":
-                    return validNumber(commandWords[1]);
-                default:
-                    return false;
+    public static void mainMenu() {
+        String input;
+        boolean running = true;
+        showHelp = false;
+        while (running) {
+            // if the user asked for available commands print help menu, otherwise print main menu
+            if (showHelp){
+                PrinterMenu.printMenu("help");
+                showHelp = false;
+            }else{
+                PrinterMenu.printMenu("main");
             }
-        }else{
-            if (commandWords[0].equals("help")) {
-                return true;
+            // get a user input, if it is valid compute the command otherwise print a warning message
+            input = scanner.nextLine();
+            if (isValidCommand(input)) {
+                running = computeCommand(input);
+            } else {
+                Printer.warningMessage("There is no such command as \"" + input + "\"! To see the list of available commands type help");
             }
-            return false;
         }
     }
 
-    public static void computeCommand(){
-        String input;
-        while(true){
-            input = scanner.nextLine();
-            if (isValidCommand(input)){
-                String[] inputArray = input.trim().toLowerCase().split(" ");
-                switch (inputArray[0]){
-                    case "new":
-                        if (inputArray[1].equals("lead")){
-                            promptLead();
-                        }
+    public static boolean computeCommand(String input) {
+        String[] inputArray = input.trim().toLowerCase().split(" ");
+        switch (inputArray[0]) {
+            case "new":
+                if (inputArray[1].equals("lead")) {
+                    promptLead();
+                }
+                break;
+            case "show":
+                switch (inputArray[1]){
+                    case "leads":
+                        db.showLeads();
                         break;
-                    case "show":
-                        if (inputArray[1].equals("leads")){
-                            db.showLeads();
-                        }
+                    case "opportunities":
+                        db.showOpportunities();
                         break;
-                    case "lookup":
-                        if (inputArray[1].equals("lead")){
-                            print(db.lookupLead(Integer.parseInt(inputArray[2])).toString());
-                        }
+                    case "contacts":
+                        db.showContacts();
                         break;
-                    case "convert":
-                        promptConvert(Integer.parseInt(inputArray[1]));
-                        break;
-                    case "close_won":
-                    case "close_lost":
-                        db.updateStatus(Status.valueOf(inputArray[0].toUpperCase()), Integer.parseInt(inputArray[1]));
-                        break;
-                    case "help":
-                        print("List of available commands:\n" +
-                                "new lead: creates new lead\n" +
-                                "show leads: shows all existing leads\n" +
-                                "lookup lead id: shows lead with the corresponding id provided\n" +
-                                "convert id: converts lead with the corresponding id provided\n" +
-                                "close_won id: change opportunity status to close won\n" +
-                                "close_lost id: change opportunity status to close lost\n" +
-                                "help: print list of available commands");
+                    case "accounts":
+                        db.showAccounts();
                         break;
                 }
-            }else{
-                print("There is no such command as \"" + input + "\"! To see the list of available commands type help");
-            }
+                break;
+            case "lookup":
+                switch (inputArray[1]){
+                    case "lead":
+                        Lead lead = db.lookupLeadId(Integer.parseInt(inputArray[2]));
+                        PrinterMenu.lookupObject(lead);
+                        promptDecision("enter");
+                        break;
+                    case "opportunity":
+                        Opportunity opportunity = db.lookupOpportunityId(Integer.parseInt(inputArray[2]));
+                        PrinterMenu.lookupObject(opportunity);
+
+                        break;
+                    case "contact":
+                        Contact contact = db.lookupContactId(Integer.parseInt(inputArray[2]));
+                        PrinterMenu.lookupObject(contact);
+                        promptDecision("enter");
+                        break;
+                    case "account":
+                        Account account = db.lookupAccountId(Integer.parseInt(inputArray[2]));
+                        PrinterMenu.lookupObject(account);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case "convert":
+                promptConvert(Integer.parseInt(inputArray[1]));
+                break;
+            case "close_won":
+            case "close_lost":
+                db.updateStatus(Status.valueOf(inputArray[0].toUpperCase()), Integer.parseInt(inputArray[1]));
+                break;
+            case "help":
+                Menu.showHelp = true;
+                break;
+            case "save":
+
+                break;
+            case "exit":
+                return false;
+            default:
+                break;
         }
+        return true;
     }
 
-    private static void promptConvert(int id){
-        // prompt Opportunity
-        Product product = promptProduct("Please provide the product to be bought");
-        int quantity = promptNumber("Please provide the quantity of products");
+    private static void promptConvert(int id) {
+        if (db.hasLead(id)){
+            String contactName = db.getLeadHash().get(id).getName();
+            // prompt Opportunity
+            PrinterMenu.printMenu("convert");
+            Product product = promptProduct();
+            PrinterMenu.printMenu("convert", "product", product.toString());
+            int quantity = promptNumber();
 
-        //prompt Account
-        Industry industry = promptIndustry("Please provide the industry associated with the new account");
-        int employeeCount = promptNumber("Please provide the number of employees of the organization");
-        String city = promptString("Please provide the organization's city","");
-        String country = promptString("Please provide the organization's country","");
-
-        db.convertLead(id, product, quantity, industry, employeeCount, city, country);
+            //prompt Account
+            PrinterMenu.printMenu("convert","quantity and contact",Integer.toString(quantity), contactName);
+            if (!promptDecision("enter back")) {
+                return;
+            }
+            PrinterMenu.printMenu("convert","account");
+            Industry industry = promptIndustry();
+            PrinterMenu.printMenu("convert", "industry", industry.toString());
+            int employeeCount = promptNumber();
+            PrinterMenu.printMenu("convert", "employees", Integer.toString(employeeCount));
+            String city = promptString("");
+            PrinterMenu.printMenu("convert", "city", city);
+            String country = promptString("");
+            PrinterMenu.printMenu("convert", "country", country);
+            if (promptDecision("enter back")){
+                db.convertLead(id, product, quantity, industry, employeeCount, city, country);
+            }
+        }else{
+            Printer.warningMessage("There is no lead with id " + id + " to convert!");
+        }
     }
 
     private static void promptLead() {
         // name, phoneNumber, email, and companyName
-        String name = promptString("Please provide the name to be associated with the lead", "name");
-        String phoneNumber = promptString("Please provide the phone number to associate with the lead", "phone");
-        String email = promptString("Please provide the email to associate with the lead", "email");
-        String companyName = promptString("Please provide the name of the company to associate with the lead", "");
-        db.addLead(name, phoneNumber, email, companyName);
+        PrinterMenu.printMenu("lead");
+        String name = promptString("name");
+        PrinterMenu.printMenu("lead", "name", name);
+        String phoneNumber = promptString("phone");
+        PrinterMenu.printMenu("lead","phone", phoneNumber);
+        String email = promptString("email");
+        PrinterMenu.printMenu("lead","email", email);
+        String companyName = promptString("");
+        PrinterMenu.printMenu("lead","company",companyName);
+        if (promptDecision("enter back")) {
+            db.addLead(name, phoneNumber, email, companyName);
+        }
     }
 
-    private static Product promptProduct(String prompt){
+    private static boolean promptDecision(String decision) {
         String input;
-        do{
-            print(prompt);
-            input = scanner.nextLine();
-        } while(!validProduct(input));
+        switch (decision){
+            case "enter back":
+                do {
+                    input = scanner.nextLine().trim().toLowerCase();
+                    switch (input) {
+                        case "":
+                            return true;
+                        case "back":
+                            return false;
+                    }
+                } while (true);
+            case "enter":
+                scanner.nextLine();
+                return true;
+        }
+        return false;
+    }
+
+    private static Product promptProduct() {
+        String input;
+        do {
+            input = scanner.nextLine().trim().toUpperCase();
+        } while (!validProduct(input));
         return Product.valueOf(input);
     }
-    private static Industry promptIndustry(String prompt){
+
+    private static Industry promptIndustry() {
         String input;
-        do{
-            print(prompt);
-            input = scanner.nextLine();
-        } while(!validIndustry(input));
+        do {
+            input = scanner.nextLine().trim().toUpperCase();
+        } while (!validIndustry(input));
         return Industry.valueOf(input);
     }
-    private static int promptNumber(String prompt){
+
+    private static int promptNumber() {
         String input;
-        do{
-            print(prompt);
-            input = scanner.nextLine();
-        } while(!validNumber(input));
+        do {
+            input = scanner.nextLine().trim();
+        } while (!validNumber(input));
         return Integer.parseInt(input);
     }
-    private static String promptString(String prompt, String checkCondition){
+
+    private static String promptString(String checkCondition) {
         String input;
-        switch (checkCondition){
+        switch (checkCondition) {
             case "phoneNumber":
-                do{
-                    print(prompt);
-                    input = scanner.nextLine();
-                } while(!validPhone(input));
+                do {
+                    input = scanner.nextLine().trim();
+                } while (!validPhone(input));
                 return input;
             case "email":
-                do{
-                    print(prompt);
-                    input = scanner.nextLine();
-                } while(!validEmail(input));
+                do {
+                    input = scanner.nextLine().trim();
+                } while (!validEmail(input));
                 return input;
             case "name":
-                do{
-                    print(prompt);
-                    input = scanner.nextLine();
-                } while(!validName(input));
+                do {
+                    input = scanner.nextLine().trim();
+                } while (!validName(input));
                 return input;
             default:
-                do{
-                    print(prompt);
-                    input = scanner.nextLine();
-                } while(!validString(input));
+                do {
+                    input = scanner.nextLine().trim();
+                } while (!validString(input));
                 return input;
         }
     }

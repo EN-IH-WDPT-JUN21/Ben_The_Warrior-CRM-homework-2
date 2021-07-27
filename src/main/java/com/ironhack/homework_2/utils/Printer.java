@@ -7,12 +7,16 @@
 
 package com.ironhack.homework_2.utils;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Collections;
 
 public class Printer {
     // Maybe create a Enum called color pallet?     // TODO [JA] - Create enum with values? Maybe delete the ones not in use
+    private static final JPanel panel = new JPanel();
+
     private static final int PROGRAM_WIDTH = 100;
+    private static final int PROGRAM_HEIGHT = 23;
 
     private static final String ANSI_RESET = "\u001B[0m";
     // ==================== Text Colors ====================
@@ -69,6 +73,8 @@ public class Printer {
         return INSERT_HIGHLIGHT_COLOR;
     }
 
+    public static int getProgramHeight(){ return PROGRAM_HEIGHT; }
+
 
     // ======================================== 3. SIMPLIFIED PRINTERS ========================================
 
@@ -100,7 +106,9 @@ public class Printer {
 
     // Print program title colored. Filled with color and text black.
     public static void printProgramTitle() {
+        printFull();
         printCenterString("CRM by Ben the Warrior", PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR + ANSI_BLACK);
+        printFull();
     }
 
     // Print line without formatting
@@ -178,12 +186,12 @@ public class Printer {
             newText = divideText(text, width - leftSpaces - 3); //divides new text if larger
         }
         // Prints the given text by defining empty spaces for the right and left side. Stylizes the text.
-        StringBuilder str = new StringBuilder(borderStyle + " " + ANSI_RESET + contentStyle);
-        int rightSpaces = width - text.replaceAll("(\\x9B|\\x1B\\[)[0-?]*[ -\\/]*[@-~]", "").length() - leftSpaces - 2; // empty spaces don't count the ANSIS codes
+        StringBuilder str = new StringBuilder(borderStyle + "  " + ANSI_RESET + contentStyle);
+        int rightSpaces = width - text.replaceAll("(\\x9B|\\x1B\\[)[0-?]*[ -\\/]*[@-~]", "").length() - leftSpaces - 4; // empty spaces don't count the ANSIS codes
         str.append(String.join("", Collections.nCopies(leftSpaces, " ")));
         str.append(text);
         str.append(String.join("", Collections.nCopies(rightSpaces, " ")));
-        str.append(ANSI_RESET).append(borderStyle).append(" ").append(ANSI_RESET);
+        str.append(ANSI_RESET).append(borderStyle).append("  ").append(ANSI_RESET);
         System.out.println(str);
     }
 
@@ -208,5 +216,9 @@ public class Printer {
             smallText.append(word).append(" ");
         }
         return "";
+    }
+
+    public static void warningMessage(String message){
+        JOptionPane.showMessageDialog(panel, message, "Warning", JOptionPane.WARNING_MESSAGE);
     }
 }
