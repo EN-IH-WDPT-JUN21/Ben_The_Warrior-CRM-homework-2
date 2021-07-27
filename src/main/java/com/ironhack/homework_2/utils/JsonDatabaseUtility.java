@@ -109,11 +109,10 @@ public class JsonDatabaseUtility {
     // ====================  An individual Lead’s details by id ====================
     public Lead lookupLeadId(Integer id){
         if(!hasLead(id)){
-            Printer.warningMessage("There is no Lead with id " + id);
             for (Lead lead : leadHash.values()) {
                 Printer.print("id: " + lead.getId() + ", name: "+lead.getName());
             }
-            return null;
+            throw new IllegalArgumentException("There is no Lead with id " + id);
         }else{
             return leadHash.get(id);
         }
@@ -121,11 +120,10 @@ public class JsonDatabaseUtility {
 
     public Opportunity lookupOpportunityId(int id) {
         if(!hasOpportunity(id)){
-            Printer.warningMessage("There is no Opportunity with this ID");
             for (Opportunity opportunity : opportunityHash.values()) {
                 Printer.print("id: " + opportunity.getId() + ", name: "+opportunity.getDecisionMaker().getName());
             }
-            return null;
+            throw new IllegalArgumentException("There is no Opportunity with id" + id);
         }else{
             return opportunityHash.get(id);
         }
@@ -137,7 +135,7 @@ public class JsonDatabaseUtility {
             for (Contact contact : contactHash.values()) {
                 Printer.print("id: " + contact.getId() + ", name: "+contact.getName());
             }
-            return null;
+            throw new IllegalArgumentException("There is no Contact with id" + id);
         }else{
             return contactHash.get(id);
         }
@@ -149,7 +147,7 @@ public class JsonDatabaseUtility {
             for (Account account : accountHash.values()) {
                 Printer.print("id: " + account.getId() + account.toString());
             }
-            return null;
+            throw new IllegalArgumentException("There is no Account with id" + id);
         }else{
             return accountHash.get(id);
         }
@@ -242,21 +240,21 @@ public class JsonDatabaseUtility {
     }
 
     public boolean hasContact(int id){
-        if(leadHash.get(id) == null){
+        if(contactHash.get(id) == null){
             return false;
         }else{
             return true;
         }
     }
     public boolean hasAccount(int id){
-        if(leadHash.get(id) == null){
+        if(accountHash.get(id) == null){
             return false;
         }else{
             return true;
         }
     }
     public boolean hasOpportunity(int id){
-        if(leadHash.get(id) == null){
+        if(opportunityHash.get(id) == null){
             return false;
         }else{
             return true;

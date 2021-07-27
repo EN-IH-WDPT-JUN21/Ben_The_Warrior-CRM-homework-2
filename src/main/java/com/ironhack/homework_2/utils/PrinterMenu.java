@@ -16,6 +16,9 @@ import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
 
+import java.util.List;
+import java.util.Map;
+
 public class PrinterMenu extends Printer {
     private static final String ANSI_RESET = getAnsiReset();
     private static final String HIGHLIGHT_COLOR = getHighlightColor();
@@ -210,7 +213,7 @@ public class PrinterMenu extends Printer {
                 setMenuLines("Quantity: " + INSERT_HIGHLIGHT_COLOR + opportunity.getQuantity() + ANSI_RESET, 8);
                 setMenuLines("Decision Maker: " + INSERT_HIGHLIGHT_COLOR + opportunity.getDecisionMaker().getName() + ANSI_RESET, 10);
                 setMenuLines("Status: " + INSERT_HIGHLIGHT_COLOR + opportunity.getStatus() + ANSI_RESET, 12);
-                setMenuLines(HIGHLIGHT_COLOR + "contact" + ANSI_RESET + "to expand contact or " + HIGHLIGHT_COLOR + "back" + ANSI_RESET + "to get back to the main menu",20);
+                setMenuLines(HIGHLIGHT_COLOR + "ENTER" + ANSI_RESET + " to expand contact or " + HIGHLIGHT_COLOR + "back" + ANSI_RESET + " to get back to the main menu",20);
             }else if (params.length == 1 && params[0].toLowerCase().equals("contact")){
                 setMenuLines("Decision Maker: Id: " + INSERT_HIGHLIGHT_COLOR + opportunity.getDecisionMaker().getId() + ANSI_RESET, 10);
                 setMenuLines("                Name: " + INSERT_HIGHLIGHT_COLOR + opportunity.getDecisionMaker().getName() + ANSI_RESET, 11);
@@ -248,120 +251,5 @@ public class PrinterMenu extends Printer {
         }
 
         PrinterMenu.printMenu("");
-    }
-    public static void printAccountInfo(Account account) {
-        Printer.clearCommandLine();
-        printProgramTitle();
-        print();
-        print();
-        print();
-        print();
-        print(HIGHLIGHT_COLOR + "Account ID - " + account.getId() + HIGHLIGHT_COLOR);
-        print();
-        print("Industry: " + INSERT_HIGHLIGHT_COLOR + account.getIndustry() + ANSI_RESET);
-        print();
-        print("Number of Employees: " + INSERT_HIGHLIGHT_COLOR + account.getEmployeeCount() + ANSI_RESET);
-        print();
-        print("City: " + INSERT_HIGHLIGHT_COLOR + account.getCity() + ANSI_RESET);
-        print();
-        print("Country: " + INSERT_HIGHLIGHT_COLOR + account.getCountry() + ANSI_RESET);
-        print();
-        print("Contacts: " + INSERT_HIGHLIGHT_COLOR + account.getContactList() + ANSI_RESET);
-        print();
-        print("Opportunities: " + INSERT_HIGHLIGHT_COLOR + account.getOpportunityList() + ANSI_RESET);
-        print();
-        print();
-        print();
-        print(HIGHLIGHT_COLOR + "ENTER - Go Back" + HIGHLIGHT_COLOR);
-        print();
-        print();
-        printFull();
-    }
-
-    public static void printOpportunityInfo(Opportunity opportunity) {
-        Printer.clearCommandLine();
-        printProgramTitle();
-        print();
-        print();
-        print();
-        print();
-        print();
-        print(HIGHLIGHT_COLOR + "Opportunity ID - " + opportunity.getId() + HIGHLIGHT_COLOR);
-        print();
-        print("Product: " + INSERT_HIGHLIGHT_COLOR + opportunity.getProduct() + ANSI_RESET);
-        print();
-        print("Quantity: " + INSERT_HIGHLIGHT_COLOR + opportunity.getQuantity() + ANSI_RESET);
-        print();
-        print("Contact Name: " + INSERT_HIGHLIGHT_COLOR + opportunity.getDecisionMaker() + ANSI_RESET); // it can be the lead name if complicated we can delete
-        print();
-        print("Status: " + INSERT_HIGHLIGHT_COLOR + opportunity.getStatus() + ANSI_RESET);
-        print();
-        print();
-        print();
-        print();
-        print();
-        print();
-        print(HIGHLIGHT_COLOR + "ENTER - Go Back" + HIGHLIGHT_COLOR);
-        print();
-        print();
-        printFull();
-    }
-
-    public static void printContactInfo(Contact contact) {
-        Printer.clearCommandLine();
-        printProgramTitle();
-        print();
-        print();
-        print();
-        print();
-        print();
-        print(HIGHLIGHT_COLOR + "Contact ID - " + contact.getId() + HIGHLIGHT_COLOR);
-        print();
-        print("Name: " + INSERT_HIGHLIGHT_COLOR + contact.getName() + ANSI_RESET);
-        print();
-        print("Email: " + INSERT_HIGHLIGHT_COLOR + contact.getEmail() + ANSI_RESET);
-        print();
-        print("Phone Number: " + INSERT_HIGHLIGHT_COLOR + contact.getPhoneNumber() + ANSI_RESET); // it can be the lead name if complicated we can delete
-        print();
-        print("Company Name: " + INSERT_HIGHLIGHT_COLOR + contact.getCompanyName() + ANSI_RESET);
-        print();
-        print();
-        print();
-        print();
-        print();
-        print();
-        print(HIGHLIGHT_COLOR + "ENTER - Go Back" + HIGHLIGHT_COLOR);
-        print();
-        print();
-        printFull();
-    }
-
-    public static void printLeadInfo(Lead lead) {
-        Printer.clearCommandLine();
-        printProgramTitle();
-        print();
-        print();
-        print();
-        print();
-        print(HIGHLIGHT_COLOR + "Lead ID - " + lead.getId() + HIGHLIGHT_COLOR);
-        print();
-        print("Name: " + INSERT_HIGHLIGHT_COLOR + lead.getName() + ANSI_RESET);
-        print();
-        print("Email: " + INSERT_HIGHLIGHT_COLOR + lead.getEmail() + ANSI_RESET);
-        print();
-        print("Phone Number: " + INSERT_HIGHLIGHT_COLOR + lead.getPhoneNumber() + ANSI_RESET);
-        print();
-        print("Company Name: " + INSERT_HIGHLIGHT_COLOR + lead.getCompanyName() + ANSI_RESET);
-        print();
-        print();
-        print();
-        print();
-        print("Other commands:  " + HIGHLIGHT_COLOR + "/help  /back" + ANSI_RESET);
-        print();
-        print();
-        print(HIGHLIGHT_COLOR + "Insert Lead Company Name: " + HIGHLIGHT_COLOR);
-        print();
-        print();
-        printFull();
     }
 }

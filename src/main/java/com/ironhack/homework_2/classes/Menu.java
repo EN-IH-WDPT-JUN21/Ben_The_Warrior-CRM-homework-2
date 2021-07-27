@@ -7,6 +7,7 @@ import com.ironhack.homework_2.utils.JsonDatabaseUtility;
 import com.ironhack.homework_2.utils.Printer;
 import com.ironhack.homework_2.utils.PrinterMenu;
 
+import java.util.Map;
 import java.util.Scanner;
 
 import static com.ironhack.homework_2.utils.Utils.*;
@@ -50,39 +51,60 @@ public class Menu {
             case "show":
                 switch (inputArray[1]){
                     case "leads":
-                        db.showLeads();
+                        showObjectsMenu(db.getLeadHash());
                         break;
                     case "opportunities":
-                        db.showOpportunities();
+                        showObjectsMenu(db.getOpportunityHash());
                         break;
                     case "contacts":
-                        db.showContacts();
+                        showObjectsMenu(db.getContactHash());
                         break;
                     case "accounts":
-                        db.showAccounts();
+                        showObjectsMenu(db.getAccountHash());
                         break;
                 }
                 break;
             case "lookup":
                 switch (inputArray[1]){
                     case "lead":
-                        Lead lead = db.lookupLeadId(Integer.parseInt(inputArray[2]));
-                        PrinterMenu.lookupObject(lead);
-                        promptDecision("enter");
+                        try{
+                            Lead lead = db.lookupLeadId(Integer.parseInt(inputArray[2]));
+                            PrinterMenu.lookupObject(lead);
+                            promptDecision("enter");
+                        }catch (IllegalArgumentException e){
+                            PrinterMenu.warningMessage(e.getMessage());
+                        }
                         break;
                     case "opportunity":
-                        Opportunity opportunity = db.lookupOpportunityId(Integer.parseInt(inputArray[2]));
-                        PrinterMenu.lookupObject(opportunity);
+                        try{
+                            Opportunity opportunity = db.lookupOpportunityId(Integer.parseInt(inputArray[2]));
+                            PrinterMenu.lookupObject(opportunity);
+                            boolean decision = promptDecision("enter back");
+                            if (decision){
+                                PrinterMenu.lookupObject(opportunity, "contact");
+                                promptDecision("enter");
+                            }
+                        }catch (IllegalArgumentException e){
+                            PrinterMenu.warningMessage(e.getMessage());
+                        }
 
                         break;
                     case "contact":
-                        Contact contact = db.lookupContactId(Integer.parseInt(inputArray[2]));
-                        PrinterMenu.lookupObject(contact);
-                        promptDecision("enter");
+                        try{
+                            Contact contact = db.lookupContactId(Integer.parseInt(inputArray[2]));
+                            PrinterMenu.lookupObject(contact);
+                            promptDecision("enter");
+                        }catch (IllegalArgumentException e){
+                            PrinterMenu.warningMessage(e.getMessage());
+                        }
                         break;
                     case "account":
-                        Account account = db.lookupAccountId(Integer.parseInt(inputArray[2]));
-                        PrinterMenu.lookupObject(account);
+                        try{
+                            Account account = db.lookupAccountId(Integer.parseInt(inputArray[2]));
+                            PrinterMenu.lookupObject(account);
+                        }catch (IllegalArgumentException e){
+                            PrinterMenu.warningMessage(e.getMessage());
+                        }
                         break;
                     default:
                         break;
@@ -107,6 +129,21 @@ public class Menu {
                 break;
         }
         return true;
+    }
+
+    private static void showObjectsMenu(Map<Integer, Object> objectMap) {
+        /*int page = 0;
+        boolean hasMorePages = PrinterMenu.printMultipleObjects(objectMap, page);
+        boolean running = true;
+        while (running){
+            if (hasMorePages && page != 0){
+
+            }else if (hasMorePages){
+
+            }else {
+
+            }
+        }*/
     }
 
     private static void promptConvert(int id) {
@@ -174,6 +211,23 @@ public class Menu {
                 return true;
         }
         return false;
+    }
+
+    private static int promptAccountDecision(){
+        String input;
+        do {
+            input = scanner.nextLine().trim().toLowerCase();
+            switch (input) {
+                case "":
+                    return 0;
+                case "opportunity":
+                    return 1;
+                case "contact":
+                    return 2;
+                case "both":
+                    return 4;
+            }
+        } while (true);
     }
 
     private static Product promptProduct() {
