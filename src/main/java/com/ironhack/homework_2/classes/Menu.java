@@ -51,16 +51,16 @@ public class Menu {
             case "show":
                 switch (inputArray[1]){
                     case "leads":
-                        showObjectsMenu(db.getLeadHash());
+
                         break;
                     case "opportunities":
-                        showObjectsMenu(db.getOpportunityHash());
+
                         break;
                     case "contacts":
-                        showObjectsMenu(db.getContactHash());
+
                         break;
                     case "accounts":
-                        showObjectsMenu(db.getAccountHash());
+
                         break;
                 }
                 break;
