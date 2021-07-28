@@ -58,6 +58,7 @@ public class Utils {
                         case "contacts":
                             return commandWords.length == 2;
                     }
+                    return false;
                 case "lookup":
                     if (commandWords.length == 3){
                         switch (commandWords[1]){

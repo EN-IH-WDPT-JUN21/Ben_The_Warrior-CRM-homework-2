@@ -105,7 +105,7 @@ public class Menu {
                         try{
                             Account account = db.lookupAccountId(Integer.parseInt(inputArray[2]));
                             PrinterMenu.clearWarning();
-                            PrinterMenu.lookupObject(account);
+                            lookupAccountMenu(account);
                         }catch (IllegalArgumentException e){
                             PrinterMenu.setWarning(e.getMessage());
                         }
@@ -145,6 +145,26 @@ public class Menu {
                 break;
         }
         return true;
+    }
+
+    private static void lookupAccountMenu(Account account){
+        PrinterMenu.lookupObject(account);
+        while (true){
+            int answer = promptMultipleDecisions("contacts", "opportunities", "back");
+            switch (answer){
+                case 0:
+                    showContactsMenu(account.getContactList());
+                    PrinterMenu.lookupObject(account);
+                    break;
+                case 1:
+                    showOpportunitiesMenu(account.getOpportunityList());
+                    PrinterMenu.lookupObject(account);
+                    break;
+                case 2:
+                    return;
+            }
+        }
+
     }
 
     private static void showLeadsMenu() {
@@ -229,7 +249,7 @@ public class Menu {
         int numPages = listListOpportunity.size();
         int decision;
         while(true){
-            PrinterMenu.showOpportunities(listListOpportunity.get(currentPage), currentPage == 0, currentPage + 1 == numPages);
+            PrinterMenu.showOpportunities(listListOpportunity.get(currentPage), currentPage == 0, currentPage + 1 == numPages, false);
             if(listListOpportunity.size() > 1){
                 if (currentPage == 0){
                     decision = promptMultipleDecisions("next","back");
@@ -349,7 +369,7 @@ public class Menu {
         int numPages = listListContact.size();
         int decision;
         while(true){
-            PrinterMenu.showContacts(listListContact.get(currentPage), currentPage == 0, currentPage + 1 == numPages);
+            PrinterMenu.showContacts(listListContact.get(currentPage), currentPage == 0, currentPage + 1 == numPages, false);
             if(listListContact.size() > 1){
                 if (currentPage == 0){
                     decision = promptMultipleDecisions("next","back");
@@ -388,8 +408,121 @@ public class Menu {
         }
     }
 
-    private static void showObjectsMenu(ArrayList<Object> objectList) {
+    private static void showContactsMenu(ArrayList<Contact> contactList) {
+        int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
+        int currentPage = 0;
+        int currentIndex = 0;
+        int decision;
+        List<ArrayList<Contact>> listListContacts = new ArrayList<>();
+        listListContacts.add(new ArrayList<>());
 
+        for(Contact contact : contactList) {
+            if (currentIndex++ < maxElements){
+                listListContacts.get(currentPage).add(contact);
+            }else{
+                listListContacts.add(new ArrayList<>());
+                listListContacts.get(++currentPage).add(contact);
+            }
+        }
+
+        int numPages = listListContacts.size();
+
+        while(true){
+            PrinterMenu.showContacts(listListContacts.get(currentPage), currentPage == 0, currentPage + 1 == numPages, true);
+            if(listListContacts.size() > 1){
+                if (currentPage == 0){
+                    decision = promptMultipleDecisions("next","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else if (currentPage + 1 == numPages){
+                    decision = promptMultipleDecisions("previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage--;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else{
+                    decision = promptMultipleDecisions("next","previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            currentPage--;
+                        case 2:
+                            return;
+                    }
+                }
+            }else{
+                promptDecision("enter");
+                return;
+            }
+        }
+    }
+    private static void showOpportunitiesMenu(ArrayList<Opportunity> opportunityList) {
+        int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
+        int currentPage = 0;
+        int currentIndex = 0;
+        int decision;
+        List<ArrayList<Opportunity>> listListOpportunity = new ArrayList<>();
+        listListOpportunity.add(new ArrayList<>());
+
+        for(Opportunity opportunity : opportunityList) {
+            if (currentIndex++ < maxElements){
+                listListOpportunity.get(currentPage).add(opportunity);
+            }else{
+                listListOpportunity.add(new ArrayList<>());
+                listListOpportunity.get(++currentPage).add(opportunity);
+            }
+        }
+
+        int numPages = listListOpportunity.size();
+
+        while(true){
+            PrinterMenu.showOpportunities(listListOpportunity.get(currentPage), currentPage == 0, currentPage + 1 == numPages, true);
+            if(listListOpportunity.size() > 1){
+                if (currentPage == 0){
+                    decision = promptMultipleDecisions("next","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else if (currentPage + 1 == numPages){
+                    decision = promptMultipleDecisions("previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage--;
+                            break;
+                        case 1:
+                            return;
+                    }
+                }else{
+                    decision = promptMultipleDecisions("next","previous","back");
+                    switch (decision){
+                        case 0:
+                            currentPage++;
+                            break;
+                        case 1:
+                            currentPage--;
+                        case 2:
+                            return;
+                    }
+                }
+            }else{
+                promptDecision("enter");
+                return;
+            }
+        }
     }
 
     private static void promptConvert(int id) {

@@ -232,6 +232,7 @@ public class PrinterMenu extends Printer {
         }else if (Account.class.equals(object.getClass())){
             Account account = (Account) object;
             if (params.length == 0){
+                setMenuLines("",1,7,9,11,13,15,17,18,19,21);
                 setMenuLines(HIGHLIGHT_COLOR + "Information of Account with id " + account.getId() + HIGHLIGHT_COLOR,4);
                 setMenuLines("Industry: " + INSERT_HIGHLIGHT_COLOR + account.getIndustry() + ANSI_RESET, 6);
                 setMenuLines("Employee Count: " + INSERT_HIGHLIGHT_COLOR + account.getEmployeeCount() + ANSI_RESET, 8);
@@ -239,6 +240,9 @@ public class PrinterMenu extends Printer {
                 setMenuLines("Number of Opportunities: " + INSERT_HIGHLIGHT_COLOR + account.getOpportunityList().size() + ANSI_RESET, 12);
                 setMenuLines("City: " + INSERT_HIGHLIGHT_COLOR + account.getCity() + ANSI_RESET, 14);
                 setMenuLines("Country: " + INSERT_HIGHLIGHT_COLOR + account.getCountry() + ANSI_RESET, 16);
+                setMenuLines(HIGHLIGHT_COLOR + "contacts " + ANSI_RESET + "- show Account's Contacts | " +
+                        HIGHLIGHT_COLOR + "opportunities " + ANSI_RESET + "- show Account's Opportunities | " + HIGHLIGHT_COLOR +
+                        "back " + ANSI_RESET + "- return to the main menu",20);
             }
             else if (params.length == 1){
                 switch (params[0].toLowerCase()){
@@ -283,7 +287,7 @@ public class PrinterMenu extends Printer {
         PrinterMenu.printMenu("");
     }
 
-    public static void showOpportunities(ArrayList<Opportunity> opportunities, boolean firstPage, boolean lastPage) {
+    public static void showOpportunities(ArrayList<Opportunity> opportunities, boolean firstPage, boolean lastPage, boolean fromAccount) {
         setMenuLines("",1,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21);
         if (opportunities.size() == 0){
             setMenuLines(HIGHLIGHT_COLOR + "There are no Opportunities" + HIGHLIGHT_COLOR,4);
@@ -295,22 +299,22 @@ public class PrinterMenu extends Printer {
             setMenuLines(opportunity.toString(),initialLine++);
         }
         if (firstPage && lastPage){
-            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + (fromAccount ? "- return to Account" : "- return to the main menu"),20);
         }else if (firstPage){
             setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "- go to the next page |" + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "- return to the main menu",20);
+                    "back " + ANSI_RESET + (fromAccount ? "- return to Account" : "- return to the main menu"),20);
         }else if (lastPage){
             setMenuLines(HIGHLIGHT_COLOR + "previous " + ANSI_RESET + "- return to the previous page | " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "- return to the main menu",20);
+                    "back " + ANSI_RESET + (fromAccount ? "- return to Account" : "- return to the main menu"),20);
         }else{
             setMenuLines(HIGHLIGHT_COLOR + "next" + ANSI_RESET + "- go to the next page |" + HIGHLIGHT_COLOR +
                     "previous " + ANSI_RESET + "- return to the previous page |" + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "- return to the main menu",20);
+                    "back " + ANSI_RESET + (fromAccount ? "- return to Account" : "- return to the main menu"),20);
         }
         PrinterMenu.printMenu("");
     }
 
-    public static void showContacts(ArrayList<Contact> contacts, boolean firstPage, boolean lastPage) {
+    public static void showContacts(ArrayList<Contact> contacts, boolean firstPage, boolean lastPage, boolean fromAccount) {
         setMenuLines("",1,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21);
         if (contacts.size() == 0){
             setMenuLines(HIGHLIGHT_COLOR + "There are no Contacts" + HIGHLIGHT_COLOR,4);
@@ -322,17 +326,17 @@ public class PrinterMenu extends Printer {
             setMenuLines(contact.toString(),initialLine++);
         }
         if (firstPage && lastPage){
-            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + (fromAccount ? "- return to Account" : "- return to the main menu"),20);
         }else if (firstPage){
             setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "- go to the next page | " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "- return to the main menu",20);
+                    "back " + ANSI_RESET + (fromAccount ? "- return to Account" : "- return to the main menu"),20);
         }else if (lastPage){
             setMenuLines(HIGHLIGHT_COLOR + "previous " + ANSI_RESET + "- return to the previous page | " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "- return to the main menu",20);
+                    "back " + ANSI_RESET + (fromAccount ? "- return to Account" : "- return to the main menu"),20);
         }else{
             setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "- go to the next page |" + HIGHLIGHT_COLOR +
                     "previous " + ANSI_RESET + "- return to the previous page | " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "- return to the main menu",20);
+                    "back " + ANSI_RESET + (fromAccount ? "- return to Account" : "- return to the main menu"),20);
         }
         PrinterMenu.printMenu("");
     }
