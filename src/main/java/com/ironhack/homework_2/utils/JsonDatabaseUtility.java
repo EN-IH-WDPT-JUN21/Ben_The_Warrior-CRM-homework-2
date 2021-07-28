@@ -109,9 +109,6 @@ public class JsonDatabaseUtility {
     // ====================  An individual Lead’s details by id ====================
     public Lead lookupLeadId(Integer id){
         if(!hasLead(id)){
-            for (Lead lead : leadHash.values()) {
-                Printer.print("id: " + lead.getId() + ", name: "+lead.getName());
-            }
             throw new IllegalArgumentException("There is no Lead with id " + id);
         }else{
             return leadHash.get(id);
@@ -120,10 +117,7 @@ public class JsonDatabaseUtility {
 
     public Opportunity lookupOpportunityId(int id) {
         if(!hasOpportunity(id)){
-            for (Opportunity opportunity : opportunityHash.values()) {
-                Printer.print("id: " + opportunity.getId() + ", name: "+opportunity.getDecisionMaker().getName());
-            }
-            throw new IllegalArgumentException("There is no Opportunity with id" + id);
+            throw new IllegalArgumentException("There is no Opportunity with id " + id);
         }else{
             return opportunityHash.get(id);
         }
@@ -131,11 +125,7 @@ public class JsonDatabaseUtility {
 
     public Contact lookupContactId(int id) {
         if(!hasContact(id)){
-            Printer.warningMessage("There is no Contact with this ID");
-            for (Contact contact : contactHash.values()) {
-                Printer.print("id: " + contact.getId() + ", name: "+contact.getName());
-            }
-            throw new IllegalArgumentException("There is no Contact with id" + id);
+            throw new IllegalArgumentException("There is no Contact with id " + id);
         }else{
             return contactHash.get(id);
         }
@@ -143,11 +133,7 @@ public class JsonDatabaseUtility {
 
     public Account lookupAccountId(int id) {
         if(!hasAccount(id)){
-            Printer.warningMessage("There is no Account with this ID");
-            for (Account account : accountHash.values()) {
-                Printer.print("id: " + account.getId() + account.toString());
-            }
-            throw new IllegalArgumentException("There is no Account with id" + id);
+            throw new IllegalArgumentException("There is no Account with id " + id);
         }else{
             return accountHash.get(id);
         }
@@ -259,24 +245,5 @@ public class JsonDatabaseUtility {
         }else{
             return true;
         }
-    }
-
-    public void updateStatus(Status status, int id){
-    }
-
-    public void addOpportunity(Product product, int quantity){
-    }
-
-    public void addAccount(Industry industry, int numEmployees, String city, String country){
-
-    }
-
-    public void showOpportunities() {
-    }
-
-    public void showContacts() {
-    }
-
-    public void showAccounts() {
     }
 }

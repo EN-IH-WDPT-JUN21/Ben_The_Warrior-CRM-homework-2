@@ -70,8 +70,8 @@ public class Utils {
                     }
                     return false;
                 case "convert":
-                case "close_won":
-                case "close_lost":
+                case "close-won":
+                case "close-lost":
                     return validNumber(commandWords[1]);
                 default:
                     return false;

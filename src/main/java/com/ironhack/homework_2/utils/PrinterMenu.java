@@ -26,11 +26,11 @@ public class PrinterMenu extends Printer {
     private static final String INSERT_HIGHLIGHT_COLOR = getInsertHighlightColor();
     private static final int PRINT_MULTIPLE_OBJECTS_MAX = 13;
     // String array to print the menu
-    private static String[] menuLine = {"","","","","","","","","","","","","","","","","","","","","","",""};
+    private static String[] menuLine = {"","","","","","","","","","","","","","","","","","","","","","","","",""};
 
     // Set the menu String array for the main menu
     private static void mainMenuLines(){
-        setMenuLines("",0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,22);
+        setMenuLines("",4,6,7,8,9,10,11,12,13,14,15,16,17,18,19);
         setMenuLines("Welcome to Ben's CMR program.",1);
         setMenuLines("Enter " + HIGHLIGHT_COLOR + "help" + ANSI_RESET + " for a list of valid commands!",20);
         setMenuLines("Enter " + HIGHLIGHT_COLOR + "exit" + ANSI_RESET + " to close the application!",21);
@@ -38,7 +38,7 @@ public class PrinterMenu extends Printer {
 
     // Set the menu String array for the help menu with a list of available commands
     private static void helpMenuLines(){
-        setMenuLines("",0,2,3,5,7,9,11,13,15,16,18,20,22);
+        setMenuLines("",7,9,11,13,15,16,18,20);
         setMenuLines("Welcome to Ben's CMR program. Here are the main commands:",1);
         setMenuLines(HIGHLIGHT_COLOR + "new lead" + ANSI_RESET + " - Creates a new Lead",4);
         setMenuLines(HIGHLIGHT_COLOR + "convert <ID>" + ANSI_RESET + " - Converts a Lead into an Opportunity",6);
@@ -102,7 +102,7 @@ public class PrinterMenu extends Printer {
     private static void newLeadLines(String... params) {
         // Set initial menu for the lead creation
         if (params.length == 0){
-            setMenuLines("",0,1,2,3,5,7,9,11,13,14,15,16,17,18,19,21,22);
+            setMenuLines("",1,7,9,11,13,14,15,16,17,18,19,21);
             setMenuLines(HIGHLIGHT_COLOR + "Create New Lead" + HIGHLIGHT_COLOR,4);
             setMenuLines("Name: ",6);
             setMenuLines("Phone Number: ",8);
@@ -126,8 +126,8 @@ public class PrinterMenu extends Printer {
                     break;
                 case "company":
                     setMenuLines(getMenuLine(12) + INSERT_HIGHLIGHT_COLOR + params[1] + ANSI_RESET,12);
-                    setMenuLines("Other commands:  " + HIGHLIGHT_COLOR + "back" + ANSI_RESET,17);
-                    setMenuLines(HIGHLIGHT_COLOR + "ENTER - Confirm New Lead" + HIGHLIGHT_COLOR,20);
+                    setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- confirm Lead creation | " +
+                            HIGHLIGHT_COLOR + "back " + ANSI_RESET + "- cancel Lead creation",20);
                     break;
             }
         }else{
@@ -140,7 +140,7 @@ public class PrinterMenu extends Printer {
     private static void convertLeadLines(String... params){
         // Set New Opportunity menu
         if (params.length == 0){
-            setMenuLines("",0,1,2,3,5,7,9,10,11,12,13,14,15,16,17,18,19,21,22);
+            setMenuLines("",1,7,9,10,11,12,13,14,15,16,17,18,19,21);
             setMenuLines(HIGHLIGHT_COLOR + "Create New Opportunity" + HIGHLIGHT_COLOR,4);
             setMenuLines("Product: ",6);
             setMenuLines("Quantity: ",8);
@@ -166,19 +166,18 @@ public class PrinterMenu extends Printer {
                     break;
                 case "country":
                     setMenuLines(getMenuLine(12) + INSERT_HIGHLIGHT_COLOR + params[1] + ANSI_RESET,12);
-                    setMenuLines("Other commands:  " + HIGHLIGHT_COLOR + "back" + ANSI_RESET,17);
-                    setMenuLines(HIGHLIGHT_COLOR + "ENTER - Confirm New Account" + HIGHLIGHT_COLOR,20);
+                    setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- delete Lead and create Contact, Opportunity and Account | " +
+                            HIGHLIGHT_COLOR + "back " + ANSI_RESET + "- cancel Lead conversion",20);
                     break;
             }
         }else if(params.length == 3 && params[0].toLowerCase().equals("quantity and contact")){
             setMenuLines(getMenuLine(8) + INSERT_HIGHLIGHT_COLOR + params[1] + ANSI_RESET,8);
             setMenuLines("Contact Name: " + INSERT_HIGHLIGHT_COLOR + params[2] + ANSI_RESET,10);
             setMenuLines("Status: " + INSERT_HIGHLIGHT_COLOR + Status.OPEN + ANSI_RESET,12);
-            setMenuLines("Other commands:  " + HIGHLIGHT_COLOR + "back" + ANSI_RESET,17);
-            setMenuLines(HIGHLIGHT_COLOR + "ENTER - Confirm Opportunity Information" + HIGHLIGHT_COLOR,20);
+            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- confirm Opportunity information | " + HIGHLIGHT_COLOR + "back " + ANSI_RESET + "- return to the main menu",20);
         //Set New Account menu
         }else if (params.length == 1 && params[0].toLowerCase().equals("account")){
-            setMenuLines("",0,1,2,3,5,7,9,11,13,14,15,16,17,18,19,21,22);
+            setMenuLines("",1,7,9,11,13,14,15,16,17,18,19,21);
             setMenuLines(HIGHLIGHT_COLOR + "Create New Account" + HIGHLIGHT_COLOR,4);
             setMenuLines("Industry: ",6);
             setMenuLines("Number of Employees: ",8);
@@ -192,34 +191,34 @@ public class PrinterMenu extends Printer {
     public static void lookupObject(Object object, String... params){
         if (Lead.class.equals(object.getClass())) {
             Lead lead = (Lead) object;
-            setMenuLines("",1,2,3,5,7,9,11,13,14,15,16,17,18,19,21,22);
+            setMenuLines("",1,7,9,11,13,14,15,16,17,18,19,21);
             setMenuLines(HIGHLIGHT_COLOR + "Information of Lead with id " + lead.getId() + HIGHLIGHT_COLOR,4);
             setMenuLines("Name: " + INSERT_HIGHLIGHT_COLOR + lead.getName() + ANSI_RESET, 6);
             setMenuLines("Phone Number: " + INSERT_HIGHLIGHT_COLOR + lead.getPhoneNumber() + ANSI_RESET, 8);
             setMenuLines("Email: " + INSERT_HIGHLIGHT_COLOR + lead.getEmail() + ANSI_RESET, 10);
             setMenuLines("Company Name: " + INSERT_HIGHLIGHT_COLOR + lead.getCompanyName() + ANSI_RESET, 12);
-            setMenuLines(HIGHLIGHT_COLOR + "ENTER - Return to the main menu" + HIGHLIGHT_COLOR,20);
+            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu",20);
 
         }else if (Contact.class.equals(object.getClass())){
             Contact contact = (Contact) object;
-            setMenuLines("",1,2,3,5,7,9,11,13,14,15,16,17,18,19,21,22);
+            setMenuLines("",1,7,9,11,13,14,15,16,17,18,19,21);
             setMenuLines(HIGHLIGHT_COLOR + "Information of Contact with id " + contact.getId() + HIGHLIGHT_COLOR,4);
             setMenuLines("Name: " + INSERT_HIGHLIGHT_COLOR + contact.getName() + ANSI_RESET, 6);
             setMenuLines("Phone Number: " + INSERT_HIGHLIGHT_COLOR + contact.getPhoneNumber() + ANSI_RESET, 8);
             setMenuLines("Email: " + INSERT_HIGHLIGHT_COLOR + contact.getEmail() + ANSI_RESET, 10);
             setMenuLines("Company Name: " + INSERT_HIGHLIGHT_COLOR + contact.getCompanyName() + ANSI_RESET, 12);
-            setMenuLines(HIGHLIGHT_COLOR + "ENTER - Return to the main menu" + HIGHLIGHT_COLOR,20);
+            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu",20);
 
         }else if (Opportunity.class.equals(object.getClass())){
             Opportunity opportunity = (Opportunity) object;
             if (params.length == 0){
-                setMenuLines("",1,2,3,5,7,9,11,13,14,15,16,17,18,19,21,22);
+                setMenuLines("",1,7,9,11,13,14,15,16,17,18,19,21);
                 setMenuLines(HIGHLIGHT_COLOR + "Information of Opportunity with id " + opportunity.getId() + HIGHLIGHT_COLOR,4);
                 setMenuLines("Product: " + INSERT_HIGHLIGHT_COLOR + opportunity.getProduct() + ANSI_RESET, 6);
                 setMenuLines("Quantity: " + INSERT_HIGHLIGHT_COLOR + opportunity.getQuantity() + ANSI_RESET, 8);
                 setMenuLines("Decision Maker: " + INSERT_HIGHLIGHT_COLOR + opportunity.getDecisionMaker().getName() + ANSI_RESET, 10);
                 setMenuLines("Status: " + INSERT_HIGHLIGHT_COLOR + opportunity.getStatus() + ANSI_RESET, 12);
-                setMenuLines(HIGHLIGHT_COLOR + "ENTER" + ANSI_RESET + " to expand contact or " + HIGHLIGHT_COLOR + "back" + ANSI_RESET + " to get back to the main menu",20);
+                setMenuLines(HIGHLIGHT_COLOR + "ENTER" + ANSI_RESET + "- expand contact | " + HIGHLIGHT_COLOR + "back " + ANSI_RESET + "- return to the main menu",20);
             }else if (params.length == 1 && params[0].toLowerCase().equals("contact")){
                 setMenuLines("Decision Maker: Id: " + INSERT_HIGHLIGHT_COLOR + opportunity.getDecisionMaker().getId() + ANSI_RESET, 10);
                 setMenuLines("                Name: " + INSERT_HIGHLIGHT_COLOR + opportunity.getDecisionMaker().getName() + ANSI_RESET, 11);
@@ -227,7 +226,7 @@ public class PrinterMenu extends Printer {
                 setMenuLines("                Email: " + INSERT_HIGHLIGHT_COLOR + opportunity.getDecisionMaker().getEmail() + ANSI_RESET, 13);
                 setMenuLines("                Company Name: " + INSERT_HIGHLIGHT_COLOR + opportunity.getDecisionMaker().getCompanyName() + ANSI_RESET, 14);
                 setMenuLines("Status: " + INSERT_HIGHLIGHT_COLOR + opportunity.getStatus() + ANSI_RESET, 16);
-                setMenuLines(HIGHLIGHT_COLOR + "ENTER - Return to the main menu" + HIGHLIGHT_COLOR,20);
+                setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu",20);
             }
 
         }else if (Account.class.equals(object.getClass())){
@@ -252,113 +251,123 @@ public class PrinterMenu extends Printer {
                 }
             }
         }else{
-            warningMessage("There is no class " + object.getClass());
-            return;
+            throw new IllegalArgumentException("There is no class " + object.getClass());
         }
 
         PrinterMenu.printMenu("");
     }
     public static void showLeads(ArrayList<Lead> leads, boolean firstPage, boolean lastPage){
-        setMenuLines("",1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22);
+        setMenuLines("",1,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21);
         if (leads.size() == 0){
             setMenuLines(HIGHLIGHT_COLOR + "There are no Leads" + HIGHLIGHT_COLOR,4);
+        }else{
+            setMenuLines(HIGHLIGHT_COLOR + "Available Leads" + HIGHLIGHT_COLOR,4);
         }
-        setMenuLines(HIGHLIGHT_COLOR + "Available Leads" + HIGHLIGHT_COLOR,4);
         int initialLine = 6;
         for (Lead lead : leads) {
             setMenuLines(lead.toString(),initialLine++);
         }
         if (firstPage && lastPage){
-            setMenuLines(HIGHLIGHT_COLOR + "ENTER - Return to the main menu" + HIGHLIGHT_COLOR,20);
+            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu",20);
         }else if (firstPage){
-            setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "to go to the next page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "- go to the next page |" + HIGHLIGHT_COLOR +
+                    " back " + ANSI_RESET + "- return to the main menu",20);
         }else if (lastPage){
-            setMenuLines(HIGHLIGHT_COLOR + "previous " + ANSI_RESET + "to return to the previous page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "previous " + ANSI_RESET + "- return to the previous page | " + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + " - return to the main menu",20);
         }else{
-            setMenuLines(HIGHLIGHT_COLOR + "next" + ANSI_RESET + "to go to the next page" + HIGHLIGHT_COLOR +
-                    "previous " + ANSI_RESET + "to return to the previous page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "next" + ANSI_RESET + "- go to the next page | " + HIGHLIGHT_COLOR +
+                    "previous " + ANSI_RESET + "- return to the previous page | " + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + "- return to the main menu",20);
         }
         PrinterMenu.printMenu("");
     }
 
     public static void showOpportunities(ArrayList<Opportunity> opportunities, boolean firstPage, boolean lastPage) {
-        setMenuLines("",1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22);
+        setMenuLines("",1,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21);
         if (opportunities.size() == 0){
             setMenuLines(HIGHLIGHT_COLOR + "There are no Opportunities" + HIGHLIGHT_COLOR,4);
+        }else{
+            setMenuLines(HIGHLIGHT_COLOR + "Available Opportunities" + HIGHLIGHT_COLOR,4);
         }
-        setMenuLines(HIGHLIGHT_COLOR + "Available Opportunities" + HIGHLIGHT_COLOR,4);
         int initialLine = 6;
         for (Opportunity opportunity : opportunities) {
             setMenuLines(opportunity.toString(),initialLine++);
         }
         if (firstPage && lastPage){
-            setMenuLines(HIGHLIGHT_COLOR + "ENTER - Return to the main menu" + HIGHLIGHT_COLOR,20);
+            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu",20);
         }else if (firstPage){
-            setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "to go to the next page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "- go to the next page |" + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + "- return to the main menu",20);
         }else if (lastPage){
-            setMenuLines(HIGHLIGHT_COLOR + "previous " + ANSI_RESET + "to return to the previous page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "previous " + ANSI_RESET + "- return to the previous page | " + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + "- return to the main menu",20);
         }else{
-            setMenuLines(HIGHLIGHT_COLOR + "next" + ANSI_RESET + "to go to the next page" + HIGHLIGHT_COLOR +
-                    "previous " + ANSI_RESET + "to return to the previous page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "next" + ANSI_RESET + "- go to the next page |" + HIGHLIGHT_COLOR +
+                    "previous " + ANSI_RESET + "- return to the previous page |" + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + "- return to the main menu",20);
         }
         PrinterMenu.printMenu("");
     }
 
     public static void showContacts(ArrayList<Contact> contacts, boolean firstPage, boolean lastPage) {
-        setMenuLines("",1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22);
+        setMenuLines("",1,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21);
         if (contacts.size() == 0){
             setMenuLines(HIGHLIGHT_COLOR + "There are no Contacts" + HIGHLIGHT_COLOR,4);
+        }else{
+            setMenuLines(HIGHLIGHT_COLOR + "Available Contacts" + HIGHLIGHT_COLOR,4);
         }
-        setMenuLines(HIGHLIGHT_COLOR + "Available Contacts" + HIGHLIGHT_COLOR,4);
         int initialLine = 6;
         for (Contact contact : contacts) {
             setMenuLines(contact.toString(),initialLine++);
         }
         if (firstPage && lastPage){
-            setMenuLines(HIGHLIGHT_COLOR + "ENTER - Return to the main menu" + HIGHLIGHT_COLOR,20);
+            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu",20);
         }else if (firstPage){
-            setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "to go to the next page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "- go to the next page | " + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + "- return to the main menu",20);
         }else if (lastPage){
-            setMenuLines(HIGHLIGHT_COLOR + "previous " + ANSI_RESET + "to return to the previous page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "previous " + ANSI_RESET + "- return to the previous page | " + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + "- return to the main menu",20);
         }else{
-            setMenuLines(HIGHLIGHT_COLOR + "next" + ANSI_RESET + "to go to the next page" + HIGHLIGHT_COLOR +
-                    "previous " + ANSI_RESET + "to return to the previous page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "- go to the next page |" + HIGHLIGHT_COLOR +
+                    "previous " + ANSI_RESET + "- return to the previous page | " + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + "- return to the main menu",20);
         }
         PrinterMenu.printMenu("");
     }
 
     public static void showAccounts(ArrayList<Account> accounts, boolean firstPage, boolean lastPage) {
-        setMenuLines("",1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22);
+        setMenuLines("",1,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21);
         if (accounts.size() == 0){
             setMenuLines(HIGHLIGHT_COLOR + "There are no Accounts" + HIGHLIGHT_COLOR,4);
+        }else{
+            setMenuLines(HIGHLIGHT_COLOR + "Available Accounts" + HIGHLIGHT_COLOR,4);
         }
-        setMenuLines(HIGHLIGHT_COLOR + "Available Accounts" + HIGHLIGHT_COLOR,4);
         int initialLine = 6;
         for (Account account : accounts) {
             setMenuLines(account.toString(),initialLine++);
         }
         if (firstPage && lastPage){
-            setMenuLines(HIGHLIGHT_COLOR + "ENTER - Return to the main menu" + HIGHLIGHT_COLOR,20);
+            setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu",20);
         }else if (firstPage){
-            setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "to go to the next page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "next " + ANSI_RESET + "- go to the next page | " + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + "- return to the main menu",20);
         }else if (lastPage){
-            setMenuLines(HIGHLIGHT_COLOR + "previous " + ANSI_RESET + "to return to the previous page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "previous " + ANSI_RESET + "- return to the previous page | " + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + "- return to the main menu",20);
         }else{
-            setMenuLines(HIGHLIGHT_COLOR + "next" + ANSI_RESET + "to go to the next page" + HIGHLIGHT_COLOR +
-                    "previous " + ANSI_RESET + "to return to the previous page or " + HIGHLIGHT_COLOR +
-                    "back " + ANSI_RESET + "to return to the main menu",20);
+            setMenuLines(HIGHLIGHT_COLOR + "next" + ANSI_RESET + "- go to the next page |" + HIGHLIGHT_COLOR +
+                    "previous " + ANSI_RESET + "- return to the previous page | " + HIGHLIGHT_COLOR +
+                    "back " + ANSI_RESET + "- return to the main menu",20);
         }
         PrinterMenu.printMenu("");
+    }
+
+    public static void setWarning(String message){
+        setMenuLines(ANSI_BRIGHT_RED + message + ANSI_RESET, 23);
+    }
+    public static void clearWarning(){
+        setMenuLines("",23);
     }
 }

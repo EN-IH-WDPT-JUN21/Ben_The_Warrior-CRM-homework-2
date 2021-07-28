@@ -32,9 +32,10 @@ public class Menu {
             // get a user input, if it is valid compute the command otherwise print a warning message
             input = scanner.nextLine();
             if (isValidCommand(input)) {
+                PrinterMenu.clearWarning();
                 running = computeCommand(input);
             } else {
-                Printer.warningMessage("There is no such command as \"" + input + "\"! To see the list of available commands type help");
+                PrinterMenu.setWarning("There is no such command as \"" + input + "\"! To see the list of available commands type help!");
             }
         }
     }
@@ -68,15 +69,17 @@ public class Menu {
                     case "lead":
                         try{
                             Lead lead = db.lookupLeadId(Integer.parseInt(inputArray[2]));
+                            PrinterMenu.clearWarning();
                             PrinterMenu.lookupObject(lead);
                             promptDecision("enter");
                         }catch (IllegalArgumentException e){
-                            PrinterMenu.warningMessage(e.getMessage());
+                            PrinterMenu.setWarning(e.getMessage());
                         }
                         break;
                     case "opportunity":
                         try{
                             Opportunity opportunity = db.lookupOpportunityId(Integer.parseInt(inputArray[2]));
+                            PrinterMenu.clearWarning();
                             PrinterMenu.lookupObject(opportunity);
                             boolean decision = promptDecision("enter back");
                             if (decision){
@@ -84,25 +87,27 @@ public class Menu {
                                 promptDecision("enter");
                             }
                         }catch (IllegalArgumentException e){
-                            PrinterMenu.warningMessage(e.getMessage());
+                            PrinterMenu.setWarning(e.getMessage());
                         }
 
                         break;
                     case "contact":
                         try{
                             Contact contact = db.lookupContactId(Integer.parseInt(inputArray[2]));
+                            PrinterMenu.clearWarning();
                             PrinterMenu.lookupObject(contact);
                             promptDecision("enter");
                         }catch (IllegalArgumentException e){
-                            PrinterMenu.warningMessage(e.getMessage());
+                            PrinterMenu.setWarning(e.getMessage());
                         }
                         break;
                     case "account":
                         try{
                             Account account = db.lookupAccountId(Integer.parseInt(inputArray[2]));
+                            PrinterMenu.clearWarning();
                             PrinterMenu.lookupObject(account);
                         }catch (IllegalArgumentException e){
-                            PrinterMenu.warningMessage(e.getMessage());
+                            PrinterMenu.setWarning(e.getMessage());
                         }
                         break;
                     default:
@@ -112,9 +117,21 @@ public class Menu {
             case "convert":
                 promptConvert(Integer.parseInt(inputArray[1]));
                 break;
-            case "close_won":
-            case "close_lost":
-                db.updateStatus(Status.valueOf(inputArray[0].toUpperCase()), Integer.parseInt(inputArray[1]));
+            case "close-won":
+                try{
+                    Opportunity opportunity = db.lookupOpportunityId(Integer.parseInt(inputArray[1]));
+                    opportunity.setStatus(Status.CLOSED_WON);
+                }catch (IllegalArgumentException e){
+                    PrinterMenu.setWarning(e.getMessage());
+                }
+                break;
+            case "close-lost":
+                try{
+                    Opportunity opportunity = db.lookupOpportunityId(Integer.parseInt(inputArray[1]));
+                    opportunity.setStatus(Status.CLOSED_LOST);
+                }catch (IllegalArgumentException e){
+                    PrinterMenu.setWarning(e.getMessage());
+                }
                 break;
             case "help":
                 Menu.showHelp = true;
@@ -402,7 +419,7 @@ public class Menu {
                 db.convertLead(id, product, quantity, industry, employeeCount, city, country);
             }
         }else{
-            Printer.warningMessage("There is no lead with id " + id + " to convert!");
+            PrinterMenu.setWarning("There is no lead with id " + id + " to convert!");
         }
     }
 
@@ -434,6 +451,9 @@ public class Menu {
                         case "back":
                             return false;
                     }
+                    PrinterMenu.setWarning("Please input a valid command from the highlighted above!");
+                    PrinterMenu.printMenu("");
+                    PrinterMenu.clearWarning();
                 } while (true);
             case "enter":
                 scanner.nextLine();
@@ -454,31 +474,44 @@ public class Menu {
                     return i;
                 }
             }
-
+            PrinterMenu.setWarning("Please input a valid command from the highlighted above!");
+            PrinterMenu.printMenu("");
+            PrinterMenu.clearWarning();
         }
     }
 
     private static Product promptProduct() {
         String input;
-        do {
+        input = scanner.nextLine().trim().toUpperCase();
+        while (!validProduct(input)){
+            PrinterMenu.setWarning("Please input a valid Product option!");
+            PrinterMenu.printMenu("");
+            PrinterMenu.clearWarning();
             input = scanner.nextLine().trim().toUpperCase();
-        } while (!validProduct(input));
+        }
         return Product.valueOf(input);
     }
 
     private static Industry promptIndustry() {
         String input;
-        do {
+        input = scanner.nextLine().trim().toUpperCase();
+        while (!validIndustry(input)){
+            PrinterMenu.setWarning("Please input a valid Industry option!");
+            PrinterMenu.printMenu("");
+            PrinterMenu.clearWarning();
             input = scanner.nextLine().trim().toUpperCase();
-        } while (!validIndustry(input));
+        }
         return Industry.valueOf(input);
     }
 
     private static int promptNumber() {
-        String input;
-        do {
+        String input = scanner.nextLine().trim();
+        while (!validNumber(input)){
+            PrinterMenu.setWarning("Please input a valid integer number!");
+            PrinterMenu.printMenu("");
+            PrinterMenu.clearWarning();
             input = scanner.nextLine().trim();
-        } while (!validNumber(input));
+        }
         return Integer.parseInt(input);
     }
 
@@ -486,24 +519,40 @@ public class Menu {
         String input;
         switch (checkCondition) {
             case "phoneNumber":
-                do {
+                input = scanner.nextLine().trim();
+                while (!validPhone(input)){
+                    PrinterMenu.setWarning("Please input a valid Phone Number!");
+                    PrinterMenu.printMenu("");
+                    PrinterMenu.clearWarning();
                     input = scanner.nextLine().trim();
-                } while (!validPhone(input));
+                }
                 return input;
             case "email":
-                do {
+                input = scanner.nextLine().trim();
+                while (!validEmail(input)){
+                    PrinterMenu.setWarning("Please input a valid Email!");
+                    PrinterMenu.printMenu("");
+                    PrinterMenu.clearWarning();
                     input = scanner.nextLine().trim();
-                } while (!validEmail(input));
+                }
                 return input;
             case "name":
-                do {
+                input = scanner.nextLine().trim();
+                while (!validName(input)){
+                    PrinterMenu.setWarning("Please input a valid Name!");
+                    PrinterMenu.printMenu("");
+                    PrinterMenu.clearWarning();
                     input = scanner.nextLine().trim();
-                } while (!validName(input));
+                }
                 return input;
             default:
-                do {
+                input = scanner.nextLine().trim();
+                while (!validPhone(input)){
+                    PrinterMenu.setWarning("Please input a non empty string!");
+                    PrinterMenu.printMenu("");
+                    PrinterMenu.clearWarning();
                     input = scanner.nextLine().trim();
-                } while (!validString(input));
+                }
                 return input;
         }
     }

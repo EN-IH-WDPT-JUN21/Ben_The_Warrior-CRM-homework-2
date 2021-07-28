@@ -16,7 +16,7 @@ public class Printer {
     private static final JPanel panel = new JPanel();
 
     private static final int PROGRAM_WIDTH = 150;
-    private static final int PROGRAM_HEIGHT = 23;
+    private static final int PROGRAM_HEIGHT = 25;
     private static final int BORDER_WIDTH = 2;
     private static final int BORDER_TO_TEXT_SPACES = 4;
 
@@ -223,9 +223,5 @@ public class Printer {
     public static int textDividedInto(String text){
         text = text.replace(HIGHLIGHT_COLOR,"").replace(ANSI_RESET,"").replace(INSERT_HIGHLIGHT_COLOR, "");
         return (text.trim().length() / (PROGRAM_WIDTH - 2*BORDER_WIDTH - 2*BORDER_TO_TEXT_SPACES)) + 1;
-    }
-
-    public static void warningMessage(String message){
-        JOptionPane.showMessageDialog(panel, message, "Warning", JOptionPane.WARNING_MESSAGE);
     }
 }
