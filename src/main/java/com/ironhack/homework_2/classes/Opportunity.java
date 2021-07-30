@@ -1,8 +1,7 @@
 package com.ironhack.homework_2.classes;
 
-import com.ironhack.homework_2.enums.*;
-
-
+import com.ironhack.homework_2.enums.Product;
+import com.ironhack.homework_2.enums.Status;
 
 public class Opportunity {
     private Integer id;
@@ -11,18 +10,21 @@ public class Opportunity {
     private Contact decisionMaker;
     private Status status;
 
+    // ============================== CONSTRUCTOR ==============================
     public Opportunity(Product product, int quantity, Contact decisionMaker, Status status) {
         setProduct(product);
         setQuantity(quantity);
         setDecisionMaker(decisionMaker);
         setStatus(status);
     }
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
+    // ============================== GETTERS & SETTERS ==============================
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Product getProduct() {
@@ -57,10 +59,11 @@ public class Opportunity {
         this.status = status;
     }
 
+    // ============================== METHODS ==============================
     @Override
     public String toString() {
         return "Id: " + id + ", Product: " + product + ", Quantity: " + quantity + ", Decision Maker: " +
             decisionMaker.getName() + ", Status: " + status;
     }
-  
+
 }

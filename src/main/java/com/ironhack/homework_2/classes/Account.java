@@ -1,10 +1,8 @@
 package com.ironhack.homework_2.classes;
 
-import com.ironhack.homework_2.enums.*;
+import com.ironhack.homework_2.enums.Industry;
 
 import java.util.ArrayList;
-import java.util.List;
-
 
 public class Account {
     private Integer id;
@@ -15,18 +13,20 @@ public class Account {
     private ArrayList<Contact> contactList;
     private ArrayList<Opportunity> opportunityList;
 
+    // ============================== CONSTRUCTOR ==============================
     public Account(Industry industry, int employeeCount, String city, String country, Contact contact, Opportunity opportunity) {
         setId(id);
         setIndustry(industry);
         setEmployeeCount(employeeCount);
         setCity(city);
         setCountry(country);
-        contactList = new ArrayList<Contact>();
+        contactList = new ArrayList<>();
         contactList.add(contact);
-        opportunityList = new ArrayList<Opportunity>();
+        opportunityList = new ArrayList<>();
         opportunityList.add(opportunity);
     }
 
+    // ============================== GETTERS & SETTERS ==============================
     public Integer getId() {
         return id;
     }
@@ -71,11 +71,19 @@ public class Account {
         return contactList;
     }
 
+    public void setContactList(ArrayList<Contact> contactList) {
+        this.contactList = contactList;
+    }
 
     public ArrayList<Opportunity> getOpportunityList() {
         return opportunityList;
     }
 
+    public void setOpportunityList(ArrayList<Opportunity> opportunityList) {
+        this.opportunityList = opportunityList;
+    }
+
+    // ============================== METHODS ==============================
     @Override
     public String toString() {
         return "Id: " + id + ", Industry: " + industry + ", Number of Employees: " + employeeCount + ", City: " + city +

@@ -1,7 +1,5 @@
 package com.ironhack.homework_2.classes;
 
-import java.util.UUID;
-
 public class Lead {
     private Integer id;
     private String name;
@@ -9,6 +7,7 @@ public class Lead {
     private String email;
     private String companyName;
 
+    // ============================== CONSTRUCTOR ==============================
     public Lead(String name, String phoneNumber, String email, String companyName) {
         setName(name);
         setPhoneNumber(phoneNumber);
@@ -16,6 +15,7 @@ public class Lead {
         setCompanyName(companyName);
     }
 
+    // ============================== GETTERS & SETTERS ==============================
     public Integer getId() {
         return id;
     }
@@ -56,6 +56,7 @@ public class Lead {
         this.companyName = companyName;
     }
 
+    // ============================== METHODS ==============================
     @Override
     public String toString() {
         return "Id: " + id + ", Name: " + name + ", Email: " + email + ", Phone: " + phoneNumber + ", Company: " + companyName;
