@@ -8,7 +8,6 @@
 package com.ironhack.homework_2.utils;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.util.Collections;
 
 public class Printer {
@@ -75,7 +74,9 @@ public class Printer {
         return INSERT_HIGHLIGHT_COLOR;
     }
 
-    public static int getProgramHeight(){ return PROGRAM_HEIGHT; }
+    public static int getProgramHeight() {
+        return PROGRAM_HEIGHT;
+    }
 
 
     // ======================================== 3. SIMPLIFIED PRINTERS ========================================
@@ -210,7 +211,8 @@ public class Printer {
         for (String word : textArray) {
             // check if word length is greater than empty space and first word.
             // If yes it will return only the part that fits.
-            if (word.length() > emptySpaces && countLength == 0) return word.substring(0, emptySpaces - BORDER_WIDTH * 2);
+            if (word.length() > emptySpaces && countLength == 0)
+                return word.substring(0, emptySpaces - BORDER_WIDTH * 2);
 
             // Count words length and adds word to output text until it surpasses the empty spaces. Returns when full
             countLength += word.length() + 1;
@@ -220,8 +222,8 @@ public class Printer {
         return "";
     }
 
-    public static int textDividedInto(String text){
-        text = text.replace(HIGHLIGHT_COLOR,"").replace(ANSI_RESET,"").replace(INSERT_HIGHLIGHT_COLOR, "");
-        return (text.trim().length() / (PROGRAM_WIDTH - 2*BORDER_WIDTH - 2*BORDER_TO_TEXT_SPACES)) + 1;
+    public static int textDividedInto(String text) {
+        text = text.replace(HIGHLIGHT_COLOR, "").replace(ANSI_RESET, "").replace(INSERT_HIGHLIGHT_COLOR, "");
+        return (text.trim().length() / (PROGRAM_WIDTH - 2 * BORDER_WIDTH - 2 * BORDER_TO_TEXT_SPACES)) + 1;
     }
 }
