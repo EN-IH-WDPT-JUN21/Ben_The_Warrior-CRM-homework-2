@@ -539,7 +539,7 @@ public class Menu {
             PrinterMenu.printMenu("convert");
             Product product = promptProduct();
             PrinterMenu.printMenu("convert", "product", product.toString());
-            int quantity = promptNumber();
+            int quantity = promptPositiveNumber();
 
             //prompt Account
             PrinterMenu.printMenu("convert", "quantity and contact", Integer.toString(quantity), contactName);
@@ -549,7 +549,7 @@ public class Menu {
             PrinterMenu.printMenu("convert", "account");
             Industry industry = promptIndustry();
             PrinterMenu.printMenu("convert", "industry", industry.toString());
-            int employeeCount = promptNumber();
+            int employeeCount = promptPositiveNumber();
             PrinterMenu.printMenu("convert", "employees", Integer.toString(employeeCount));
             String city = promptString("");
             PrinterMenu.printMenu("convert", "city", city);
@@ -644,10 +644,10 @@ public class Menu {
         return Industry.valueOf(input);
     }
 
-    private static int promptNumber() {
+    private static int promptPositiveNumber() {
         String input = scanner.nextLine().trim();
-        while (!validNumber(input)) {
-            PrinterMenu.setWarning("Please input a valid integer number!");
+        while (!validNumberGreaterThan(input, -1)) {
+            PrinterMenu.setWarning("Please input a valid integer number! Must be greater than 0!");
             PrinterMenu.printMenu("");
             PrinterMenu.clearWarning();
             input = scanner.nextLine().trim();

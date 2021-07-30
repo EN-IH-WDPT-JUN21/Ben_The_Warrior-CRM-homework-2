@@ -13,6 +13,15 @@ public class Utils {
         }
     }
 
+    public static boolean validNumberGreaterThan(String num, int smallest) {
+        try {
+            int convertedNum = Integer.parseInt(num);
+            return convertedNum > smallest;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static boolean validProduct(String product) {
         try {
             Product.valueOf(product);
