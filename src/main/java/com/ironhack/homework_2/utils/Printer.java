@@ -133,20 +133,13 @@ public class Printer {
 
 
     // ======================================== 4. MAIN PRINTERS ========================================
-
     // Clear command line. In Intellij adds spacing between menus.
     public static void clearCommandLine() /*throws IOException, InterruptedException*/ {
         // Clear in Intellij
-        System.out.println("==========================================================================================");
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-
-        // TODO [JA] - Need to test both in different OS
-        // Clear in command line - Method 1
+        // Clear in command line
         System.out.print("\033[H\033[2J");
         System.out.flush();
-
-        // Clear in command line - Method 2
-//    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor(); //throws IOException and InterruptedException
     }
 
     // Print a stylish text line with the text centered.
