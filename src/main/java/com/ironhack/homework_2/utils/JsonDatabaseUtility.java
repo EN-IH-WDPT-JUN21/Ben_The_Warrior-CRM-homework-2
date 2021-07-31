@@ -1,13 +1,18 @@
 package com.ironhack.homework_2.utils;
 
+import com.google.gson.Gson;
 import com.ironhack.homework_2.classes.*;
 import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+
 
 public class JsonDatabaseUtility {
     private Map<Integer, Lead> leadHash = new HashMap<>();
@@ -246,4 +251,217 @@ public class JsonDatabaseUtility {
             return true;
         }
     }
+
+    // ==================== Save Methods for Leads, Contacts, Opportunities and Accounts class into a Json files ====================
+    // saveLead method will add lead info to Lead Json file
+
+    public void saveLeadInJson(Lead lead) throws IOException {
+        File file = new File("leads.json");
+        FileWriter writer = new FileWriter("leads.json", true);
+        String jsonLead = new Gson().toJson(lead);
+        if(isInJson(lead,file)){
+            System.out.println("This lead is already saved in the Json file");
+            writer.close();
+        }
+        else{
+            writer.append(new Gson().toJson(lead));
+            writer.append("\n");
+            writer.close();
+            System.out.println("Lead has been saved correctly");
+        }
+    }
+
+    // this method return a Lead from a Json file
+    public Lead loadLeadFromJson(Integer id){
+        Gson gson = new Gson();
+        Path path = Paths.get("leads.json");
+        List<Lead> leads = new ArrayList<>();
+        Lead selectedLead = null;
+
+        try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.US_ASCII)) {
+            String leadString = reader.readLine();
+            while (leadString != null){
+                Lead lead = gson.fromJson(leadString, Lead.class);
+                leads.add(lead);
+                leadString = reader.readLine();
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
+        for (Lead l: leads) {
+            if(id == l.getId()){
+                selectedLead = l;
+            }
+            else{
+                System.out.println("This Id does not exist in the leads record");
+            }
+        }
+        return selectedLead;
+    }
+
+    // saveContact method will add a Contact info to contacts Json file
+    public void saveContactInJason(Contact contact) throws IOException {
+        File file = new File("contacts.json");
+        FileWriter writer = new FileWriter("contacts.json", true);
+        String jsonContact = new Gson().toJson(contact);
+        if(isInJson(contact,file)){
+            System.out.println("This contact is already saved in the Json file");
+            writer.close();
+        }
+        else{
+            writer.append(new Gson().toJson(contact));
+            writer.append("\n");
+            writer.close();
+            System.out.println("Contact has been saved correctly");
+        }
+    }
+
+    // this method return a Contact from a Json file
+    public Contact loadContactFromJson(Integer id){
+        Gson gson = new Gson();
+        Path path = Paths.get("contacts.json");
+        List<Contact> contacts = new ArrayList<>();
+        Contact selectedContact = null;
+
+        try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.US_ASCII)) {
+            String contactString = reader.readLine();
+            while (contactString != null){
+                Contact contact = gson.fromJson(contactString, Contact.class);
+                contacts.add(contact);
+                contactString = reader.readLine();
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
+        for (Contact c: contacts) {
+            if(id == c.getId()){
+                selectedContact = c;
+            }
+            else{
+                System.out.println("This Id does not exist in the contacts record");
+            }
+        }
+        return selectedContact;
+    }
+
+    // saveOpportunity method will add an Opportunity object to opportunities Json file
+    public void saveOpportunityInJson(Opportunity opportunity) throws IOException {
+        File file = new File("opportunities.json");
+        FileWriter writer = new FileWriter("opportunities.json", true);
+        String jsonOpportunity = new Gson().toJson(opportunity);
+        if(isInJson(opportunity,file)){
+            System.out.println("This opportunity is already saved in the Json file");
+            writer.close();
+        }
+        else{
+            writer.append(new Gson().toJson(opportunity));
+            writer.append("\n");
+            writer.close();
+            System.out.println("Opportunity has been saved correctly");
+        }
+    }
+
+    // this method return an Opportunity from a Json file
+    public Opportunity loadOpportunityFromJson(Integer id){
+        Gson gson = new Gson();
+        Path path = Paths.get("opportunities.json");
+        List<Opportunity> opportunities = new ArrayList<>();
+        Opportunity selectedOpportunity = null;
+
+        try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.US_ASCII)) {
+            String opportunityString = reader.readLine();
+            while (opportunityString != null){
+                Opportunity opportunity = gson.fromJson(opportunityString, Opportunity.class);
+                opportunities.add(opportunity);
+                opportunityString = reader.readLine();
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
+        for (Opportunity o: opportunities) {
+            if(id == o.getId()){
+                selectedOpportunity = o;
+            }
+            else{
+                System.out.println("This Id does not exist in the opportunities record");
+            }
+        }
+        return selectedOpportunity;
+    }
+
+    // saveAccount method will add an Account object to accounts Json file
+    public void saveAccountInJson(Account account) throws IOException {
+        File file = new File("accounts.json");
+        FileWriter writer = new FileWriter("accounts.json", true);
+        String jsonAccount = new Gson().toJson(account);
+        if(isInJson(account,file)){
+            System.out.println("This Account is already saved in the Json file");
+            writer.close();
+        }
+        else{
+            writer.append(new Gson().toJson(account));
+            writer.append("\n");
+            writer.close();
+            System.out.println("Account has been saved correctly");
+        }
+    }
+
+    // this method return an Account from a Json file
+    public Account loadAccountFromJson(Integer id){
+        Gson gson = new Gson();
+        Path path = Paths.get("accounts.json");
+        List<Account> accounts = new ArrayList<>();
+        Account selectedAccount = null;
+
+        try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.US_ASCII)) {
+            String accountString = reader.readLine();
+            while (accountString != null){
+                Account account = gson.fromJson(accountString, Account.class);
+                accounts.add(account);
+                accountString = reader.readLine();
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
+        for (Account a: accounts) {
+            if(id == a.getId()){
+                selectedAccount = a;
+            }
+            else{
+                System.out.println("This Id does not exist in the accounts record");
+            }
+        }
+        return selectedAccount;
+    }
+
+
+
+
+    //In order to avoid duplicate object in our Json Files we check if the object is already in the json file
+    public boolean isInJson(Object obj, File file)throws FileNotFoundException {
+        boolean isInFile = false;
+        String objJson = new Gson().toJson(obj);
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNext()){
+            if(objJson.equals(scanner.nextLine())){
+                isInFile = true;
+                break;
+            }
+            else{
+                isInFile = false;
+            }
+        }
+
+        scanner.close();
+        return isInFile;
+    }
+
 }

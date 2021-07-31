@@ -1,5 +1,6 @@
 package com.ironhack.homework_2.utils;
 
+import com.ironhack.homework_2.classes.Account;
 import com.ironhack.homework_2.classes.Contact;
 import com.ironhack.homework_2.classes.Lead;
 import com.ironhack.homework_2.classes.Opportunity;
@@ -10,7 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -194,4 +199,84 @@ class JsonDatabaseUtilityTest {
         assertEquals(1, opportunityHashSizeAfter-opportunityHashSizeBefore);
         assertEquals(1, accountHashSizeAfter-accountHashSizeBefore);
     }
+
+    @Test
+    void leadSavedInJsonFile() throws IOException {
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.saveLeadInJson(jsonDatabaseUtility.getLeadHash().get(1));
+        File file = new File("leads.json");
+        assertTrue(file.exists());
+        Scanner scan = new Scanner(file);
+        assertTrue(scan.hasNextLine());
+        scan.close();
+
+    }
+
+    @Test
+    void contactSavedInJsonFile() throws IOException {
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.addContact(1);
+        jsonDatabaseUtility.saveContactInJason(jsonDatabaseUtility.getContactHash().get(1));
+        File file = new File("contacts.json");
+        assertTrue(file.exists());
+        Scanner scan = new Scanner(file);
+        assertTrue(scan.hasNextLine());
+        scan.close();
+    }
+
+    @Test
+    void opportunitySavedInJsonFile() throws IOException {
+        jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
+        jsonDatabaseUtility.addContact(1);
+        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        jsonDatabaseUtility.addOpportunity(Product.HYBRID, 12, contact1);
+        jsonDatabaseUtility.saveOpportunityInJson(jsonDatabaseUtility.getOpportunityHash().get(1));
+        File file = new File("opportunities.json");
+        assertTrue(file.exists());
+        Scanner scan = new Scanner(file);
+        assertTrue(scan.hasNextLine());
+        scan.close();
+    }
+
+    @Test
+    void accountSavedInJsonFile() throws IOException {
+        jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
+        jsonDatabaseUtility.addContact(1);
+        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        jsonDatabaseUtility.addOpportunity(Product.HYBRID, 12, contact1);
+        Opportunity opportunity1=jsonDatabaseUtility.getOpportunityHash().get(1);
+        jsonDatabaseUtility.addAccount(Industry.MEDICAL, 12, "Warsaw", "Poland", contact1, opportunity1);
+        jsonDatabaseUtility.saveAccountInJson(jsonDatabaseUtility.getAccountHash().get(1));
+        File file = new File("accounts.json");
+        assertTrue(file.exists());
+        Scanner scan = new Scanner(file);
+        assertTrue(scan.hasNextLine());
+        scan.close();
+    }
+
+    @Test
+    void loadLeadFromJson(){
+        Lead lead = jsonDatabaseUtility.loadLeadFromJson(1);
+        assertEquals("john@gmail.com",lead.getEmail());
+    }
+
+    @Test
+    void loadContactFromJson(){
+        Contact contact = jsonDatabaseUtility.loadContactFromJson(1);
+        assertEquals("Xerox",contact.getCompanyName());
+    }
+
+    @Test
+    void loadOpportunityFromJson(){
+        Opportunity opportunity = jsonDatabaseUtility.loadOpportunityFromJson(1);
+        assertEquals(12, opportunity.getQuantity());
+    }
+
+    @Test
+    void loadAccountFromJson(){
+        Account account = jsonDatabaseUtility.loadAccountFromJson(1);
+        assertEquals("Poland", account.getCountry());
+    }
+
+
 }
