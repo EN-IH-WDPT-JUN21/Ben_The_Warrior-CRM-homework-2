@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PrinterTest {
-    private final String RED = "\u001B[31m";
-    private final String RESET = "\u001B[0m";
-    private final String BRIGHT_GREEN = "\u001B[92m";
-    private final String BG_RED = "\u001B[41m";
+    private final static String RED = "\u001B[31m";
+    private final static String RESET = "\u001B[0m";
+    private final static String BRIGHT_GREEN = "\u001B[92m";
+    private final static String BG_RED = "\u001B[41m";
 
     // Setup for print testing.
     private final PrintStream standardOut = System.out;
@@ -94,6 +94,38 @@ class PrinterTest {
         assertEquals(expectedRows, Printer.numberOfTextRows(s, inputEmptySpace));
     }
 
+    // ============================== TEST numberOfTextRows() with color codes ==============================
+    @ParameterizedTest
+    @ValueSource(strings = {RED + RESET, RED + " " + RESET, BRIGHT_GREEN + "   " + RESET,
+        RED + "Test" + BRIGHT_GREEN + "Test" + RESET, BG_RED + " Test Test" + RESET,
+        BRIGHT_GREEN + "Test " + BG_RED + "Test "})
+    void numberOfTextRows_textSmallerThanEmptySpaceWithColor_OneRow(String s) {
+        assertEquals(1, Printer.numberOfTextRows(s, 10));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {RED + "TestTestTest" + RESET, "Test " + BG_RED + "Test" + RESET + " Test",
+        " Te" + BG_RED + "st Test" + RESET + " t", RED + "TestTest" + RESET + "TestTestTest" + BRIGHT_GREEN + "TestTest",
+        "Test" + RED + " test Test" + BG_RED + "Test Test" + RESET + " Test"})
+    void numberOfTextRows_textLargerThanEmptySpaceWithColor_moreThanOneRow(String s) {
+        assertTrue(Printer.numberOfTextRows(s, 10) > 1);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"6,10", "10,5", "12,5", "18,4", "19,3", "24,3", "30,2", "49,1", "100,1"})
+    void numberOfTextRows_fixedTextWithVariableEmptySpaceWithColor_correctNumberOfRows(int inputEmptySpace, int expectedRows) {
+        String s = "Test " + RED + "Test Test" + BRIGHT_GREEN + " Test Test " + BG_RED + "Test Test" + RESET + " Test Test Test";
+        assertEquals(expectedRows, Printer.numberOfTextRows(s, inputEmptySpace));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {3, 7, 13, 17, 18, 20})
+    void numberOfTextRows_textWithAndWithoutColor_sameNumberOfRows(int emptySize) {
+        String s = "Test TestTest Test";
+        String sc = "Test " + RED + "Test" + BRIGHT_GREEN + "Test" + BG_RED + " Test" + RESET;
+        assertEquals(Printer.numberOfTextRows(s, emptySize), Printer.numberOfTextRows(sc, emptySize));
+    }
+
     // ============================== TEST getColorCodes() ==============================
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "     ", "Test", "TestTestTestTestTestTestTest",
@@ -142,35 +174,6 @@ class PrinterTest {
         aux.put(26, BRIGHT_GREEN);
         aux.put(47, RESET);
         assertEquals(aux, cm);
-    }
-
-
-// =====================================================================================================
-
-
-    @ParameterizedTest
-    @ValueSource(strings = {"All 1234 12345", "ad+hgkmsao jghnworyn0a35yn03 ahny 39ahn 39ngv 3agn     ",
-        "wnfvc924nfg2gh 2hrf 284y3hf 183y bdh1bc y81"})
-    void divideText_textLargerThanSpace_returnTextSmallerThanSpace(String text) {
-//    assertTrue(0 >= Printer.divideText(text, 0).length());
-//    assertTrue(2 >= Printer.divideText(text, 2).length());
-//    assertTrue(20 >= Printer.divideText(text, 20).length());
-//    assertTrue(40 >= Printer.divideText(text, 30).length());
-//    assertTrue(120 >= Printer.divideText(text, 80).length());
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"1234 3562 1356 sfhs", "1234 du5d sg4g 4gs4", "rair 3462 2136 2gs4", "2d23 sfrs rway afjja",})
-    void divideText_textLargerThanSpace_doNotSplitWords_inFours(String text) {
-//    assertEquals(text.substring(0,4).trim(), Printer.divideText(text, 6));
-//    assertEquals(text.substring(0,14).trim(), Printer.divideText(text, 18));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"12345 35625 13565 sfhs5", "12345 du5d5 sg4g 4gs4", "rair5 34625 21365 2gs45", "2d235 sfrs5 rway5 afjja",})
-    void divideText_textLargerThanSpace_doNotSplitWords_inFives(String text) {
-//    assertEquals(text.substring(0,5).trim(), Printer.divideText(text, 6));
-//    assertEquals(text.substring(0,17).trim(), Printer.divideText(text, 18));
     }
 
 
