@@ -2,6 +2,7 @@ package com.ironhack.homework_2.utils;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -34,11 +35,48 @@ class PrinterTest {
     }
 
 
-    // ============================== Test numberOfTextRows() ==============================
+    // ============================== TEST divideText() ==============================
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "    ", "TestTest", " Test Test", "Test Test ", "TestTestTest", "Test Test Test",
+        " Test Test t", "TestTestTestTestTestTestTest", "Test test TestTest Test Test",
+        "TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest Test "})
+    void divideText_textEqualOrSmallerThanEmptySpace_originalStringAndEmptyString(String s) {
+        String[] dividedString = Printer.divideText(s, s.length());
+        assertTrue(dividedString[0].equals(s) && dividedString[1].equals(""));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"TestTest", "TestTestTest", "TestTestTestTestTestTestTest",
+        "TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest Test "})
+    void divideText_firstWordLargerThanEmptySpace_firstWordSplitByEmptySpaceAndRemainingStringExists(String s) {
+        String[] dividedString = Printer.divideText(s, 3);
+        assertTrue(dividedString[0].equals("Tes") && dividedString[1].length() > 0);
+    }
+
+    @Test
+    void divideText_firstWordLargerThanEmptySpace_correctSplitText() {
+        String[] dividedString = Printer.divideText("TestTestTest Test", 6);
+        assertTrue(dividedString[0].equals("TestTe") && dividedString[1].equals("stTest Test"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {" Test Test", "Test Test ", "Test Test Test", " Test Test t",
+        "Test test TestTest Test Test"})
+    void divideText_textLargerThanEmptySpace_wordsThatFitAndRemainingStringExists(String s) {
+        String[] dividedString = Printer.divideText(s, 6);
+        assertTrue(dividedString[0].equals("Test ") && dividedString[1].length() > 0);
+    }
+
+    @Test
+    void divideText_textLargerThanEmptySpace_correctSplitText() {
+        String[] dividedString = Printer.divideText("Test Test TestTest", 12);
+        assertTrue(dividedString[0].equals("Test Test ") && dividedString[1].equals("TestTest"));
+    }
+
+    // ============================== TEST numberOfTextRows() ==============================
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "   ", "TestTest", " Test Test", "Test Test "})
     void numberOfTextRows_textSmallerThanEmptySpace_OneRow(String s) {
-//        System.out.println(Printer.numberOfTextRows(s, 10));
         assertEquals(1, Printer.numberOfTextRows(s, 10));
     }
 
@@ -46,7 +84,6 @@ class PrinterTest {
     @ValueSource(strings = {"TestTestTest", "Test Test Test", " Test Test t", "TestTestTestTestTestTestTest",
         "Test test TestTest Test Test"})
     void numberOfTextRows_textLargerThanEmptySpace_moreThanOneRow(String s) {
-//        System.out.println(Printer.numberOfTextRows(s, 10));
         assertTrue(Printer.numberOfTextRows(s, 10) > 1);
     }
 
@@ -57,13 +94,12 @@ class PrinterTest {
         assertEquals(expectedRows, Printer.numberOfTextRows(s, inputEmptySpace));
     }
 
-    // ============================== Test getColorCodes() ==============================
+    // ============================== TEST getColorCodes() ==============================
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "     ", "Test", "TestTestTestTestTestTestTest",
         "TestTest TestTestTest - TestTest: Test? `\"", "-931t3tn 9qcg7637 613",
         "-93jkhg9qn3v9w783gh q783ghq8v3 gq3y8igbq58y3bgakgba3jygbxnev853 g3ma8yg nuebv antg ye ng vzyug ajyv znrut3 gegz1t3 tn9qcg7 637613"})
     void getColorCodes_noASCIIColorCode_EmptyTreeMap(String s) {
-//        System.out.println(Printer.getColorCodes(s));
         assertTrue(Printer.getColorCodes(s).isEmpty());
     }
 
@@ -73,7 +109,6 @@ class PrinterTest {
         RED + "-931t3 tn9qcg7 637613" + RESET,
         RED + "-93jkhg9qn3v9w783gh q783ghq8v3 gq3y8igbq58y3bgakgba3jygbxnev853 g3ma8yg nuebv antg ye ng vzyug ajyv znrut3 gegz1t3 tn9qcg7 637613" + RESET})
     void getColorCodes_twoASCIIColorCode_TreeMapWithSizeTwo(String s) {
-//        System.out.println(Printer.getColorCodes(s));
         assertEquals(2, Printer.getColorCodes(s).size());
     }
 
@@ -81,7 +116,6 @@ class PrinterTest {
     @ValueSource(strings = {"TestTest " + RED + "TestTestTest" + RESET,
         "Blablaba " + RED + "TestTestTest" + RESET + " TestTestTest"})
     void getColorCodes_twoASCIIColorCodeInIndex9And26_correctColorCodeIndexes(String s) {
-//        System.out.println(Printer.getColorCodes(s));
         TreeMap<Integer, String> cm = Printer.getColorCodes(s);
         assertEquals(9, cm.firstKey());
         assertEquals(26, cm.lastKey());
@@ -91,7 +125,6 @@ class PrinterTest {
     @ValueSource(strings = {"TestTest " + RED + "TestTestTest" + BRIGHT_GREEN + BG_RED + "Lalallalalaala" + RESET,
         "Blablaba " + RED + "TestTestTest" + BRIGHT_GREEN + " TestTestTest" + BG_RED + "Lalalala" + RESET})
     void getColorCodes_multipleASCIIColorCode_savesAllColorCode(String s) {
-//        System.out.println(Printer.getColorCodes(s));
         TreeMap<Integer, String> cm = Printer.getColorCodes(s);
         assertTrue(cm.containsValue(RED));
         assertTrue(cm.containsValue(BRIGHT_GREEN));
@@ -103,7 +136,6 @@ class PrinterTest {
     @ValueSource(strings = {"TestTest " + RED + "TestTestTest" + BRIGHT_GREEN + "TestTestTestTest" + RESET,
         "Blablabla" + RED + "TestTestTest" + BRIGHT_GREEN + " Test Test Test " + RESET + "Blaaaa!"})
     void getColorCodes_multipleASCIIColorCode_correctColorTreeMap(String s) {
-//        System.out.println(Printer.getColorCodes(s));
         TreeMap<Integer, String> cm = Printer.getColorCodes(s);
         TreeMap<Integer, String> aux = new TreeMap<>();
         aux.put(9, RED);
@@ -115,13 +147,6 @@ class PrinterTest {
 
 // =====================================================================================================
 
-
-    @ParameterizedTest
-    @ValueSource(strings = {"", " ", "All 1234 12345", "ad+hgkmsao jghnworyn0a35yn03 ahny 39ahn 39ngv 3agn     "})
-    void divideText_textSmallerOrEqualThanSpace_returnAllTextTrimmed(String text) {
-//    assertEquals(text.trim(), Printer.divideText(text, text.length() + 1));
-//    assertEquals(text.trim(), Printer.divideText(text, text.length()));
-    }
 
     @ParameterizedTest
     @ValueSource(strings = {"All 1234 12345", "ad+hgkmsao jghnworyn0a35yn03 ahny 39ahn 39ngv 3agn     ",
