@@ -8,6 +8,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PrinterTest {
 
+
+
+
+
+
+
+
+
   @ParameterizedTest
   @ValueSource(strings = {"", " ", "All 1234 12345", "ad+hgkmsao jghnworyn0a35yn03 ahny 39ahn 39ngv 3agn     "})
   void divideText_textSmallerOrEqualThanSpace_returnAllTextTrimmed(String text) {

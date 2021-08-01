@@ -1,3 +1,4 @@
+// TODO JA: Small intro and index structure of class
 // Printer class structure:
 // 1. Printer proprieties and defined colors
 // 2. Getters and setters
@@ -7,20 +8,17 @@
 
 package com.ironhack.homework_2.utils;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
 
 public class Printer {
     // Maybe create a Enum called color pallet?     // TODO [JA] - Create enum with values? Maybe delete the ones not in use
-    private static final JPanel panel = new JPanel();
-
     private static final int PROGRAM_WIDTH = 150;
     private static final int PROGRAM_HEIGHT = 25;
     private static final int BORDER_WIDTH = 2;
     private static final int BORDER_TO_TEXT_SPACES = 4;
-
+    // TODO JA: Delete not used ones.
     private static final String ANSI_RESET = "\u001B[0m";
     // ==================== Text Colors ====================
     private static final String ANSI_BLACK = "\u001B[30m";
@@ -82,7 +80,7 @@ public class Printer {
 
 
     // ======================================== 3. SIMPLIFIED PRINTERS ========================================
-
+    // TODO JA: If not in use -> delete
     // Print in the main style. Side borders colored and text with a margin to the left.
     public static void print() {
         printLeftString("", 0, PROGRAM_WIDTH, BORDER_COLOR, "");
@@ -92,6 +90,7 @@ public class Printer {
         printLeftString(text, BORDER_TO_TEXT_SPACES, PROGRAM_WIDTH, BORDER_COLOR, "");
     }
 
+    // TODO JA: If not in use -> delete
     public static void print(String text, int margin) {
         printLeftString(text, margin, PROGRAM_WIDTH, BORDER_COLOR, "");
     }
@@ -101,10 +100,12 @@ public class Printer {
         printLeftString("", 0, PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR);
     }
 
+    // TODO JA: If not in use -> delete
     public static void printFull(String text) {
         printLeftString(text, 4, PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR);
     }
 
+    // TODO JA: If not in use -> delete
     public static void printFull(String text, int margin) {
         printLeftString(text, margin, PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR);
     }
@@ -116,16 +117,19 @@ public class Printer {
         printFull();
     }
 
+    // TODO JA: If not in use -> delete
     // Print line without formatting
     public static void printEmpty() {
         System.out.println();
     }
 
+    // TODO JA: If not in use -> delete
     // Return a colored Warning without new line. (useful for presenting small error situations)
     public static String printWarning() {
         return (ANSI_YELLOW + "[WARNING] " + ANSI_RESET);
     }
 
+    // TODO JA: If not in use -> delete
     // Return a colored Error without new line. (useful for presenting error situations)
     public static String printError() {
         return (ANSI_RED + "[ERROR] " + ANSI_RESET);
@@ -169,9 +173,8 @@ public class Printer {
     }
 
     // Print a stylish text line with the text on the left. Has a margin option.
-    // If text exceeds program width, wraps to the next line, no cut words. Uses recursion!
-    // If text has color, keeps it to next line. (Used for printing variable size text)
-    // Uses recursion to print the different lines. (uses aux method -> divideText(text, maxWidth) )
+    // If text exceeds program width, wraps to the next line, no cut words unless single big word.
+    // If text has color, keeps it to next lines. (Used for printing variable size text)
     public static void printLeftString(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
         // Divide the text if it is larger than program width.
         String newText = divideText(text, width - leftSpaces * 2)[0];
@@ -193,6 +196,7 @@ public class Printer {
         System.out.println(str);
     }
 
+    // TODO JA: If to be used rename and overite the original (keep initial comments)
     public static void printLeftString2(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
         // Initializes Maps and lists that will be used in the aux methods to divide rows and keep a color structure
         ArrayList<String> rows = new ArrayList<>();
@@ -315,7 +319,7 @@ public class Printer {
         return colorCodes;
     }
 
-
+    // TODO JA: If not in use -> delete
     public static int textDividedInto(String text) {
         text = text.replace(HIGHLIGHT_COLOR, "").replace(ANSI_RESET, "").replace(INSERT_HIGHLIGHT_COLOR, "");
         return (text.trim().length() / (PROGRAM_WIDTH - 2 * BORDER_WIDTH - 2 * BORDER_TO_TEXT_SPACES)) + 1;
