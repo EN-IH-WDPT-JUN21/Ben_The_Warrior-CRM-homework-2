@@ -283,7 +283,7 @@ public class Printer {
             smallText.append(word).append(" ");
         }
         return new String[]{text, ""}; // Only used to have a return. Never used.
-    }
+    }   // Note: For it to work with the print method and color mapping this method will always count the space after a word.
 
     // Counts the number of rows that the printLeftString() and printCenterString() methods will create.
     // The emptySpace is defined only for the text section. Ex: printLeftString -> width - 2*leftSpaces.
@@ -314,7 +314,7 @@ public class Printer {
                 colorCodes.put(i + wordLength, code);
                 textString = textString.substring(0, i) + textString.substring(i + code.length());
             }
-            wordLength += code.length();
+            wordLength += code.length(); // Add size of colors that were removed
         }
         return colorCodes;
     }

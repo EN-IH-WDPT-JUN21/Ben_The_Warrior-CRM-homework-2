@@ -3,35 +3,66 @@ package com.ironhack.homework_2.utils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PrinterTest {
-    private static final String RED = "\u001B[31m";
-    private static final String RESET = "\u001B[0m";
-    public static final String BRIGHT_GREEN = "\u001B[92m";
-    public static final String BG_RED = "\u001B[41m";
+    private final String RED = "\u001B[31m";
+    private final String RESET = "\u001B[0m";
+    private final String BRIGHT_GREEN = "\u001B[92m";
+    private final String BG_RED = "\u001B[41m";
 
+    // Setup for print testing.
+    private final PrintStream standardOut = System.out;
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
     @BeforeEach
     void setUp() {
+        System.setOut(new PrintStream(outputStreamCaptor));
     }
 
     @AfterEach
     void tearDown() {
+        System.setOut(standardOut);
     }
 
+
+    // ============================== Test numberOfTextRows() ==============================
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   ", "TestTest", " Test Test", "Test Test "})
+    void numberOfTextRows_textSmallerThanEmptySpace_OneRow(String s) {
+//        System.out.println(Printer.numberOfTextRows(s, 10));
+        assertEquals(1, Printer.numberOfTextRows(s, 10));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"TestTestTest", "Test Test Test", " Test Test t", "TestTestTestTestTestTestTest",
+        "Test test TestTest Test Test"})
+    void numberOfTextRows_textLargerThanEmptySpace_moreThanOneRow(String s) {
+//        System.out.println(Printer.numberOfTextRows(s, 10));
+        assertTrue(Printer.numberOfTextRows(s, 10) > 1);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"6,10", "10,5", "12,5", "18,4", "19,3", "24,3", "30,2", "49,1", "100,1"})
+    void numberOfTextRows_fixedTextWithVariableEmptySpace_correctNumberOfRows(int inputEmptySpace, int expectedRows) {
+        String s = "Test Test Test Test Test Test Test Test Test Test";
+        assertEquals(expectedRows, Printer.numberOfTextRows(s, inputEmptySpace));
+    }
 
     // ============================== Test getColorCodes() ==============================
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "     ", "Test", "TestTestTestTestTestTestTest",
         "TestTest TestTestTest - TestTest: Test? `\"", "-931t3tn 9qcg7637 613",
         "-93jkhg9qn3v9w783gh q783ghq8v3 gq3y8igbq58y3bgakgba3jygbxnev853 g3ma8yg nuebv antg ye ng vzyug ajyv znrut3 gegz1t3 tn9qcg7 637613"})
-    void testGetColorCodes_noASCIIColorCode_EmptyTreeMap(String s) {
+    void getColorCodes_noASCIIColorCode_EmptyTreeMap(String s) {
 //        System.out.println(Printer.getColorCodes(s));
         assertTrue(Printer.getColorCodes(s).isEmpty());
     }
@@ -41,7 +72,7 @@ class PrinterTest {
         RED + "TestTestTestTestTestTestTest" + RESET, RED + "TestTest TestTestTest - TestTest: Test? `\"" + RESET,
         RED + "-931t3 tn9qcg7 637613" + RESET,
         RED + "-93jkhg9qn3v9w783gh q783ghq8v3 gq3y8igbq58y3bgakgba3jygbxnev853 g3ma8yg nuebv antg ye ng vzyug ajyv znrut3 gegz1t3 tn9qcg7 637613" + RESET})
-    void testGetColorCodes_twoASCIIColorCode_TreeMapWithSizeTwo(String s) {
+    void getColorCodes_twoASCIIColorCode_TreeMapWithSizeTwo(String s) {
 //        System.out.println(Printer.getColorCodes(s));
         assertEquals(2, Printer.getColorCodes(s).size());
     }
@@ -49,7 +80,7 @@ class PrinterTest {
     @ParameterizedTest
     @ValueSource(strings = {"TestTest " + RED + "TestTestTest" + RESET,
         "Blablaba " + RED + "TestTestTest" + RESET + " TestTestTest"})
-    void testGetColorCodes_twoASCIIColorCodeInIndex9And26_correctColorCodeIndexes(String s) {
+    void getColorCodes_twoASCIIColorCodeInIndex9And26_correctColorCodeIndexes(String s) {
 //        System.out.println(Printer.getColorCodes(s));
         TreeMap<Integer, String> cm = Printer.getColorCodes(s);
         assertEquals(9, cm.firstKey());
@@ -59,7 +90,7 @@ class PrinterTest {
     @ParameterizedTest
     @ValueSource(strings = {"TestTest " + RED + "TestTestTest" + BRIGHT_GREEN + BG_RED + "Lalallalalaala" + RESET,
         "Blablaba " + RED + "TestTestTest" + BRIGHT_GREEN + " TestTestTest" + BG_RED + "Lalalala" + RESET})
-    void testGetColorCodes_multipleASCIIColorCode_savesAllColorCode(String s) {
+    void getColorCodes_multipleASCIIColorCode_savesAllColorCode(String s) {
 //        System.out.println(Printer.getColorCodes(s));
         TreeMap<Integer, String> cm = Printer.getColorCodes(s);
         assertTrue(cm.containsValue(RED));
@@ -71,7 +102,7 @@ class PrinterTest {
     @ParameterizedTest
     @ValueSource(strings = {"TestTest " + RED + "TestTestTest" + BRIGHT_GREEN + "TestTestTestTest" + RESET,
         "Blablabla" + RED + "TestTestTest" + BRIGHT_GREEN + " Test Test Test " + RESET + "Blaaaa!"})
-    void testGetColorCodes_multipleASCIIColorCode_correctColorTreeMap(String s) {
+    void getColorCodes_multipleASCIIColorCode_correctColorTreeMap(String s) {
 //        System.out.println(Printer.getColorCodes(s));
         TreeMap<Integer, String> cm = Printer.getColorCodes(s);
         TreeMap<Integer, String> aux = new TreeMap<>();
@@ -80,6 +111,9 @@ class PrinterTest {
         aux.put(47, RESET);
         assertEquals(aux, cm);
     }
+
+
+// =====================================================================================================
 
 
     @ParameterizedTest
