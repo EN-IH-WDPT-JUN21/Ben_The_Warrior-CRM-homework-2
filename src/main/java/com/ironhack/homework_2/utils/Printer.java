@@ -308,13 +308,13 @@ public class Printer {
         // Finds color codes and saves them until all found.
         while (i != -1) {
             String code = "";
-            i = textString.indexOf("\u001B[", i + wordLength);
+            i = textString.indexOf("\u001B[");
             if (i != -1) { // if it has color code remove initial part of the string and save colorText and index
                 code = textString.substring(i, textString.indexOf("m", i) + 1);
-                colorCodes.put(i, code);
+                colorCodes.put(i + wordLength, code);
                 textString = textString.substring(0, i) + textString.substring(i + code.length());
             }
-            wordLength = code.length();
+            wordLength += code.length();
         }
         return colorCodes;
     }
