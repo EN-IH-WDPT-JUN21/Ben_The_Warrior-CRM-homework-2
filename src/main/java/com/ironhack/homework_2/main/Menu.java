@@ -646,8 +646,8 @@ public class Menu {
 
     private static int promptPositiveNumber() {
         String input = scanner.nextLine().trim();
-        while (!validNumberGreaterThan(input, -1)) {
-            PrinterMenu.setWarning("Please input a valid integer number! Must be greater than 0!");
+        while (!isValidPositiveNumber(input)) {
+            PrinterMenu.setWarning("Please input a valid integer number! Must be positive!");
             PrinterMenu.printMenu("");
             PrinterMenu.clearWarning();
             input = scanner.nextLine().trim();

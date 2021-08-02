@@ -4,19 +4,10 @@ import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 
 public class Utils {
-    public static boolean validNumber(String num) {
-        try {
-            Integer.parseInt(num);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public static boolean validNumberGreaterThan(String num, int smallest) {
+    public static boolean isValidPositiveNumber(String num) {
         try {
             int convertedNum = Integer.parseInt(num);
-            return convertedNum > smallest;
+            return convertedNum >= 0;
         } catch (Exception e) {
             return false;
         }
@@ -81,14 +72,14 @@ public class Utils {
                             case "opportunity":
                             case "account":
                             case "contact":
-                                return validNumber(commandWords[2]);
+                                return isValidPositiveNumber(commandWords[2]);
                         }
                     }
                     return false;
                 case "convert":
                 case "close-won":
                 case "close-lost":
-                    return validNumber(commandWords[1]);
+                    return isValidPositiveNumber(commandWords[1]);
                 default:
                     return false;
             }
