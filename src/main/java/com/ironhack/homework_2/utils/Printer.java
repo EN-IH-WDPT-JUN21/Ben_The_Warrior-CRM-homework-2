@@ -1,3 +1,4 @@
+// TODO JA: Small intro and index structure of class
 // Printer class structure:
 // 1. Printer proprieties and defined colors
 // 2. Getters and setters
@@ -7,19 +8,17 @@
 
 package com.ironhack.homework_2.utils;
 
-import javax.swing.*;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.TreeMap;
 
 public class Printer {
     // Maybe create a Enum called color pallet?     // TODO [JA] - Create enum with values? Maybe delete the ones not in use
-    private static final JPanel panel = new JPanel();
-
     private static final int PROGRAM_WIDTH = 150;
     private static final int PROGRAM_HEIGHT = 25;
     private static final int BORDER_WIDTH = 2;
     private static final int BORDER_TO_TEXT_SPACES = 4;
-
+    // TODO JA: Delete not used ones.
     private static final String ANSI_RESET = "\u001B[0m";
     // ==================== Text Colors ====================
     private static final String ANSI_BLACK = "\u001B[30m";
@@ -75,11 +74,13 @@ public class Printer {
         return INSERT_HIGHLIGHT_COLOR;
     }
 
-    public static int getProgramHeight(){ return PROGRAM_HEIGHT; }
+    public static int getProgramHeight() {
+        return PROGRAM_HEIGHT;
+    }
 
 
     // ======================================== 3. SIMPLIFIED PRINTERS ========================================
-
+    // TODO JA: If not in use -> delete
     // Print in the main style. Side borders colored and text with a margin to the left.
     public static void print() {
         printLeftString("", 0, PROGRAM_WIDTH, BORDER_COLOR, "");
@@ -89,6 +90,7 @@ public class Printer {
         printLeftString(text, BORDER_TO_TEXT_SPACES, PROGRAM_WIDTH, BORDER_COLOR, "");
     }
 
+    // TODO JA: If not in use -> delete
     public static void print(String text, int margin) {
         printLeftString(text, margin, PROGRAM_WIDTH, BORDER_COLOR, "");
     }
@@ -98,10 +100,12 @@ public class Printer {
         printLeftString("", 0, PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR);
     }
 
+    // TODO JA: If not in use -> delete
     public static void printFull(String text) {
         printLeftString(text, 4, PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR);
     }
 
+    // TODO JA: If not in use -> delete
     public static void printFull(String text, int margin) {
         printLeftString(text, margin, PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR);
     }
@@ -113,16 +117,19 @@ public class Printer {
         printFull();
     }
 
+    // TODO JA: If not in use -> delete
     // Print line without formatting
     public static void printEmpty() {
         System.out.println();
     }
 
+    // TODO JA: If not in use -> delete
     // Return a colored Warning without new line. (useful for presenting small error situations)
     public static String printWarning() {
         return (ANSI_YELLOW + "[WARNING] " + ANSI_RESET);
     }
 
+    // TODO JA: If not in use -> delete
     // Return a colored Error without new line. (useful for presenting error situations)
     public static String printError() {
         return (ANSI_RED + "[ERROR] " + ANSI_RESET);
@@ -130,20 +137,13 @@ public class Printer {
 
 
     // ======================================== 4. MAIN PRINTERS ========================================
-
     // Clear command line. In Intellij adds spacing between menus.
     public static void clearCommandLine() /*throws IOException, InterruptedException*/ {
         // Clear in Intellij
-        System.out.println("==========================================================================================");
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-
-        // TODO [JA] - Need to test both in different OS
-        // Clear in command line - Method 1
+        // Clear in command line
         System.out.print("\033[H\033[2J");
         System.out.flush();
-
-        // Clear in command line - Method 2
-//    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor(); //throws IOException and InterruptedException
     }
 
     // Print a stylish text line with the text centered.
@@ -152,14 +152,14 @@ public class Printer {
     // Uses recursion to print the different lines. (uses aux method -> divideText(text, maxWidth) )
     public static void printCenterString(String text, int width, String borderStyle, String innerStyle) {
         // Divide the text if it is larger than program width.
-        String newText = divideText(text, width - 3);
+        String newText = divideText(text, width - 3)[0];
         // Recursion!
         while (!newText.equals(text.trim())) {  //loops while it is larger than width
             printCenterString(newText, width, borderStyle, innerStyle);  //prints first line
             text = text.trim().substring(newText.length());  //removes first line
             if (newText.contains("\u001B") && !newText.contains("\u001B[0m"))  //adds style if it has it (not the reset style)
                 text = newText.substring(newText.indexOf("\u001B"), newText.indexOf("\u001B") + 5) + text;
-            newText = divideText(text, width - 3);  //divides new text if larger
+            newText = divideText(text, width - 3)[0];  //divides new text if larger
         }
         // Prints the given text centered by defining empty space and dividing it by 2 for each side. Stylizes the text.
         StringBuilder str = new StringBuilder(borderStyle + " " + ANSI_RESET + innerStyle);
@@ -173,19 +173,18 @@ public class Printer {
     }
 
     // Print a stylish text line with the text on the left. Has a margin option.
-    // If text exceeds program width, wraps to the next line, no cut words. Uses recursion!
-    // If text has color, keeps it to next line. (Used for printing variable size text)
-    // Uses recursion to print the different lines. (uses aux method -> divideText(text, maxWidth) )
+    // If text exceeds program width, wraps to the next line, no cut words unless single big word.
+    // If text has color, keeps it to next lines. (Used for printing variable size text)
     public static void printLeftString(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
         // Divide the text if it is larger than program width.
-        String newText = divideText(text, width - leftSpaces * 2);
+        String newText = divideText(text, width - leftSpaces * 2)[0];
         // Recursion!
         while (!newText.equals(text.trim())) {  //loops while it is larger than width
             printLeftString(newText, leftSpaces, width, borderStyle, contentStyle);  //prints first line
             text = text.trim().substring(newText.length());  //removes first line
             if (newText.contains("\u001B") && !newText.contains("\u001B[0m"))  //adds style if it has it (not the reset style)
                 text = newText.substring(newText.indexOf("\u001B"), newText.indexOf("\u001B") + 5) + text;
-            newText = divideText(text, width - leftSpaces - 3); //divides new text if larger
+            newText = divideText(text, width - leftSpaces - 3)[0]; //divides new text if larger
         }
         // Prints the given text by defining empty spaces for the right and left side. Stylizes the text.
         StringBuilder str = new StringBuilder(borderStyle + "  " + ANSI_RESET + contentStyle);
@@ -197,31 +196,132 @@ public class Printer {
         System.out.println(str);
     }
 
-
-    // ======================================== 5. AUX METHODS ========================================
-
-    public static String divideText(String text, int emptySpaces) {   // TODO [JA] - Maybe move this to Utils class
-        if (text.trim().length() <= emptySpaces) return text.trim(); // If input size fits program with returns input.
-        String[] textArray = text.trim().split(" ");
-
-        // Return entire words of text that fit into empty spaces:
-        StringBuilder smallText = new StringBuilder();
-        int countLength = 0;
-        for (String word : textArray) {
-            // check if word length is greater than empty space and first word.
-            // If yes it will return only the part that fits.
-            if (word.length() > emptySpaces && countLength == 0) return word.substring(0, emptySpaces - BORDER_WIDTH * 2);
-
-            // Count words length and adds word to output text until it surpasses the empty spaces. Returns when full
-            countLength += word.length() + 1;
-            if (countLength > emptySpaces) return smallText.toString().trim();
-            smallText.append(word).append(" ");
+    // TODO JA: If to be used rename and overite the original (keep initial comments)
+    public static void printLeftString2(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
+        // Initializes Maps and lists that will be used in the aux methods to divide rows and keep a color structure
+        ArrayList<String> rows = new ArrayList<>();
+        TreeMap<Integer, String> colorMap = getColorCodes(text);
+        TreeMap<Integer, String> newColorMap = new TreeMap<>();
+        StringBuilder stringStart = new StringBuilder(), previousColor = new StringBuilder();
+        // Creates a clean text without colors for counting and structure
+        // (colors count for string length but doesn't print characters)
+        String cleanText = text.replaceAll("\u001B\\[[;\\d]*m", "");
+        // Splits the text according to the empty space. [0] split string;[1] remaining of the string.
+        String[] splitCleanText = divideText(cleanText, width - leftSpaces * 2);
+        StringBuilder splitText = new StringBuilder(splitCleanText[0]);
+        // Add color map to the clean split string.
+        // Save used colors to be added to start of the next row.
+        // Not used colors save in aux map with adjusted index.
+        for (Integer i : colorMap.descendingMap().keySet()) {
+            if (i < splitText.length()) {
+                splitText.insert(i, colorMap.get(i));
+                previousColor.insert(0, colorMap.get(i));
+            } else {
+                newColorMap.put(i - splitText.length(), colorMap.get(i));
+            }
         }
-        return "";
+        // Add to first row
+        rows.add(splitText.toString());
+
+        // checks if text is split. For split test repeat previous row creation methods.
+        while (!splitCleanText[0].equals(cleanText)) {
+            // Reset values for aux variables
+            cleanText = splitCleanText[1];
+            colorMap = new TreeMap<>();
+            colorMap.putAll(newColorMap);
+            newColorMap = new TreeMap<>();
+            splitCleanText = divideText(cleanText, width - leftSpaces * 2);
+            splitText = new StringBuilder(splitCleanText[0]);
+            stringStart.append(previousColor);
+            previousColor = new StringBuilder();
+            // Repeat previous color mapping methodology. Add color, save used to start, adjust remaining.
+            for (Integer i : colorMap.descendingMap().keySet()) {
+                if (i < splitText.length()) {
+                    splitText.insert(i, colorMap.get(i));
+                    previousColor.insert(0, colorMap.get(i));
+                } else {
+                    newColorMap.put(i - splitText.length(), colorMap.get(i));
+                }
+            }
+            // Add new row with starter color
+            rows.add(stringStart.toString() + splitText);
+        }
+
+        // Prints all rows stylized.
+        for (String row : rows) {
+            StringBuilder str = new StringBuilder();
+            str.append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET).append(contentStyle);
+            // Empty spaces on the right. Doesn't count color codes
+            int rightSpaces = width - row.replaceAll("\u001B\\[[;\\d]*m", "").length() - leftSpaces;
+            str.append(String.join("", Collections.nCopies(leftSpaces, " ")));
+            str.append(row);
+            str.append(String.join("", Collections.nCopies(rightSpaces, " ")));
+            str.append(ANSI_RESET).append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET);
+            System.out.println(str);
+        }
     }
 
-    public static int textDividedInto(String text){
-        text = text.replace(HIGHLIGHT_COLOR,"").replace(ANSI_RESET,"").replace(INSERT_HIGHLIGHT_COLOR, "");
-        return (text.trim().length() / (PROGRAM_WIDTH - 2*BORDER_WIDTH - 2*BORDER_TO_TEXT_SPACES)) + 1;
+
+    // ======================================== 5. AUX METHODS ========================================
+    // Divides text to fill empty spaces. Returns [0] split string, and [1] remaining string.
+    public static String[] divideText(String text, int emptySpaces) {
+        if (text.trim().length() <= emptySpaces)    // If input size fits program with returns input.
+            return new String[]{text, ""};
+        // Initiates aux int and string
+        int countLength = 0;
+        StringBuilder smallText = new StringBuilder();
+        // Divide into words. Return entire words of text that fit into empty spaces:
+        String[] textArray = text.trim().split(" ");
+        for (String word : textArray) {
+            // Check if word length is greater than empty space and is first word. If yes it will return only the part that fits.
+            if (word.length() > emptySpaces && countLength == 0)
+                return new String[]{word.substring(0, emptySpaces), text.substring(emptySpaces)};
+            // Count words length and adds word to output text until it surpasses the empty spaces. Returns when full.
+            countLength += word.length() + 1;
+            if (countLength > emptySpaces)
+                return new String[]{smallText.toString(), text.substring(smallText.length())};
+            smallText.append(word).append(" ");
+        }
+        return new String[]{text, ""}; // Only used to have a return. Never used.
+    }   // Note: For it to work with the print method and color mapping this method will always count the space after a word.
+
+    // Counts the number of rows that the printLeftString() and printCenterString() methods will create.
+    // The emptySpace is defined only for the text section. Ex: printLeftString -> width - 2*leftSpaces.
+    public static int numberOfTextRows(String text, int emptySpaces) {
+        // Clean text of color codes and split it.
+        String cleanText = text.replaceAll("\u001B\\[[;\\d]*m", "");
+        String[] splitText = divideText(cleanText, emptySpaces);
+        int count = 1;
+        // Divides the text until is no longer divided (split = original). Counts each loop.
+        while (!splitText[0].equals(cleanText)) {
+            count++;
+            cleanText = splitText[1];
+            splitText = divideText(cleanText, emptySpaces);
+        }
+        return count;
+    }
+
+    // Saves and returns all color codes and their indexes in a string.
+    public static TreeMap<Integer, String> getColorCodes(String textString) {
+        TreeMap<Integer, String> colorCodes = new TreeMap<>();
+        int wordLength = 0, i = 0;
+        // Finds color codes and saves them until all found.
+        while (i != -1) {
+            String code = "";
+            i = textString.indexOf("\u001B[");
+            if (i != -1) { // if it has color code remove initial part of the string and save colorText and index
+                code = textString.substring(i, textString.indexOf("m", i) + 1);
+                colorCodes.put(i + wordLength, code);
+                textString = textString.substring(0, i) + textString.substring(i + code.length());
+            }
+            wordLength += code.length(); // Add size of colors that were removed
+        }
+        return colorCodes;
+    }
+
+    // TODO JA: If not in use -> delete
+    public static int textDividedInto(String text) {
+        text = text.replace(HIGHLIGHT_COLOR, "").replace(ANSI_RESET, "").replace(INSERT_HIGHLIGHT_COLOR, "");
+        return (text.trim().length() / (PROGRAM_WIDTH - 2 * BORDER_WIDTH - 2 * BORDER_TO_TEXT_SPACES)) + 1;
     }
 }

@@ -1,10 +1,13 @@
-package com.ironhack.homework_2.classes;
+package com.ironhack.homework_2.main;
 
+import com.ironhack.homework_2.classes.Account;
+import com.ironhack.homework_2.classes.Contact;
+import com.ironhack.homework_2.classes.Lead;
+import com.ironhack.homework_2.classes.Opportunity;
 import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
 import com.ironhack.homework_2.utils.JsonDatabaseUtility;
-import com.ironhack.homework_2.utils.Printer;
 import com.ironhack.homework_2.utils.PrinterMenu;
 
 import java.util.*;
@@ -23,10 +26,10 @@ public class Menu {
         showHelp = false;
         while (running) {
             // if the user asked for available commands print help menu, otherwise print main menu
-            if (showHelp){
+            if (showHelp) {
                 PrinterMenu.printMenu("help");
                 showHelp = false;
-            }else{
+            } else {
                 PrinterMenu.printMenu("main");
             }
             // get a user input, if it is valid compute the command otherwise print a warning message
@@ -49,7 +52,7 @@ public class Menu {
                 }
                 break;
             case "show":
-                switch (inputArray[1]){
+                switch (inputArray[1]) {
                     case "leads":
                         showLeadsMenu();
                         break;
@@ -65,48 +68,48 @@ public class Menu {
                 }
                 break;
             case "lookup":
-                switch (inputArray[1]){
+                switch (inputArray[1]) {
                     case "lead":
-                        try{
+                        try {
                             Lead lead = db.lookupLeadId(Integer.parseInt(inputArray[2]));
                             PrinterMenu.clearWarning();
                             PrinterMenu.lookupObject(lead);
                             promptDecision("enter");
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             PrinterMenu.setWarning(e.getMessage());
                         }
                         break;
                     case "opportunity":
-                        try{
+                        try {
                             Opportunity opportunity = db.lookupOpportunityId(Integer.parseInt(inputArray[2]));
                             PrinterMenu.clearWarning();
                             PrinterMenu.lookupObject(opportunity);
                             boolean decision = promptDecision("enter back");
-                            if (decision){
+                            if (decision) {
                                 PrinterMenu.lookupObject(opportunity, "contact");
                                 promptDecision("enter");
                             }
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             PrinterMenu.setWarning(e.getMessage());
                         }
 
                         break;
                     case "contact":
-                        try{
+                        try {
                             Contact contact = db.lookupContactId(Integer.parseInt(inputArray[2]));
                             PrinterMenu.clearWarning();
                             PrinterMenu.lookupObject(contact);
                             promptDecision("enter");
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             PrinterMenu.setWarning(e.getMessage());
                         }
                         break;
                     case "account":
-                        try{
+                        try {
                             Account account = db.lookupAccountId(Integer.parseInt(inputArray[2]));
                             PrinterMenu.clearWarning();
                             lookupAccountMenu(account);
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             PrinterMenu.setWarning(e.getMessage());
                         }
                         break;
@@ -118,18 +121,18 @@ public class Menu {
                 promptConvert(Integer.parseInt(inputArray[1]));
                 break;
             case "close-won":
-                try{
+                try {
                     Opportunity opportunity = db.lookupOpportunityId(Integer.parseInt(inputArray[1]));
                     opportunity.setStatus(Status.CLOSED_WON);
-                }catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     PrinterMenu.setWarning(e.getMessage());
                 }
                 break;
             case "close-lost":
-                try{
+                try {
                     Opportunity opportunity = db.lookupOpportunityId(Integer.parseInt(inputArray[1]));
                     opportunity.setStatus(Status.CLOSED_LOST);
-                }catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     PrinterMenu.setWarning(e.getMessage());
                 }
                 break;
@@ -147,11 +150,11 @@ public class Menu {
         return true;
     }
 
-    private static void lookupAccountMenu(Account account){
+    private static void lookupAccountMenu(Account account) {
         PrinterMenu.lookupObject(account);
-        while (true){
+        while (true) {
             int answer = promptMultipleDecisions("contacts", "opportunities", "back");
-            switch (answer){
+            switch (answer) {
                 case 0:
                     showContactsMenu(account.getContactList());
                     PrinterMenu.lookupObject(account);
@@ -171,16 +174,16 @@ public class Menu {
         int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
         int currentIndex = 0;
         int currentPage = 0;
-        TreeMap<Integer,Lead> leadTreeMap = new TreeMap<>(db.getLeadHash());
+        TreeMap<Integer, Lead> leadTreeMap = new TreeMap<>(db.getLeadHash());
         List<ArrayList<Lead>> listListLead = new ArrayList<>();
         listListLead.add(new ArrayList<>());
         Set<Map.Entry<Integer, Lead>> entryLeadSet = leadTreeMap.entrySet();
 
         // for-each loop
-        for(Map.Entry<Integer, Lead> entry : entryLeadSet) {
-            if (currentIndex++ < maxElements){
+        for (Map.Entry<Integer, Lead> entry : entryLeadSet) {
+            if (currentIndex++ < maxElements) {
                 listListLead.get(currentPage).add(entry.getValue());
-            }else{
+            } else {
                 listListLead.add(new ArrayList<>());
                 listListLead.get(++currentPage).add(entry.getValue());
             }
@@ -188,30 +191,30 @@ public class Menu {
         currentPage = 0;
         int numPages = listListLead.size();
         int decision;
-        while(true){
+        while (true) {
             PrinterMenu.showLeads(listListLead.get(currentPage), currentPage == 0, currentPage + 1 == numPages);
-            if(listListLead.size() > 1){
-                if (currentPage == 0){
-                    decision = promptMultipleDecisions("next","back");
-                    switch (decision){
+            if (listListLead.size() > 1) {
+                if (currentPage == 0) {
+                    decision = promptMultipleDecisions("next", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
                         case 1:
                             return;
                     }
-                }else if (currentPage + 1 == numPages){
-                    decision = promptMultipleDecisions("previous","back");
-                    switch (decision){
+                } else if (currentPage + 1 == numPages) {
+                    decision = promptMultipleDecisions("previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage--;
                             break;
                         case 1:
                             return;
                     }
-                }else{
-                    decision = promptMultipleDecisions("next","previous","back");
-                    switch (decision){
+                } else {
+                    decision = promptMultipleDecisions("next", "previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
@@ -221,26 +224,27 @@ public class Menu {
                             return;
                     }
                 }
-            }else{
+            } else {
                 promptDecision("enter");
                 return;
             }
         }
     }
-    private static void showOpportunitiesMenu(){
+
+    private static void showOpportunitiesMenu() {
         int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
         int currentIndex = 0;
         int currentPage = 0;
-        TreeMap<Integer,Opportunity> opportunityTreeMap = new TreeMap<>(db.getOpportunityHash());
+        TreeMap<Integer, Opportunity> opportunityTreeMap = new TreeMap<>(db.getOpportunityHash());
         List<ArrayList<Opportunity>> listListOpportunity = new ArrayList<>();
         listListOpportunity.add(new ArrayList<>());
         Set<Map.Entry<Integer, Opportunity>> entryOpportunitySet = opportunityTreeMap.entrySet();
 
         // for-each loop
-        for(Map.Entry<Integer, Opportunity> entry : entryOpportunitySet) {
-            if (currentIndex++ < maxElements){
+        for (Map.Entry<Integer, Opportunity> entry : entryOpportunitySet) {
+            if (currentIndex++ < maxElements) {
                 listListOpportunity.get(currentPage).add(entry.getValue());
-            }else{
+            } else {
                 listListOpportunity.add(new ArrayList<>());
                 listListOpportunity.get(++currentPage).add(entry.getValue());
             }
@@ -248,30 +252,30 @@ public class Menu {
         currentPage = 0;
         int numPages = listListOpportunity.size();
         int decision;
-        while(true){
+        while (true) {
             PrinterMenu.showOpportunities(listListOpportunity.get(currentPage), currentPage == 0, currentPage + 1 == numPages, false);
-            if(listListOpportunity.size() > 1){
-                if (currentPage == 0){
-                    decision = promptMultipleDecisions("next","back");
-                    switch (decision){
+            if (listListOpportunity.size() > 1) {
+                if (currentPage == 0) {
+                    decision = promptMultipleDecisions("next", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
                         case 1:
                             return;
                     }
-                }else if (currentPage + 1 == numPages){
-                    decision = promptMultipleDecisions("previous","back");
-                    switch (decision){
+                } else if (currentPage + 1 == numPages) {
+                    decision = promptMultipleDecisions("previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage--;
                             break;
                         case 1:
                             return;
                     }
-                }else{
-                    decision = promptMultipleDecisions("next","previous","back");
-                    switch (decision){
+                } else {
+                    decision = promptMultipleDecisions("next", "previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
@@ -281,26 +285,27 @@ public class Menu {
                             return;
                     }
                 }
-            }else{
+            } else {
                 promptDecision("enter");
                 return;
             }
         }
     }
-    private static void showAccountsMenu(){
+
+    private static void showAccountsMenu() {
         int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
         int currentIndex = 0;
         int currentPage = 0;
-        TreeMap<Integer,Account> accountTreeMap = new TreeMap<>(db.getAccountHash());
+        TreeMap<Integer, Account> accountTreeMap = new TreeMap<>(db.getAccountHash());
         List<ArrayList<Account>> listListAccount = new ArrayList<>();
         listListAccount.add(new ArrayList<>());
         Set<Map.Entry<Integer, Account>> entryAccountSet = accountTreeMap.entrySet();
 
         // for-each loop
-        for(Map.Entry<Integer, Account> entry : entryAccountSet) {
-            if (currentIndex++ < maxElements){
+        for (Map.Entry<Integer, Account> entry : entryAccountSet) {
+            if (currentIndex++ < maxElements) {
                 listListAccount.get(currentPage).add(entry.getValue());
-            }else{
+            } else {
                 listListAccount.add(new ArrayList<>());
                 listListAccount.get(++currentPage).add(entry.getValue());
             }
@@ -308,30 +313,30 @@ public class Menu {
         currentPage = 0;
         int numPages = listListAccount.size();
         int decision;
-        while(true){
+        while (true) {
             PrinterMenu.showAccounts(listListAccount.get(currentPage), currentPage == 0, currentPage + 1 == numPages);
-            if(listListAccount.size() > 1){
-                if (currentPage == 0){
-                    decision = promptMultipleDecisions("next","back");
-                    switch (decision){
+            if (listListAccount.size() > 1) {
+                if (currentPage == 0) {
+                    decision = promptMultipleDecisions("next", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
                         case 1:
                             return;
                     }
-                }else if (currentPage + 1 == numPages){
-                    decision = promptMultipleDecisions("previous","back");
-                    switch (decision){
+                } else if (currentPage + 1 == numPages) {
+                    decision = promptMultipleDecisions("previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage--;
                             break;
                         case 1:
                             return;
                     }
-                }else{
-                    decision = promptMultipleDecisions("next","previous","back");
-                    switch (decision){
+                } else {
+                    decision = promptMultipleDecisions("next", "previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
@@ -341,26 +346,27 @@ public class Menu {
                             return;
                     }
                 }
-            }else{
+            } else {
                 promptDecision("enter");
                 return;
             }
         }
     }
-    private static void showContactsMenu(){
+
+    private static void showContactsMenu() {
         int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
         int currentIndex = 0;
         int currentPage = 0;
-        TreeMap<Integer,Contact> contactTreeMap = new TreeMap<>(db.getContactHash());
+        TreeMap<Integer, Contact> contactTreeMap = new TreeMap<>(db.getContactHash());
         List<ArrayList<Contact>> listListContact = new ArrayList<>();
         listListContact.add(new ArrayList<>());
         Set<Map.Entry<Integer, Contact>> entryContactSet = contactTreeMap.entrySet();
 
         // for-each loop
-        for(Map.Entry<Integer, Contact> entry : entryContactSet) {
-            if (currentIndex++ < maxElements){
+        for (Map.Entry<Integer, Contact> entry : entryContactSet) {
+            if (currentIndex++ < maxElements) {
                 listListContact.get(currentPage).add(entry.getValue());
-            }else{
+            } else {
                 listListContact.add(new ArrayList<>());
                 listListContact.get(++currentPage).add(entry.getValue());
             }
@@ -368,30 +374,30 @@ public class Menu {
         currentPage = 0;
         int numPages = listListContact.size();
         int decision;
-        while(true){
+        while (true) {
             PrinterMenu.showContacts(listListContact.get(currentPage), currentPage == 0, currentPage + 1 == numPages, false);
-            if(listListContact.size() > 1){
-                if (currentPage == 0){
-                    decision = promptMultipleDecisions("next","back");
-                    switch (decision){
+            if (listListContact.size() > 1) {
+                if (currentPage == 0) {
+                    decision = promptMultipleDecisions("next", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
                         case 1:
                             return;
                     }
-                }else if (currentPage + 1 == numPages){
-                    decision = promptMultipleDecisions("previous","back");
-                    switch (decision){
+                } else if (currentPage + 1 == numPages) {
+                    decision = promptMultipleDecisions("previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage--;
                             break;
                         case 1:
                             return;
                     }
-                }else{
-                    decision = promptMultipleDecisions("next","previous","back");
-                    switch (decision){
+                } else {
+                    decision = promptMultipleDecisions("next", "previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
@@ -401,7 +407,7 @@ public class Menu {
                             return;
                     }
                 }
-            }else{
+            } else {
                 promptDecision("enter");
                 return;
             }
@@ -416,10 +422,10 @@ public class Menu {
         List<ArrayList<Contact>> listListContacts = new ArrayList<>();
         listListContacts.add(new ArrayList<>());
 
-        for(Contact contact : contactList) {
-            if (currentIndex++ < maxElements){
+        for (Contact contact : contactList) {
+            if (currentIndex++ < maxElements) {
                 listListContacts.get(currentPage).add(contact);
-            }else{
+            } else {
                 listListContacts.add(new ArrayList<>());
                 listListContacts.get(++currentPage).add(contact);
             }
@@ -427,30 +433,30 @@ public class Menu {
 
         int numPages = listListContacts.size();
 
-        while(true){
+        while (true) {
             PrinterMenu.showContacts(listListContacts.get(currentPage), currentPage == 0, currentPage + 1 == numPages, true);
-            if(listListContacts.size() > 1){
-                if (currentPage == 0){
-                    decision = promptMultipleDecisions("next","back");
-                    switch (decision){
+            if (listListContacts.size() > 1) {
+                if (currentPage == 0) {
+                    decision = promptMultipleDecisions("next", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
                         case 1:
                             return;
                     }
-                }else if (currentPage + 1 == numPages){
-                    decision = promptMultipleDecisions("previous","back");
-                    switch (decision){
+                } else if (currentPage + 1 == numPages) {
+                    decision = promptMultipleDecisions("previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage--;
                             break;
                         case 1:
                             return;
                     }
-                }else{
-                    decision = promptMultipleDecisions("next","previous","back");
-                    switch (decision){
+                } else {
+                    decision = promptMultipleDecisions("next", "previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
@@ -460,12 +466,13 @@ public class Menu {
                             return;
                     }
                 }
-            }else{
+            } else {
                 promptDecision("enter");
                 return;
             }
         }
     }
+
     private static void showOpportunitiesMenu(ArrayList<Opportunity> opportunityList) {
         int maxElements = PrinterMenu.getPrintMultipleObjectsMax();
         int currentPage = 0;
@@ -474,10 +481,10 @@ public class Menu {
         List<ArrayList<Opportunity>> listListOpportunity = new ArrayList<>();
         listListOpportunity.add(new ArrayList<>());
 
-        for(Opportunity opportunity : opportunityList) {
-            if (currentIndex++ < maxElements){
+        for (Opportunity opportunity : opportunityList) {
+            if (currentIndex++ < maxElements) {
                 listListOpportunity.get(currentPage).add(opportunity);
-            }else{
+            } else {
                 listListOpportunity.add(new ArrayList<>());
                 listListOpportunity.get(++currentPage).add(opportunity);
             }
@@ -485,30 +492,30 @@ public class Menu {
 
         int numPages = listListOpportunity.size();
 
-        while(true){
+        while (true) {
             PrinterMenu.showOpportunities(listListOpportunity.get(currentPage), currentPage == 0, currentPage + 1 == numPages, true);
-            if(listListOpportunity.size() > 1){
-                if (currentPage == 0){
-                    decision = promptMultipleDecisions("next","back");
-                    switch (decision){
+            if (listListOpportunity.size() > 1) {
+                if (currentPage == 0) {
+                    decision = promptMultipleDecisions("next", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
                         case 1:
                             return;
                     }
-                }else if (currentPage + 1 == numPages){
-                    decision = promptMultipleDecisions("previous","back");
-                    switch (decision){
+                } else if (currentPage + 1 == numPages) {
+                    decision = promptMultipleDecisions("previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage--;
                             break;
                         case 1:
                             return;
                     }
-                }else{
-                    decision = promptMultipleDecisions("next","previous","back");
-                    switch (decision){
+                } else {
+                    decision = promptMultipleDecisions("next", "previous", "back");
+                    switch (decision) {
                         case 0:
                             currentPage++;
                             break;
@@ -518,7 +525,7 @@ public class Menu {
                             return;
                     }
                 }
-            }else{
+            } else {
                 promptDecision("enter");
                 return;
             }
@@ -526,32 +533,32 @@ public class Menu {
     }
 
     private static void promptConvert(int id) {
-        if (db.hasLead(id)){
+        if (db.hasLead(id)) {
             String contactName = db.getLeadHash().get(id).getName();
             // prompt Opportunity
             PrinterMenu.printMenu("convert");
             Product product = promptProduct();
             PrinterMenu.printMenu("convert", "product", product.toString());
-            int quantity = promptNumber();
+            int quantity = promptPositiveNumber();
 
             //prompt Account
-            PrinterMenu.printMenu("convert","quantity and contact",Integer.toString(quantity), contactName);
+            PrinterMenu.printMenu("convert", "quantity and contact", Integer.toString(quantity), contactName);
             if (!promptDecision("enter back")) {
                 return;
             }
-            PrinterMenu.printMenu("convert","account");
+            PrinterMenu.printMenu("convert", "account");
             Industry industry = promptIndustry();
             PrinterMenu.printMenu("convert", "industry", industry.toString());
-            int employeeCount = promptNumber();
+            int employeeCount = promptPositiveNumber();
             PrinterMenu.printMenu("convert", "employees", Integer.toString(employeeCount));
             String city = promptString("");
             PrinterMenu.printMenu("convert", "city", city);
             String country = promptString("");
             PrinterMenu.printMenu("convert", "country", country);
-            if (promptDecision("enter back")){
+            if (promptDecision("enter back")) {
                 db.convertLead(id, product, quantity, industry, employeeCount, city, country);
             }
-        }else{
+        } else {
             PrinterMenu.setWarning("There is no lead with id " + id + " to convert!");
         }
     }
@@ -562,11 +569,11 @@ public class Menu {
         String name = promptString("name");
         PrinterMenu.printMenu("lead", "name", name);
         String phoneNumber = promptString("phone");
-        PrinterMenu.printMenu("lead","phone", phoneNumber);
+        PrinterMenu.printMenu("lead", "phone", phoneNumber);
         String email = promptString("email");
-        PrinterMenu.printMenu("lead","email", email);
+        PrinterMenu.printMenu("lead", "email", email);
         String companyName = promptString("");
-        PrinterMenu.printMenu("lead","company",companyName);
+        PrinterMenu.printMenu("lead", "company", companyName);
         if (promptDecision("enter back")) {
             db.addLead(name, phoneNumber, email, companyName);
         }
@@ -574,7 +581,7 @@ public class Menu {
 
     private static boolean promptDecision(String decision) {
         String input;
-        switch (decision){
+        switch (decision) {
             case "enter back":
                 do {
                     input = scanner.nextLine().trim().toLowerCase();
@@ -595,15 +602,15 @@ public class Menu {
         return false;
     }
 
-    private static int promptMultipleDecisions(String... choices){
-        if (choices.length == 0){
+    private static int promptMultipleDecisions(String... choices) {
+        if (choices.length == 0) {
             throw new IllegalArgumentException();
         }
         String input;
-        while(true){
+        while (true) {
             input = scanner.nextLine().trim().toLowerCase();
             for (int i = 0; i < choices.length; i++) {
-                if (input.equals(choices[i].trim().toLowerCase())){
+                if (input.equals(choices[i].trim().toLowerCase())) {
                     return i;
                 }
             }
@@ -616,7 +623,7 @@ public class Menu {
     private static Product promptProduct() {
         String input;
         input = scanner.nextLine().trim().toUpperCase();
-        while (!validProduct(input)){
+        while (!validProduct(input)) {
             PrinterMenu.setWarning("Please input a valid Product option!");
             PrinterMenu.printMenu("");
             PrinterMenu.clearWarning();
@@ -628,7 +635,7 @@ public class Menu {
     private static Industry promptIndustry() {
         String input;
         input = scanner.nextLine().trim().toUpperCase();
-        while (!validIndustry(input)){
+        while (!validIndustry(input)) {
             PrinterMenu.setWarning("Please input a valid Industry option!");
             PrinterMenu.printMenu("");
             PrinterMenu.clearWarning();
@@ -637,10 +644,10 @@ public class Menu {
         return Industry.valueOf(input);
     }
 
-    private static int promptNumber() {
+    private static int promptPositiveNumber() {
         String input = scanner.nextLine().trim();
-        while (!validNumber(input)){
-            PrinterMenu.setWarning("Please input a valid integer number!");
+        while (!isValidPositiveNumber(input)) {
+            PrinterMenu.setWarning("Please input a valid integer number! Must be positive!");
             PrinterMenu.printMenu("");
             PrinterMenu.clearWarning();
             input = scanner.nextLine().trim();
@@ -653,7 +660,7 @@ public class Menu {
         switch (checkCondition) {
             case "phoneNumber":
                 input = scanner.nextLine().trim();
-                while (!validPhone(input)){
+                while (!validPhone(input)) {
                     PrinterMenu.setWarning("Please input a valid Phone Number!");
                     PrinterMenu.printMenu("");
                     PrinterMenu.clearWarning();
@@ -662,7 +669,7 @@ public class Menu {
                 return input;
             case "email":
                 input = scanner.nextLine().trim();
-                while (!validEmail(input)){
+                while (!validEmail(input)) {
                     PrinterMenu.setWarning("Please input a valid Email!");
                     PrinterMenu.printMenu("");
                     PrinterMenu.clearWarning();
@@ -671,7 +678,7 @@ public class Menu {
                 return input;
             case "name":
                 input = scanner.nextLine().trim();
-                while (!validName(input)){
+                while (!validName(input)) {
                     PrinterMenu.setWarning("Please input a valid Name!");
                     PrinterMenu.printMenu("");
                     PrinterMenu.clearWarning();
@@ -680,7 +687,7 @@ public class Menu {
                 return input;
             default:
                 input = scanner.nextLine().trim();
-                while (!validPhone(input)){
+                while (!validPhone(input)) {
                     PrinterMenu.setWarning("Please input a non empty string!");
                     PrinterMenu.printMenu("");
                     PrinterMenu.clearWarning();
