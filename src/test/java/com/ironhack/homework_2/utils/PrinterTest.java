@@ -37,6 +37,29 @@ class PrinterTest {
         System.setOut(standardOut);
     }
 
+    // ============================== MAIN PRINT TESTS ==============================
+
+
+    // ==================== TEST printCenterString() ====================
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   "})
+    @DisplayName("Print centered - Empty text")
+    void printCenterString_noTextWithBorderStyle_emptyLine() {
+        Printer.printCenterString2("", 20, "\u001B[41m", "");
+        String output = "\u001B[41m  \u001B[0m                \u001B[0m\u001B[41m  \u001B[0m";
+        assertEquals(output + "\r\n", outputStreamCaptor.toString());
+    }
+
+    // ==================== TEST printLeftString() ====================
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   "})
+    @DisplayName("Print on left - Empty text")
+    void printLeftString_noTextWithBorderStyle_emptyLine() {
+        Printer.printLeftString2("", 0, 20, "\u001B[41m", "");
+        String output = "\u001B[41m  \u001B[0m                \u001B[0m\u001B[41m  \u001B[0m";
+        assertEquals(output + "\r\n", outputStreamCaptor.toString());
+    }
+
 
     // ============================== AUX METHODS TESTS ==============================
     // ==================== TEST createTextRows() ====================

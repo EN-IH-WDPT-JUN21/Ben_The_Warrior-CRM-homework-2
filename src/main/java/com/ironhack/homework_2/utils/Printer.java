@@ -221,13 +221,13 @@ public class Printer {
     // TODO JA: If to be used rename and overwrite the original (keep initial comments)
     public static void printLeftString2(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
         // Divides input text in multiple rows.
-        ArrayList<String> rows = createTextRows(text, width - leftSpaces * 2);
+        ArrayList<String> rows = createTextRows(text, width - 2 * leftSpaces - 2 * BORDER_WIDTH);
         // Prints all rows stylized.
         for (String row : rows) {
             StringBuilder str = new StringBuilder();
             str.append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET).append(contentStyle);
             // Empty spaces on the right. Doesn't count color codes
-            int rightSpaces = width - row.replaceAll("\u001B\\[[;\\d]*m", "").length() - leftSpaces;
+            int rightSpaces = width - row.replaceAll("\u001B\\[[;\\d]*m", "").length() - leftSpaces - 2 * BORDER_WIDTH;
             str.append(String.join("", Collections.nCopies(leftSpaces, " ")));
             str.append(row);
             str.append(String.join("", Collections.nCopies(rightSpaces, " ")));
