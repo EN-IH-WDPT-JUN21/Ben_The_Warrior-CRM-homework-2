@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
     public static boolean isValidPositiveNumber(String num) {
+    // Method to validate a number inputted by the user
         try {
             int convertedNum = Integer.parseInt(num);
             return convertedNum >= 0;
@@ -14,7 +15,7 @@ public class Utils {
             return false;
         }
     }
-
+    // Method to validate a Product inputted by the user
     public static boolean validProduct(String product) {
         try {
             Product.valueOf(product);
@@ -23,7 +24,7 @@ public class Utils {
             return false;
         }
     }
-
+    // Method to validate a Industry inputted by the user
     public static boolean validIndustry(String industry) {
         try {
             Industry.valueOf(industry);
@@ -32,16 +33,16 @@ public class Utils {
             return false;
         }
     }
-
+    // Method to validate a name inputted by the user
     public static boolean validName(String name){
         return Pattern.compile("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$").matcher(name).find();
     }
-
+    // Method to validate an email inputted by the user
     public static boolean validEmail(String email){
         Pattern emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
         return emailPattern.matcher(email).find();
     }
-
+    // Method to validate a phone number inputted by the user
     public static boolean validPhone(String phone){
         String patterns = "^\\s?((\\+[1-9]{1,4}[ \\-]*)" +
                 "|(\\([0-9]{2,3}\\)[ \\-]*)" +
@@ -49,7 +50,7 @@ public class Utils {
         Pattern phoneNumRegexes = Pattern.compile(patterns);
         return phoneNumRegexes.matcher(phone).find();
     }
-
+    // Method to validate a generic string inputted by the user
     public static boolean validString(String str){
         if (str.length() < 1) return false;
         return Pattern.compile("^[A-ZÀ-Ü]+([a-zA-Z\\u0080-\\u024F]+(?:. |-| |'))*[a-zA-Z\\u0080-\\u024F]+$").matcher(str).find();

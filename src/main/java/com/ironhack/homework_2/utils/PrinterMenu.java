@@ -21,31 +21,9 @@ public class PrinterMenu extends Printer {
     private static final String HIGHLIGHT_COLOR = getHighlightColor();
     private static final String INSERT_HIGHLIGHT_COLOR = getInsertHighlightColor();
     private static final int PRINT_MULTIPLE_OBJECTS_MAX = 13;
+    private static final int ERROR_LINE = 23;
     // String array to print the menu
     private static String[] menuLine = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
-
-    // Set the menu String array for the main menu
-    private static void mainMenuLines() {
-        setMenuLines("", 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19);
-        setMenuLines("Welcome to Ben's CMR program.", 1);
-        setMenuLines("Enter " + HIGHLIGHT_COLOR + "help" + ANSI_RESET + " for a list of valid commands!", 20);
-        setMenuLines("Enter " + HIGHLIGHT_COLOR + "exit" + ANSI_RESET + " to close the application!", 21);
-    }
-
-    // Set the menu String array for the help menu with a list of available commands
-    private static void helpMenuLines() {
-        setMenuLines("", 7, 9, 11, 13, 15, 16, 18, 20);
-        setMenuLines("Welcome to Ben's CMR program. Here are the main commands:", 1);
-        setMenuLines(HIGHLIGHT_COLOR + "new lead" + ANSI_RESET + " - Creates a new Lead", 4);
-        setMenuLines(HIGHLIGHT_COLOR + "convert <ID>" + ANSI_RESET + " - Converts a Lead into an Opportunity", 6);
-        setMenuLines(HIGHLIGHT_COLOR + "close-won <ID>" + ANSI_RESET + " - Close Won Opportunity", 8);
-        setMenuLines(HIGHLIGHT_COLOR + "close-lost <ID>" + ANSI_RESET + " - Close Lost Opportunity", 10);
-        setMenuLines(HIGHLIGHT_COLOR + "lookup <OBJECT> <ID>" + ANSI_RESET + " - Search for specific Lead, Opportunity, Account or Contact", 12);
-        setMenuLines(HIGHLIGHT_COLOR + "show <OBJECT PLURAL>" + ANSI_RESET + " - List all Leads, Opportunities, Accounts or Contacts", 14);
-        setMenuLines(HIGHLIGHT_COLOR + "help" + ANSI_RESET + " - Explains usage of available commands", 17);
-        setMenuLines(HIGHLIGHT_COLOR + "save" + ANSI_RESET + " - Saves the changed data", 19);
-        setMenuLines(HIGHLIGHT_COLOR + "exit" + ANSI_RESET + " - Saves and exits the program", 21);
-    }
 
     // Set one or multiple lines of the menu String array to the String passed in
     public static void setMenuLines(String str, int... lines) {
@@ -68,7 +46,6 @@ public class PrinterMenu extends Printer {
         return PrinterMenu.PRINT_MULTIPLE_OBJECTS_MAX;
     }
 
-
     // ======================================== 2. CREATE MAIN MENU ========================================
     // Sets appropriate menu String array and prints it
     public static void printMenu(String menuChoice, String... params) {
@@ -78,6 +55,9 @@ public class PrinterMenu extends Printer {
                 break;
             case "help":
                 helpMenuLines();
+                break;
+            case "exit":
+                saveBeforeQuit();
                 break;
             case "lead":
                 newLeadLines(params);
@@ -94,7 +74,39 @@ public class PrinterMenu extends Printer {
         printFull();
     }
 
+    // Set the menu String array for the main menu
+    private static void mainMenuLines(){
+        setMenuLines("",4,6,7,8,9,10,11,12,13,14,15,16,17,18,19);
+        setMenuLines("Welcome to Ben's CMR program.",1);
+        setMenuLines("Enter " + HIGHLIGHT_COLOR + "help" + ANSI_RESET + " for a list of valid commands!",20);
+        setMenuLines("Enter " + HIGHLIGHT_COLOR + "exit" + ANSI_RESET + " to close the application!",21);
+    }
+
+    private static void saveBeforeQuit(){
+        setMenuLines("",4,6,7,8,9,10,11,12,13,14,15,16,17,18,19);
+        setMenuLines("Goodbye.",1);
+        setMenuLines("Do you want to save before exiting?", 19);
+        setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- save and exit",20);
+        setMenuLines(HIGHLIGHT_COLOR + "exit " + ANSI_RESET + "- exit",21);
+    }
+
+    // Set the menu String array for the help menu with a list of available commands
+    private static void helpMenuLines(){
+        setMenuLines("",7,9,11,13,15,16,18,20);
+        setMenuLines("Welcome to Ben's CMR program. Here are the main commands:",1);
+        setMenuLines(HIGHLIGHT_COLOR + "new lead" + ANSI_RESET + " - Creates a new Lead",4);
+        setMenuLines(HIGHLIGHT_COLOR + "convert <ID>" + ANSI_RESET + " - Converts a Lead into an Opportunity",6);
+        setMenuLines(HIGHLIGHT_COLOR + "close-won <ID>" + ANSI_RESET + " - Close Won Opportunity",8);
+        setMenuLines(HIGHLIGHT_COLOR + "close-lost <ID>" + ANSI_RESET + " - Close Lost Opportunity",10);
+        setMenuLines(HIGHLIGHT_COLOR + "lookup <OBJECT> <ID>" + ANSI_RESET + " - Search for specific Lead, Opportunity, Account or Contact",12);
+        setMenuLines(HIGHLIGHT_COLOR + "show <OBJECT PLURAL>" + ANSI_RESET + " - List all Leads, Opportunities, Accounts or Contacts",14);
+        setMenuLines(HIGHLIGHT_COLOR + "help" + ANSI_RESET + " - Explains usage of available commands",17);
+        setMenuLines(HIGHLIGHT_COLOR + "save" + ANSI_RESET + " - Saves the changed data",19);
+        setMenuLines(HIGHLIGHT_COLOR + "exit" + ANSI_RESET + " - Saves and exits the program",21);
+    }
+
     // ======================================== 3.1 NEW LEAD MENU ========================================
+    // Set the menu String array for the lead creation menu
     private static void newLeadLines(String... params) {
         // Set initial menu for the lead creation
         if (params.length == 0) {
@@ -106,7 +118,7 @@ public class PrinterMenu extends Printer {
             setMenuLines("Company Name: ", 12);
             setMenuLines(HIGHLIGHT_COLOR + "Insert Lead Name: " + HIGHLIGHT_COLOR, 20);
         } else if (params.length == 2) {
-            // Update the menu for the lead creation
+            // Update the menu for each lead creation part
             switch (params[0].toLowerCase()) {
                 case "name":
                     setMenuLines(getMenuLine(6) + INSERT_HIGHLIGHT_COLOR + params[1] + ANSI_RESET, 6);
@@ -132,16 +144,16 @@ public class PrinterMenu extends Printer {
     }
 
     // ======================================== 3.2 CONVERT LEAD MENU ========================================
-
+    // Set the menu String array for the lead conversion menu
     private static void convertLeadLines(String... params) {
-        // Set New Opportunity menu
+        // Set menu for the new Opportunity creation
         if (params.length == 0) {
             setMenuLines("", 1, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21);
             setMenuLines(HIGHLIGHT_COLOR + "Create New Opportunity" + HIGHLIGHT_COLOR, 4);
             setMenuLines("Product: ", 6);
             setMenuLines("Quantity: ", 8);
             setMenuLines(HIGHLIGHT_COLOR + "Insert Product type [HYBRID, FLATBED or BOX]: " + HIGHLIGHT_COLOR, 20);
-            // Update the convert lead menu
+        // Update the menu for the lead conversion
         } else if (params.length == 2) {
             switch (params[0].toLowerCase()) {
                 case "product":
@@ -171,7 +183,7 @@ public class PrinterMenu extends Printer {
             setMenuLines("Contact Name: " + INSERT_HIGHLIGHT_COLOR + params[2] + ANSI_RESET, 10);
             setMenuLines("Status: " + INSERT_HIGHLIGHT_COLOR + Status.OPEN + ANSI_RESET, 12);
             setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- confirm Opportunity information | " + HIGHLIGHT_COLOR + "back " + ANSI_RESET + "- return to the main menu", 20);
-            //Set New Account menu
+        //Set menu for the new Account creation
         } else if (params.length == 1 && params[0].toLowerCase().equals("account")) {
             setMenuLines("", 1, 7, 9, 11, 13, 14, 15, 16, 17, 18, 19, 21);
             setMenuLines(HIGHLIGHT_COLOR + "Create New Account" + HIGHLIGHT_COLOR, 4);
@@ -184,7 +196,9 @@ public class PrinterMenu extends Printer {
     }
 
     // ======================================== 4. LOOKUP OBJECT INFO MENUS ========================================
+    // Set the menu String array for lookup of a particular object
     public static void lookupObject(Object object, String... params) {
+        // identify which object to lookup and then set the menu appropriately
         if (Lead.class.equals(object.getClass())) {
             Lead lead = (Lead) object;
             setMenuLines("", 1, 7, 9, 11, 13, 14, 15, 16, 17, 18, 19, 21);
@@ -255,7 +269,7 @@ public class PrinterMenu extends Printer {
 
         PrinterMenu.printMenu("");
     }
-
+    // Set the menu String array to show the provided page (List) of leads
     public static void showLeads(ArrayList<Lead> leads, boolean firstPage, boolean lastPage) {
         setMenuLines("", 1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21);
         if (leads.size() == 0) {
@@ -282,7 +296,7 @@ public class PrinterMenu extends Printer {
         }
         PrinterMenu.printMenu("");
     }
-
+    // Set the menu String array to show the provided page (List) of opportunities
     public static void showOpportunities(ArrayList<Opportunity> opportunities, boolean firstPage, boolean lastPage, boolean fromAccount) {
         setMenuLines("", 1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21);
         if (opportunities.size() == 0) {
@@ -309,7 +323,7 @@ public class PrinterMenu extends Printer {
         }
         PrinterMenu.printMenu("");
     }
-
+    // Set the menu String array to show the provided page (List) of contacts
     public static void showContacts(ArrayList<Contact> contacts, boolean firstPage, boolean lastPage, boolean fromAccount) {
         setMenuLines("", 1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21);
         if (contacts.size() == 0) {
@@ -336,7 +350,7 @@ public class PrinterMenu extends Printer {
         }
         PrinterMenu.printMenu("");
     }
-
+    // Set the menu String array to show the provided page (List) of accounts
     public static void showAccounts(ArrayList<Account> accounts, boolean firstPage, boolean lastPage) {
         setMenuLines("", 1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21);
         if (accounts.size() == 0) {
@@ -363,12 +377,12 @@ public class PrinterMenu extends Printer {
         }
         PrinterMenu.printMenu("");
     }
-
+    // Set the warning
     public static void setWarning(String message) {
-        setMenuLines(ANSI_BRIGHT_RED + message + ANSI_RESET, 23);
+        setMenuLines(ANSI_BRIGHT_RED + message + ANSI_RESET, ERROR_LINE);
     }
-
+    public static String getWarning() { return getMenuLine(ERROR_LINE).replace(ANSI_BRIGHT_RED,"").replace(ANSI_RESET,""); }
     public static void clearWarning() {
-        setMenuLines("", 23);
+        setMenuLines("",ERROR_LINE);
     }
 }

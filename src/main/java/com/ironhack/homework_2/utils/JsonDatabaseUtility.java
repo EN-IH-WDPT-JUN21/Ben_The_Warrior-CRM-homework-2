@@ -1,6 +1,7 @@
 package com.ironhack.homework_2.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ironhack.homework_2.classes.Account;
 import com.ironhack.homework_2.classes.Contact;
 import com.ironhack.homework_2.classes.Lead;
@@ -13,18 +14,31 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Scanner;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
 public class JsonDatabaseUtility {
-    private Map<Integer, Lead> leadHash = new HashMap<>();
-    private Map<Integer, Contact> contactHash = new HashMap<>();
-    private Map<Integer, Opportunity> opportunityHash = new HashMap<>();
-    private Map<Integer, Account> accountHash = new HashMap<>();
+    private Integer leadId;
+    private Integer contactId;
+    private Integer opportunityId;
+    private Integer accountId;
+    private Map<Integer, Lead> leadHash;
+    private Map<Integer, Contact> contactHash;
+    private Map<Integer, Opportunity> opportunityHash;
+    private Map<Integer, Account> accountHash;
 
     // ========== CONSTRUCTORS ==========
     public JsonDatabaseUtility() {
+        leadHash = new HashMap<>();
+        contactHash = new HashMap<>();
+        opportunityHash = new HashMap<>();
+        accountHash = new HashMap<>();
+        leadId = 0;
+        contactId = 0;
+        opportunityId = 0;
+        accountId = 0;
     }
 
     public JsonDatabaseUtility(Map<Integer, Lead> leadHash, Map<Integer, Contact> contactHash,
@@ -66,6 +80,35 @@ public class JsonDatabaseUtility {
 
     public void setAccountHash(Map<Integer, Account> accountHash) {
         this.accountHash = accountHash;
+    }
+
+    // Save database
+    public static void saveDatabaseInJson(JsonDatabaseUtility database) throws IOException {
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+        File file = new File("src/main/java/com/ironhack/homework_2/database/database.json");
+        FileWriter writer = new FileWriter(file, false);
+        String jsonData = gson.toJson(database);
+        writer.write(jsonData);
+        writer.close();
+    }
+
+    // Load database
+    public static JsonDatabaseUtility loadDatabaseInJson() throws FileNotFoundException {
+        Gson gson = new Gson();
+        File file = new File("src/main/java/com/ironhack/homework_2/database/database.json");
+        FileReader reader = new FileReader(file);
+        try{
+            char[] chars = new char[(int) file.length()];
+            reader.read(chars);
+            String jsonData = new String(chars);
+            JsonDatabaseUtility jsonDatabaseUtility = gson.fromJson(jsonData, JsonDatabaseUtility.class);
+            reader.close();
+            return jsonDatabaseUtility;
+        }catch (Exception e){
+            return new JsonDatabaseUtility();
+        }
     }
 
     // ==================== Adds new Lead to HashMap for Leads====================
@@ -118,8 +161,7 @@ public class JsonDatabaseUtility {
             Printer.print("List of Leads is empty");
         }
     }
-
-    // ====================  An individual Lead’s details by id ====================
+    // Search a lead from id. If it doesn't exist throw exception
     public Lead lookupLeadId(Integer id) {
         if (!hasLead(id)) {
             throw new IllegalArgumentException("There is no Lead with id " + id);
@@ -127,7 +169,7 @@ public class JsonDatabaseUtility {
             return leadHash.get(id);
         }
     }
-
+    // Search a opportunity from id. If it doesn't exist throw exception
     public Opportunity lookupOpportunityId(int id) {
         if (!hasOpportunity(id)) {
             throw new IllegalArgumentException("There is no Opportunity with id " + id);
@@ -135,7 +177,7 @@ public class JsonDatabaseUtility {
             return opportunityHash.get(id);
         }
     }
-
+    // Search a contact from id. If it doesn't exist throw exception
     public Contact lookupContactId(int id) {
         if (!hasContact(id)) {
             throw new IllegalArgumentException("There is no Contact with id " + id);
@@ -143,7 +185,7 @@ public class JsonDatabaseUtility {
             return contactHash.get(id);
         }
     }
-
+    // Search a account from id. If it doesn't exist throw exception
     public Account lookupAccountId(int id) {
         if (!hasAccount(id)) {
             throw new IllegalArgumentException("There is no Account with id " + id);
@@ -238,6 +280,7 @@ public class JsonDatabaseUtility {
 //        removeLead(id);
     }
 
+    // Method to check if a lead exists with a specific id
     public boolean hasLead(int id) {
         if (leadHash.get(id) == null) {
             return false;
@@ -245,7 +288,7 @@ public class JsonDatabaseUtility {
             return true;
         }
     }
-
+    // Method to check if a contact exists with a specific id
     public boolean hasContact(int id) {
         if (contactHash.get(id) == null) {
             return false;
@@ -253,7 +296,7 @@ public class JsonDatabaseUtility {
             return true;
         }
     }
-
+    // Method to check if a account exists with a specific id
     public boolean hasAccount(int id) {
         if (accountHash.get(id) == null) {
             return false;
@@ -261,7 +304,7 @@ public class JsonDatabaseUtility {
             return true;
         }
     }
-
+    // Method to check if a opportunity exists with a specific id
     public boolean hasOpportunity(int id) {
         if (opportunityHash.get(id) == null) {
             return false;
