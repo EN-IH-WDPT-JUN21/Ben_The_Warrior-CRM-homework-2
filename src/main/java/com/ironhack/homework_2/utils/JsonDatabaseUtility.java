@@ -291,20 +291,8 @@ public class JsonDatabaseUtility {
     //load method that gives maps from Database in json file to actual JsonDatabaseUtility class
     public void load() throws FileNotFoundException {
         Gson gson = new Gson();
-        Path path = Paths.get("DatabaseUtility.json");
         JsonDatabaseUtility jsonDatabaseUtility1 = new JsonDatabaseUtility();
 
-       /* try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.US_ASCII)) {
-            String jsonDataString = reader.readLine();
-            while (jsonDataString != null){
-                jsonDatabaseUtility1 = gson.fromJson(jsonDataString, JsonDatabaseUtility.class);
-                jsonDataString = reader.readLine();
-            }
-
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }*/
 
         File file = new File("DatabaseUtility.json");
         Scanner sc = new Scanner(file);
