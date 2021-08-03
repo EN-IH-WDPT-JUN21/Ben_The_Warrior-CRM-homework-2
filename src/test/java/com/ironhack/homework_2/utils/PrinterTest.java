@@ -50,6 +50,24 @@ class PrinterTest {
         assertEquals(output + "\r\n", outputStreamCaptor.toString());
     }
 
+    @Test
+    @DisplayName("Print centered - Simple text")
+    void printCenterString_textWithBorderStyle_simpleLine() {
+        Printer.printCenterString2("Test", 20, "\u001B[41m", "");
+        String output = "\u001B[41m  \u001B[0m      Test      \u001B[0m\u001B[41m  \u001B[0m" + "\r\n";
+        assertEquals(output, outputStreamCaptor.toString());
+    }
+
+    @Test
+    @DisplayName("Print centered - Big word")
+    void printCenterString_bigWordWithBorderStyle_multipleLines() {
+        Printer.printCenterString2("TestTestTestTestTestTestTestTestTest", 20, "\u001B[41m", "");
+        String output = "\u001B[41m  \u001B[0mTestTestTestTest\u001B[0m\u001B[41m  \u001B[0m" + "\r\n" +
+            "\u001B[41m  \u001B[0mTestTestTestTest\u001B[0m\u001B[41m  \u001B[0m" + "\r\n" +
+            "\u001B[41m  \u001B[0m      Test      \u001B[0m\u001B[41m  \u001B[0m" + "\r\n";
+        assertEquals(output, outputStreamCaptor.toString());
+    }
+
     // ==================== TEST printLeftString() ====================
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "   "})
@@ -58,6 +76,24 @@ class PrinterTest {
         Printer.printLeftString2("", 0, 20, "\u001B[41m", "");
         String output = "\u001B[41m  \u001B[0m                \u001B[0m\u001B[41m  \u001B[0m";
         assertEquals(output + "\r\n", outputStreamCaptor.toString());
+    }
+
+    @Test
+    @DisplayName("Print on left - Simple text and format")
+    void printLeftString_textWithBorderStyle_simpleLine() {
+        Printer.printLeftString2("Test", 2, 20, "\u001B[41m", "");
+        String output = "\u001B[41m  \u001B[0m  Test          \u001B[0m\u001B[41m  \u001B[0m";
+        assertEquals(output + "\r\n", outputStreamCaptor.toString());
+    }
+
+    @Test
+    @DisplayName("Print on left - Big word")
+    void printLeftString_bigWordWithBorderStyle_multipleLines() {
+        Printer.printLeftString2("TestTestTestTestTestTestTestTest", 2, 20, "\u001B[41m", "");
+        String output = "\u001B[41m  \u001B[0m  TestTestTest  \u001B[0m\u001B[41m  \u001B[0m" + "\r\n" +
+            "\u001B[41m  \u001B[0m  TestTestTest  \u001B[0m\u001B[41m  \u001B[0m" + "\r\n" +
+            "\u001B[41m  \u001B[0m  TestTest      \u001B[0m\u001B[41m  \u001B[0m" + "\r\n";
+        assertEquals(output, outputStreamCaptor.toString());
     }
 
 
