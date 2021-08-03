@@ -200,13 +200,13 @@ public class Printer {
     // TODO JA: If to be used rename and overwrite the original (keep initial comments)
     public static void printCenterString2(String text, int width, String borderStyle, String innerStyle) {
         // Divides input text in multiple rows.
-        ArrayList<String> rows = createTextRows(text, width - 2);
+        ArrayList<String> rows = createTextRows(text, width - 2 * BORDER_WIDTH);
         // Prints all rows stylized.
         for (String row : rows) {
             StringBuilder str = new StringBuilder();
             str.append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET).append(innerStyle);
             // Empty spaces on the right. Doesn't count color codes
-            int emptySpaces = width - row.replaceAll("\u001B\\[[;\\d]*m", "").length() - 2;
+            int emptySpaces = width - row.replaceAll("\u001B\\[[;\\d]*m", "").length() - 2 * BORDER_WIDTH;
             boolean even = emptySpaces % 2 == 0;
             // Half the empty spaces
             str.append(String.join("", Collections.nCopies(emptySpaces / 2, " ")));
