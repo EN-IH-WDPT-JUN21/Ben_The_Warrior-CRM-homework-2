@@ -1,5 +1,6 @@
 package com.ironhack.homework_2.utils;
 
+import com.google.gson.Gson;
 import com.ironhack.homework_2.classes.Account;
 import com.ironhack.homework_2.classes.Contact;
 import com.ironhack.homework_2.classes.Lead;
@@ -8,8 +9,13 @@ import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class JsonDatabaseUtility {
     private Map<Integer, Lead> leadHash = new HashMap<>();
@@ -263,4 +269,78 @@ public class JsonDatabaseUtility {
             return true;
         }
     }
+
+    // ==================== Save Methods for Leads, Contacts, Opportunities and Accounts class into a Json files ====================
+    // save database in a json file
+    public void save() throws IOException {
+        File file = new File("DatabaseUtility.json");
+        FileWriter writer = new FileWriter("DatabaseUtility.json", false);
+        String jsonData = new Gson().toJson(this);
+        if(isInJson(this,file)){
+            System.out.println("This Database is already saved in the Json file");
+            writer.close();
+        }
+        else{
+            writer.write(jsonData);
+            writer.append("\n");
+            writer.close();
+            System.out.println("Database has been saved correctly");
+        }
+    }
+
+    //load method that gives maps from Database in json file to actual JsonDatabaseUtility class
+    public void load() throws FileNotFoundException {
+        Gson gson = new Gson();
+        Path path = Paths.get("DatabaseUtility.json");
+        JsonDatabaseUtility jsonDatabaseUtility1 = new JsonDatabaseUtility();
+
+       /* try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.US_ASCII)) {
+            String jsonDataString = reader.readLine();
+            while (jsonDataString != null){
+                jsonDatabaseUtility1 = gson.fromJson(jsonDataString, JsonDatabaseUtility.class);
+                jsonDataString = reader.readLine();
+            }
+
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }*/
+
+        File file = new File("DatabaseUtility.json");
+        Scanner sc = new Scanner(file);
+
+        while (sc.hasNext()){
+            String jsonString = sc.nextLine();
+            jsonDatabaseUtility1 = gson.fromJson(jsonString, JsonDatabaseUtility.class);
+
+        }
+        sc.close();
+
+        setLeadHash(jsonDatabaseUtility1.getLeadHash());
+        setContactHash(jsonDatabaseUtility1.getContactHash());
+        setOpportunityHash(jsonDatabaseUtility1.getOpportunityHash());
+        setAccountHash(jsonDatabaseUtility1.getAccountHash());
+    }
+
+    //In order to avoid duplicate object in our Json Files we check if the object is already in the json file
+    public boolean isInJson(Object obj, File file)throws FileNotFoundException {
+        boolean isInFile = false;
+        String objJson = new Gson().toJson(obj);
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNext()){
+            if(objJson.equals(scanner.nextLine())){
+                isInFile = true;
+                break;
+            }
+            else{
+                isInFile = false;
+            }
+        }
+
+        scanner.close();
+        return isInFile;
+    }
+
 }
+
+

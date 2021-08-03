@@ -10,7 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -194,4 +198,35 @@ class JsonDatabaseUtilityTest {
         assertEquals(1, opportunityHashSizeAfter-opportunityHashSizeBefore);
         assertEquals(1, accountHashSizeAfter-accountHashSizeBefore);
     }
+
+    @Test
+    void saveJsonDatabaseInJsonFile() throws IOException {
+        jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
+        jsonDatabaseUtility.addContact(1);
+        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        jsonDatabaseUtility.addOpportunity(Product.BOX, 2, contact1);
+        Opportunity opportunity1=jsonDatabaseUtility.getOpportunityHash().get(1);
+        jsonDatabaseUtility.addAccount(Industry.PRODUCE, 10, "Santiago", "Chile", contact1, opportunity1);
+        jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
+        jsonDatabaseUtility.addContact(2);
+        Contact contact2=jsonDatabaseUtility.getContactHash().get(2);
+        jsonDatabaseUtility.addOpportunity(Product.FLATBED, 50, contact2);
+        Opportunity opportunity2=jsonDatabaseUtility.getOpportunityHash().get(2);
+        jsonDatabaseUtility.addAccount(Industry.MEDICAL, 12, "Warsaw", "Poland", contact2, opportunity2);
+        jsonDatabaseUtility.save();
+        File file = new File("DatabaseUtility.json");
+        assertTrue(file.exists());
+        Scanner scan = new Scanner(file);
+        assertTrue(scan.hasNextLine());
+        scan.close();
+    }
+
+    @Test
+    void loadJsonDatabaseFromJsonFile() throws FileNotFoundException {
+        JsonDatabaseUtility jsonDatabaseUtility2 = new JsonDatabaseUtility();
+        jsonDatabaseUtility2.load();
+        System.out.println(jsonDatabaseUtility2.getContactHash().get(1).getEmail());
+        assertEquals("john@gmail.com",jsonDatabaseUtility2.getContactHash().get(1).getEmail());
+    }
+
 }
