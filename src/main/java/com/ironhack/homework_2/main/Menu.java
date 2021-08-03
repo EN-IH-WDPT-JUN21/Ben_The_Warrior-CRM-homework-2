@@ -747,7 +747,7 @@ public class Menu {
     }
 
     //prompt number and validate
-    private int promptNumber() {
+    private int promptPositiveNumber() {
         String input = scanner.nextLine().trim();
         while (!isValidPositiveNumber(input)) {
             PrinterMenu.setWarning("Please input a valid integer number! Must be positive!");

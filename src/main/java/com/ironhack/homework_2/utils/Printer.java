@@ -176,27 +176,6 @@ public class Printer {
     // If text exceeds program width, wraps to the next line, no cut words unless single big word.
     // If text has color, keeps it to next lines. (Used for printing variable size text)
     public static void printLeftString(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
-        // Divide the text if it is larger than program width.
-        String newText = divideText(text, width - leftSpaces * 2)[0];
-        // Recursion!
-        while (!newText.equals(text.trim())) {  //loops while it is larger than width
-            printLeftString(newText, leftSpaces, width, borderStyle, contentStyle);  //prints first line
-            text = text.trim().substring(newText.length());  //removes first line
-            if (newText.contains("\u001B") && !newText.contains("\u001B[0m"))  //adds style if it has it (not the reset style)
-                text = newText.substring(newText.indexOf("\u001B"), newText.indexOf("\u001B") + 5) + text;
-            newText = divideText(text, width - leftSpaces - 3)[0]; //divides new text if larger
-        }
-        // Prints the given text by defining empty spaces for the right and left side. Stylizes the text.
-        StringBuilder str = new StringBuilder(borderStyle + "  " + ANSI_RESET + contentStyle);
-        int rightSpaces = width - text.replaceAll("(\\x9B|\\x1B\\[)[0-?]*[ -\\/]*[@-~]", "").length() - leftSpaces - 4; // empty spaces don't count the ANSIS codes
-        str.append(String.join("", Collections.nCopies(leftSpaces, " ")));
-        str.append(text);
-        str.append(String.join("", Collections.nCopies(rightSpaces, " ")));
-        str.append(ANSI_RESET).append(borderStyle).append("  ").append(ANSI_RESET);
-        System.out.println(str);
-    }
-
-
     // TODO JA: If to be used rename and overwrite the original (keep initial comments)
     public static void printCenterString2(String text, int width, String borderStyle, String innerStyle) {
         // Divides input text in multiple rows.
@@ -219,7 +198,6 @@ public class Printer {
     }
 
     // TODO JA: If to be used rename and overwrite the original (keep initial comments)
-    public static void printLeftString2(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
         // Divides input text in multiple rows.
         ArrayList<String> rows = createTextRows(text, width - 2 * leftSpaces - 2 * BORDER_WIDTH);
         // Prints all rows stylized.

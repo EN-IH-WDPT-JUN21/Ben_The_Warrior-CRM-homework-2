@@ -1,3 +1,4 @@
+
 package com.ironhack.homework_2.utils;
 
 import org.junit.jupiter.api.DisplayName;
@@ -25,12 +26,10 @@ class UtilsTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"new lead", "show leads", "lookup lead 10", "convert 20", "close-won 30", "close-lost 1",
-        "help", "exit"})
+            "help", "exit"})
     @DisplayName("Valid commands identified")
     void isValidCommand_ValidCommand_True(String command) {
         assertTrue(Utils.isValidCommand(command));
-
-
     }
 
     @ParameterizedTest
@@ -38,83 +37,6 @@ class UtilsTest {
     @DisplayName("Invalid commands identified")
     void isValidCommand_InvalidCommand_False(String command) {
         assertFalse(Utils.isValidCommand(command));
-    }
-
-    @Test
-    void validNumber() {
-        assertTrue(Utils.validNumber("1000"));
-        assertTrue(Utils.validNumber("1"));
-        assertTrue(Utils.validNumber("23"));
-        assertTrue(Utils.validNumber("486"));
-        assertFalse(Utils.validNumber("-20"));
-        assertFalse(Utils.validNumber("x"));
-        assertFalse(Utils.validNumber(""));
-        assertFalse(Utils.validNumber("Something"));
-
-    }
-
-    @Test
-    void validProduct() {
-        assertTrue(Utils.validProduct("HYBRID"));
-        assertTrue(Utils.validProduct("FLATBED"));
-        assertTrue(Utils.validProduct("BOX"));
-        assertFalse(Utils.validProduct(""));
-        assertFalse(Utils.validProduct("hybrid"));
-        assertFalse(Utils.validProduct("AaAaaAaAAAa"));
-        assertFalse(Utils.validProduct("eºregeveri"));
-    }
-
-    @Test
-    void validIndustry() {
-        assertTrue(Utils.validIndustry("PRODUCE"));
-        assertTrue(Utils.validIndustry("ECOMMERCE"));
-        assertTrue(Utils.validIndustry("MANUFACTURING"));
-        assertTrue(Utils.validIndustry("MEDICAL"));
-        assertTrue(Utils.validIndustry("OTHER"));
-        assertFalse(Utils.validIndustry("ecommErcE"));
-        assertFalse(Utils.validIndustry(""));
-        assertFalse(Utils.validIndustry("EeEEEfeEWf"));
-        assertFalse(Utils.validIndustry("HYBRID"));
-    }
-
-    @Test
-    void validName() {
-        assertTrue(Utils.validName("John"));
-        assertTrue(Utils.validName("André"));
-        assertTrue(Utils.validName("Afonso"));
-        assertTrue(Utils.validName("C. S. Roberto"));
-        assertFalse(Utils.validName(""));
-        assertFalse(Utils.validName("123"));
-        assertFalse(Utils.validName("-<'?"));
-    }
-
-    @Test
-    void validEmail() {
-        assertTrue(Utils.validEmail("john@hotmail.com"));
-        assertTrue(Utils.validEmail("andre@gmail.com"));
-        assertTrue(Utils.validEmail("afonso@sapo.pt"));
-        assertTrue(Utils.validEmail("c_s_roberto@ironhack.com"));
-        assertFalse(Utils.validEmail(""));
-        assertFalse(Utils.validEmail("johnjohn"));
-        assertFalse(Utils.validEmail("@"));
-        assertFalse(Utils.validEmail("@.com"));
-    }
-
-    @Test
-    void validPhone() {
-        assertTrue(Utils.validPhone("+351 91 296 09 99"));
-        assertTrue(Utils.validPhone("94129192421"));
-        assertTrue(Utils.validPhone("11241241442"));
-        assertFalse(Utils.validPhone(""));
-        assertFalse(Utils.validPhone("ABC"));
-        assertFalse(Utils.validPhone("+"));
-    }
-
-    @Test
-    void validString() {
-        assertTrue(Utils.validString("Abc"));
-        assertTrue(Utils.validString("123"));
-        assertFalse(Utils.validString(""));
     }
 
     @ParameterizedTest

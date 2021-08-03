@@ -1,5 +1,6 @@
-package com.ironhack.homework_2.classes;
+package com.ironhack.homework_2.main;
 
+import com.ironhack.homework_2.classes.Contact;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
 import com.ironhack.homework_2.utils.JsonDatabaseUtility;
