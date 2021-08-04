@@ -196,8 +196,51 @@ public class Printer {
         System.out.println(str);
     }
 
-    // TODO JA: If to be used rename and overite the original (keep initial comments)
+
+    // TODO JA: If to be used rename and overwrite the original (keep initial comments)
+    public static void printCenterString2(String text, int width, String borderStyle, String innerStyle) {
+        // Divides input text in multiple rows.
+        ArrayList<String> rows = createTextRows(text, width - 2 * BORDER_WIDTH);
+        // Prints all rows stylized.
+        for (String row : rows) {
+            StringBuilder str = new StringBuilder();
+            str.append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET).append(innerStyle);
+            // Empty spaces on the right. Doesn't count color codes
+            int emptySpaces = width - row.replaceAll("\u001B\\[[;\\d]*m", "").length() - 2 * BORDER_WIDTH;
+            boolean even = emptySpaces % 2 == 0;
+            // Half the empty spaces are adjusted
+            str.append(String.join("", Collections.nCopies(even ? emptySpaces / 2 : (emptySpaces / 2) + 1, " ")));
+            str.append(row);
+            // Other half the empty spaces
+            str.append(String.join("", Collections.nCopies(emptySpaces / 2, " ")));
+            str.append(ANSI_RESET).append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET);
+            System.out.println(str);
+        }
+    }
+
+    // TODO JA: If to be used rename and overwrite the original (keep initial comments)
     public static void printLeftString2(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
+        // Divides input text in multiple rows.
+        ArrayList<String> rows = createTextRows(text, width - 2 * leftSpaces - 2 * BORDER_WIDTH);
+        // Prints all rows stylized.
+        for (String row : rows) {
+            StringBuilder str = new StringBuilder();
+            str.append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET).append(contentStyle);
+            // Empty spaces on the right. Doesn't count color codes
+            int rightSpaces = width - row.replaceAll("\u001B\\[[;\\d]*m", "").length() - leftSpaces - 2 * BORDER_WIDTH;
+            str.append(String.join("", Collections.nCopies(leftSpaces, " ")));
+            str.append(row);
+            str.append(String.join("", Collections.nCopies(rightSpaces, " ")));
+            str.append(ANSI_RESET).append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET);
+            System.out.println(str);
+        }
+    }
+
+
+    // ======================================== 5. AUX METHODS ========================================
+    // Defines the different rows that the printLeftString() and printCenterString() methods will print.
+    // The emptySpace is defined only for the text section. Ex: printLeftString -> width - 2*leftSpaces.
+    public static ArrayList<String> createTextRows(String text, int emptySpaces) {
         // Initializes Maps and lists that will be used in the aux methods to divide rows and keep a color structure
         ArrayList<String> rows = new ArrayList<>();
         TreeMap<Integer, String> colorMap = getColorCodes(text);
@@ -207,15 +250,15 @@ public class Printer {
         // (colors count for string length but doesn't print characters)
         String cleanText = text.replaceAll("\u001B\\[[;\\d]*m", "");
         // Splits the text according to the empty space. [0] split string;[1] remaining of the string.
-        String[] splitCleanText = divideText(cleanText, width - leftSpaces * 2);
+        String[] splitCleanText = divideText(cleanText, emptySpaces);
         StringBuilder splitText = new StringBuilder(splitCleanText[0]);
         // Add color map to the clean split string.
         // Save used colors to be added to start of the next row.
         // Not used colors save in aux map with adjusted index.
-        for (Integer i : colorMap.descendingMap().keySet()) {
-            if (i < splitText.length()) {
+        for (Integer i : colorMap.keySet()) {
+            if (i <= splitText.length()) {
                 splitText.insert(i, colorMap.get(i));
-                previousColor.insert(0, colorMap.get(i));
+                previousColor.append(colorMap.get(i));
             } else {
                 newColorMap.put(i - splitText.length(), colorMap.get(i));
             }
@@ -230,15 +273,15 @@ public class Printer {
             colorMap = new TreeMap<>();
             colorMap.putAll(newColorMap);
             newColorMap = new TreeMap<>();
-            splitCleanText = divideText(cleanText, width - leftSpaces * 2);
+            splitCleanText = divideText(cleanText, emptySpaces);
             splitText = new StringBuilder(splitCleanText[0]);
             stringStart.append(previousColor);
             previousColor = new StringBuilder();
             // Repeat previous color mapping methodology. Add color, save used to start, adjust remaining.
-            for (Integer i : colorMap.descendingMap().keySet()) {
-                if (i < splitText.length()) {
+            for (Integer i : colorMap.keySet()) {
+                if (i <= splitText.length()) {
                     splitText.insert(i, colorMap.get(i));
-                    previousColor.insert(0, colorMap.get(i));
+                    previousColor.append(colorMap.get(i));
                 } else {
                     newColorMap.put(i - splitText.length(), colorMap.get(i));
                 }
@@ -246,23 +289,25 @@ public class Printer {
             // Add new row with starter color
             rows.add(stringStart.toString() + splitText);
         }
-
-        // Prints all rows stylized.
-        for (String row : rows) {
-            StringBuilder str = new StringBuilder();
-            str.append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET).append(contentStyle);
-            // Empty spaces on the right. Doesn't count color codes
-            int rightSpaces = width - row.replaceAll("\u001B\\[[;\\d]*m", "").length() - leftSpaces;
-            str.append(String.join("", Collections.nCopies(leftSpaces, " ")));
-            str.append(row);
-            str.append(String.join("", Collections.nCopies(rightSpaces, " ")));
-            str.append(ANSI_RESET).append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET);
-            System.out.println(str);
-        }
+        return rows; // returns array list of rows.
     }
 
+    // Counts the number of rows that the printLeftString() and printCenterString() methods will create.
+    // The emptySpace is defined only for the text section. Ex: printLeftString -> width - 2*leftSpaces.
+    public static int numberOfTextRows(String text, int emptySpaces) {
+        // Clean text of color codes and split it.
+        String cleanText = text.replaceAll("\u001B\\[[;\\d]*m", "");
+        String[] splitText = divideText(cleanText, emptySpaces);
+        int count = 1;
+        // Divides the text until is no longer divided (split = original). Counts each loop.
+        while (!splitText[0].equals(cleanText)) {
+            count++;
+            cleanText = splitText[1];
+            splitText = divideText(cleanText, emptySpaces);
+        }
+        return count;
+    }
 
-    // ======================================== 5. AUX METHODS ========================================
     // Divides text to fill empty spaces. Returns [0] split string, and [1] remaining string.
     public static String[] divideText(String text, int emptySpaces) {
         if (text.trim().length() <= emptySpaces)    // If input size fits program with returns input.
@@ -284,22 +329,6 @@ public class Printer {
         }
         return new String[]{text, ""}; // Only used to have a return. Never used.
     }   // Note: For it to work with the print method and color mapping this method will always count the space after a word.
-
-    // Counts the number of rows that the printLeftString() and printCenterString() methods will create.
-    // The emptySpace is defined only for the text section. Ex: printLeftString -> width - 2*leftSpaces.
-    public static int numberOfTextRows(String text, int emptySpaces) {
-        // Clean text of color codes and split it.
-        String cleanText = text.replaceAll("\u001B\\[[;\\d]*m", "");
-        String[] splitText = divideText(cleanText, emptySpaces);
-        int count = 1;
-        // Divides the text until is no longer divided (split = original). Counts each loop.
-        while (!splitText[0].equals(cleanText)) {
-            count++;
-            cleanText = splitText[1];
-            splitText = divideText(cleanText, emptySpaces);
-        }
-        return count;
-    }
 
     // Saves and returns all color codes and their indexes in a string.
     public static TreeMap<Integer, String> getColorCodes(String textString) {
