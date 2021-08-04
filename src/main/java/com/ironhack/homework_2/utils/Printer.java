@@ -208,11 +208,11 @@ public class Printer {
             // Empty spaces on the right. Doesn't count color codes
             int emptySpaces = width - row.replaceAll("\u001B\\[[;\\d]*m", "").length() - 2 * BORDER_WIDTH;
             boolean even = emptySpaces % 2 == 0;
-            // Half the empty spaces
-            str.append(String.join("", Collections.nCopies(emptySpaces / 2, " ")));
-            str.append(row);
-            // Other half the empty spaces adjusted.
+            // Half the empty spaces are adjusted
             str.append(String.join("", Collections.nCopies(even ? emptySpaces / 2 : (emptySpaces / 2) + 1, " ")));
+            str.append(row);
+            // Other half the empty spaces
+            str.append(String.join("", Collections.nCopies(emptySpaces / 2, " ")));
             str.append(ANSI_RESET).append(borderStyle).append(String.join("", Collections.nCopies(BORDER_WIDTH, " "))).append(ANSI_RESET);
             System.out.println(str);
         }
