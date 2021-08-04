@@ -38,7 +38,13 @@ class PrinterTest {
     }
 
     // ============================== MAIN PRINT TESTS ==============================
-    // ==================== TEST printCenterString() ====================
+    // ==================== TEST clearCommandLine() ====================
+    @Test
+    @DisplayName("Clear command line")
+    void clearCommandLine_printClearCommands() {
+        Printer.clearCommandLine();
+        assertEquals("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\033[H\033[2J", outputStreamCaptor.toString());
+    }
 
     // ==================== TEST printCenterString() ====================
     @ParameterizedTest
