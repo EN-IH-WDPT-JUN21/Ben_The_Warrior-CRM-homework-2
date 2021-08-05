@@ -37,4 +37,66 @@ class UtilsTest {
     void isValidCommand_InvalidCommand_False(String command) {
         assertFalse(Utils.isValidCommand(command));
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"HYBRID", "FLATBED", "BOX"})
+    @DisplayName("Valid Products identified")
+    void isValidProduct_True(String product) {assertTrue(Utils.validProduct(product));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"hybrid", "HI BRITT", "FLAP JACK", "BROCK"})
+    @DisplayName("Invalid Products identified")
+    void isValidProduct_False(String product) {assertFalse(Utils.validProduct(product));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"PRODUCE", "ECOMMERCE", "MANUFACTURING", "MEDICAL", "OTHER"})
+    @DisplayName("Valid Industry identified")
+    void isValidIndustry_True(String industry) {assertTrue(Utils.validIndustry(industry));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"produce", "PRO DUCKS", "ECO MR MECES", "MAN FACT RING", "MEDICINE BALL", "OTTER"})
+    @DisplayName("Invalid Industry identified")
+    void isValidIndustry_False(String industry) {assertFalse(Utils.validIndustry(industry));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Bob Kelso", "José Brasão", "John", "John Bradshaw Layfield"})
+    @DisplayName("Valid Name identified")
+    void isValidName_True(String names) {assertTrue(Utils.validName(names));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "J0sé"})
+    @DisplayName("Invalid Name identified")
+    void isValidName_False(String names) {assertFalse(Utils.validName(names));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"jd@sacredheart.com", "TheJanitor123@sacredheart.com"})
+    @DisplayName("Valid Email identified")
+    void isValidEmail_True(String emails) {assertTrue(Utils.validEmail(emails));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"myemailATnowhere", "myemail@nowhere"})
+    @DisplayName("Invalid Email identified")
+    void isValidEmail_False(String emails) {assertFalse(Utils.validEmail(emails));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"01256543624", "01256 543 624", "(012) 56543624", "+44 01256543624"})
+    @DisplayName("Valid Phone Number identified")
+    void isValidPhoneNumber_True(String phoneNumbers) {assertTrue(Utils.validPhone(phoneNumbers));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "123", "123hello456"})
+    @DisplayName("Invalid Phone Number identified")
+    void isValidPhoneNumber_False(String phoneNumbers) {assertFalse(Utils.validPhone(phoneNumbers));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"London", "Ashby-de-la-Zouch", "King's Norton", "Provence-Alpes-Côte d'Azur",
+            "Sauðárkrókur", "Übach-Palenberg"})
+    @DisplayName("Valid Address identified")
+    void isValidString_True(String address) {assertTrue(Utils.validString(address));}
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "//", "london", "London2", "Somewhere?",
+            "Anywhere-", "übach-Palenberg"})
+    @DisplayName("Invalid Address identified")
+    void isValidString_False(String address) {assertFalse(Utils.validString(address));}
 }
