@@ -97,6 +97,6 @@ class UtilsTest {
     @ParameterizedTest
     @ValueSource(strings = {"", "//", "london", "London2", "Somewhere?",
             "Anywhere-", "übach-Palenberg"})
-    @DisplayName("Valid Address identified")
+    @DisplayName("Invalid Address identified")
     void isValidString_False(String address) {assertFalse(Utils.validString(address));}
 }
