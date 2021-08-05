@@ -151,35 +151,6 @@ public class JsonDatabaseUtility {
         setAccountId(jsonDatabaseUtility.getAccountId());
     }
 
-    /*// Save database
-    public static void saveDatabaseInJson(JsonDatabaseUtility database) throws IOException {
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-        Gson gson = builder.create();
-        File file = new File(DATABASE_DIRECTORY);
-        FileWriter writer = new FileWriter(file, false);
-        String jsonData = gson.toJson(database);
-        writer.write(jsonData);
-        writer.close();
-    }
-
-    // Load database
-    public static JsonDatabaseUtility loadDatabaseInJson() throws FileNotFoundException {
-        Gson gson = new Gson();
-        File file = new File(DATABASE_DIRECTORY);
-        FileReader reader = new FileReader(file);
-        try{
-            char[] chars = new char[(int) file.length()];
-            reader.read(chars);
-            String jsonData = new String(chars);
-            JsonDatabaseUtility jsonDatabaseUtility = gson.fromJson(jsonData, JsonDatabaseUtility.class);
-            reader.close();
-            return jsonDatabaseUtility;
-        }catch (Exception e){
-            return new JsonDatabaseUtility();
-        }
-    }*/
-
     // ==================== Adds new Lead to HashMap for Leads====================
     //count of elements in HashMap for Leads nad Contacts (as they are converted into Contacts to get new ID (plus checks if this number is not used)
     public Integer setIdForNewLead(Map<Integer, Lead> leadHash) {
