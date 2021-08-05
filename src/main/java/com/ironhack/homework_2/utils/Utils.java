@@ -3,6 +3,8 @@ package com.ironhack.homework_2.utils;
 import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 
+import java.util.regex.Pattern;
+
 public class Utils {
     public static boolean isValidPositiveNumber(String num) {
         try {
@@ -31,20 +33,26 @@ public class Utils {
         }
     }
 
-    public static boolean validName(String name) {
-        return true;
+    public static boolean validName(String name){
+        return Pattern.compile("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$").matcher(name).find();
     }
 
-    public static boolean validEmail(String email) {
-        return true;
+    public static boolean validEmail(String email){
+        Pattern emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        return emailPattern.matcher(email).find();
     }
 
-    public static boolean validPhone(String phone) {
-        return true;
+    public static boolean validPhone(String phone){
+        String patterns = "^\\s?((\\+[1-9]{1,4}[ \\-]*)" +
+                "|(\\([0-9]{2,3}\\)[ \\-]*)" +
+                "|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?\\s?";
+        Pattern phoneNumRegexes = Pattern.compile(patterns);
+        return phoneNumRegexes.matcher(phone).find();
     }
 
-    public static boolean validString(String str) {
-        return true;
+    public static boolean validString(String str){
+        if (str.length() < 1) return false;
+        return Pattern.compile("^[A-ZÀ-Ü]+([a-zA-Z\\u0080-\\u024F]+(?:. |-| |'))*[a-zA-Z\\u0080-\\u024F]+$").matcher(str).find();
     }
 
 
