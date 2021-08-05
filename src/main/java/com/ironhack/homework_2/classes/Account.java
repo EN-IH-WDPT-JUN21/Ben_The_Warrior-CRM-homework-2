@@ -3,6 +3,7 @@ package com.ironhack.homework_2.classes;
 import com.ironhack.homework_2.enums.Industry;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Account {
     private Integer id;
@@ -88,5 +89,13 @@ public class Account {
     public String toString() {
         return "Id: " + id + ", Industry: " + industry + ", Number of Employees: " + employeeCount + ", City: " + city +
             ", Country: " + country + ", Contacts: " + contactList.get(0).getName() + ", Opportunities: " + opportunityList.get(0).getProduct();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return employeeCount == account.employeeCount && Objects.equals(id, account.id) && industry == account.industry && Objects.equals(city, account.city) && Objects.equals(country, account.country) && Objects.equals(contactList, account.contactList) && Objects.equals(opportunityList, account.opportunityList);
     }
 }

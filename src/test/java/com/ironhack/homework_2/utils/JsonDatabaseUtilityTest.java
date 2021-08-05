@@ -21,15 +21,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JsonDatabaseUtilityTest {
     private JsonDatabaseUtility jsonDatabaseUtility;
+    private JsonDatabaseUtility initialDatabase;
 
     @BeforeEach
-    void setUp() {
-        jsonDatabaseUtility= new JsonDatabaseUtility();
-
+    void setUp() throws IOException {
+        jsonDatabaseUtility = new JsonDatabaseUtility("dummy");
+        initialDatabase = new JsonDatabaseUtility("dummy");
+        initialDatabase.load();
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws IOException {
+        initialDatabase.save();
     }
 
     @Test
@@ -66,27 +69,27 @@ class JsonDatabaseUtilityTest {
 
     @Test
     void setIdForNewLeadTest() {
-        int leadHashSize=jsonDatabaseUtility.getLeadHash().size();
+        int leadHashSize = jsonDatabaseUtility.getLeadHash().size();
         System.out.println(leadHashSize);
-        int newId= jsonDatabaseUtility.setIdForNewLead(jsonDatabaseUtility.getLeadHash());
+        int newId = jsonDatabaseUtility.setIdForNewLead(jsonDatabaseUtility.getLeadHash());
         System.out.println(newId);
-        assertEquals(0, newId-leadHashSize);
+        assertEquals(0, newId - leadHashSize);
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
-        int leadHashSize1=jsonDatabaseUtility.getLeadHash().size();
+        int leadHashSize1 = jsonDatabaseUtility.getLeadHash().size();
         System.out.println(leadHashSize1);
-        int newId1= jsonDatabaseUtility.setIdForNewLead(jsonDatabaseUtility.getLeadHash());
+        int newId1 = jsonDatabaseUtility.setIdForNewLead(jsonDatabaseUtility.getLeadHash());
         System.out.println(newId1);
         assertEquals(1, newId1);
-        assertEquals(0, newId1-leadHashSize1);
+        assertEquals(0, newId1 - leadHashSize1);
     }
 
     @Test
     void addLeadTest() {
-        int leadHashSizeBefore=jsonDatabaseUtility.getLeadHash().size();
+        int leadHashSizeBefore = jsonDatabaseUtility.getLeadHash().size();
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
         System.out.println(jsonDatabaseUtility.getLeadHash());
-        int leadHashSizeAfter=jsonDatabaseUtility.getLeadHash().size();
-        assertEquals(1, leadHashSizeAfter-leadHashSizeBefore);
+        int leadHashSizeAfter = jsonDatabaseUtility.getLeadHash().size();
+        assertEquals(1, leadHashSizeAfter - leadHashSizeBefore);
 
     }
 
@@ -96,12 +99,12 @@ class JsonDatabaseUtilityTest {
         jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
         System.out.println("Before");
         System.out.println(jsonDatabaseUtility.getLeadHash());
-        int leadHashSizeBefore=jsonDatabaseUtility.getLeadHash().size();
+        int leadHashSizeBefore = jsonDatabaseUtility.getLeadHash().size();
         jsonDatabaseUtility.removeLead(2);
-        int leadHashSizeAfter=jsonDatabaseUtility.getLeadHash().size();
+        int leadHashSizeAfter = jsonDatabaseUtility.getLeadHash().size();
         System.out.println("After");
         System.out.println(jsonDatabaseUtility.getLeadHash());
-        assertEquals(-1, leadHashSizeAfter-leadHashSizeBefore);
+        assertEquals(-1, leadHashSizeAfter - leadHashSizeBefore);
     }
 
     @Test
@@ -121,112 +124,104 @@ class JsonDatabaseUtilityTest {
 
     @Test
     void addContactTest() {
-        int contactHashSizeBefore=jsonDatabaseUtility.getContactHash().size();
+        int contactHashSizeBefore = jsonDatabaseUtility.getContactHash().size();
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
         jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
         System.out.println("Leads before: " + jsonDatabaseUtility.getLeadHash());
-        int leadHashSizeBefore=jsonDatabaseUtility.getLeadHash().size();
+        int leadHashSizeBefore = jsonDatabaseUtility.getLeadHash().size();
         jsonDatabaseUtility.addContact(2);
         System.out.println("Contacts after: " + jsonDatabaseUtility.getContactHash());
         System.out.println("Leads after: " + jsonDatabaseUtility.getLeadHash());
-        int leadHashSizeAfter=jsonDatabaseUtility.getLeadHash().size();
-        int contactHashSizeAfter=jsonDatabaseUtility.getContactHash().size();
-        assertEquals(1, contactHashSizeAfter-contactHashSizeBefore);
-        assertEquals(-1, leadHashSizeAfter-leadHashSizeBefore);
+        int leadHashSizeAfter = jsonDatabaseUtility.getLeadHash().size();
+        int contactHashSizeAfter = jsonDatabaseUtility.getContactHash().size();
+        assertEquals(1, contactHashSizeAfter - contactHashSizeBefore);
+        assertEquals(-1, leadHashSizeAfter - leadHashSizeBefore);
     }
 
     @Test
     void addOpportunityTest() {
-        int opportunityHashSizeBefore=jsonDatabaseUtility.getOpportunityHash().size();
+        int opportunityHashSizeBefore = jsonDatabaseUtility.getOpportunityHash().size();
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
         jsonDatabaseUtility.addContact(1);
-        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        Contact contact1 = jsonDatabaseUtility.getContactHash().get(1);
         jsonDatabaseUtility.addOpportunity(Product.HYBRID, 12, contact1);
         System.out.println("Opportunities after: " + jsonDatabaseUtility.getOpportunityHash());
         assertFalse(jsonDatabaseUtility.getOpportunityHash().isEmpty());
-        int opportunityHashSizeAfter=jsonDatabaseUtility.getOpportunityHash().size();
-        assertEquals(1, opportunityHashSizeAfter-opportunityHashSizeBefore);
+        int opportunityHashSizeAfter = jsonDatabaseUtility.getOpportunityHash().size();
+        assertEquals(1, opportunityHashSizeAfter - opportunityHashSizeBefore);
 // second opportunity
-        int opportunityHashSizeBefore1=jsonDatabaseUtility.getOpportunityHash().size();
+        int opportunityHashSizeBefore1 = jsonDatabaseUtility.getOpportunityHash().size();
         jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
         System.out.println("Leads after: " + jsonDatabaseUtility.getLeadHash());
         System.out.println("Contacts after: " + jsonDatabaseUtility.getContactHash());
         jsonDatabaseUtility.addContact(2);
-        Contact contact2=jsonDatabaseUtility.getContactHash().get(2);
+        Contact contact2 = jsonDatabaseUtility.getContactHash().get(2);
         jsonDatabaseUtility.addOpportunity(Product.FLATBED, 3, contact2);
         System.out.println("Opportunities after: " + jsonDatabaseUtility.getOpportunityHash());
-        int opportunityHashSizeAfter1=jsonDatabaseUtility.getOpportunityHash().size();
-        assertEquals(1, opportunityHashSizeAfter1-opportunityHashSizeBefore1);
+        int opportunityHashSizeAfter1 = jsonDatabaseUtility.getOpportunityHash().size();
+        assertEquals(1, opportunityHashSizeAfter1 - opportunityHashSizeBefore1);
     }
 
     @Test
     void addAccountTest() {
-        int accountHashSizeBefore=jsonDatabaseUtility.getAccountHash().size();
+        int accountHashSizeBefore = jsonDatabaseUtility.getAccountHash().size();
         jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
         jsonDatabaseUtility.addContact(1);
-        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        Contact contact1 = jsonDatabaseUtility.getContactHash().get(1);
         jsonDatabaseUtility.addOpportunity(Product.HYBRID, 12, contact1);
-        Opportunity opportunity1=jsonDatabaseUtility.getOpportunityHash().get(1);
+        Opportunity opportunity1 = jsonDatabaseUtility.getOpportunityHash().get(1);
         jsonDatabaseUtility.addAccount(Industry.MEDICAL, 12, "Warsaw", "Poland", contact1, opportunity1);
         System.out.println(jsonDatabaseUtility.getAccountHash());
         assertFalse(jsonDatabaseUtility.getAccountHash().isEmpty());
-        int accountHashSizeAfter=jsonDatabaseUtility.getAccountHash().size();
-        assertEquals(1, accountHashSizeAfter-accountHashSizeBefore);
+        int accountHashSizeAfter = jsonDatabaseUtility.getAccountHash().size();
+        assertEquals(1, accountHashSizeAfter - accountHashSizeBefore);
     }
 
 
     @Test
     void convertLeadTest() {
-        int contactHashSizeBefore=jsonDatabaseUtility.getContactHash().size();
-        int opportunityHashSizeBefore=jsonDatabaseUtility.getOpportunityHash().size();
-        int accountHashSizeBefore=jsonDatabaseUtility.getAccountHash().size();
+        int contactHashSizeBefore = jsonDatabaseUtility.getContactHash().size();
+        int opportunityHashSizeBefore = jsonDatabaseUtility.getOpportunityHash().size();
+        int accountHashSizeBefore = jsonDatabaseUtility.getAccountHash().size();
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
         jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
         System.out.println("Leads before: " + jsonDatabaseUtility.getLeadHash());
-        int leadHashSizeBefore=jsonDatabaseUtility.getLeadHash().size();
+        int leadHashSizeBefore = jsonDatabaseUtility.getLeadHash().size();
         jsonDatabaseUtility.convertLead(2, Product.BOX, 10, Industry.ECOMMERCE, 8, "Warsaw", "Poland");
         System.out.println("Contacts after: " + jsonDatabaseUtility.getContactHash());
         System.out.println("Leads after: " + jsonDatabaseUtility.getLeadHash());
         System.out.println("Opportunities after: " + jsonDatabaseUtility.getOpportunityHash());
         System.out.println("Accounts after: " + jsonDatabaseUtility.getAccountHash());
-        int leadHashSizeAfter=jsonDatabaseUtility.getLeadHash().size();
-        int contactHashSizeAfter=jsonDatabaseUtility.getContactHash().size();
-        int opportunityHashSizeAfter=jsonDatabaseUtility.getOpportunityHash().size();
-        int accountHashSizeAfter=jsonDatabaseUtility.getAccountHash().size();
-        assertEquals(1, contactHashSizeAfter-contactHashSizeBefore);
-        assertEquals(-1, leadHashSizeAfter-leadHashSizeBefore);
-        assertEquals(1, opportunityHashSizeAfter-opportunityHashSizeBefore);
-        assertEquals(1, accountHashSizeAfter-accountHashSizeBefore);
+        int leadHashSizeAfter = jsonDatabaseUtility.getLeadHash().size();
+        int contactHashSizeAfter = jsonDatabaseUtility.getContactHash().size();
+        int opportunityHashSizeAfter = jsonDatabaseUtility.getOpportunityHash().size();
+        int accountHashSizeAfter = jsonDatabaseUtility.getAccountHash().size();
+        assertEquals(1, contactHashSizeAfter - contactHashSizeBefore);
+        assertEquals(-1, leadHashSizeAfter - leadHashSizeBefore);
+        assertEquals(1, opportunityHashSizeAfter - opportunityHashSizeBefore);
+        assertEquals(1, accountHashSizeAfter - accountHashSizeBefore);
     }
 
     @Test
-    void saveJsonDatabaseInJsonFile() throws IOException {
+    void saveAndLoadJsonDatabaseInJsonFile() throws IOException {
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
         jsonDatabaseUtility.addContact(1);
-        Contact contact1=jsonDatabaseUtility.getContactHash().get(1);
+        Contact contact1 = jsonDatabaseUtility.getContactHash().get(1);
         jsonDatabaseUtility.addOpportunity(Product.BOX, 2, contact1);
-        Opportunity opportunity1=jsonDatabaseUtility.getOpportunityHash().get(1);
+        Opportunity opportunity1 = jsonDatabaseUtility.getOpportunityHash().get(1);
         jsonDatabaseUtility.addAccount(Industry.PRODUCE, 10, "Santiago", "Chile", contact1, opportunity1);
         jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
         jsonDatabaseUtility.addContact(2);
-        Contact contact2=jsonDatabaseUtility.getContactHash().get(2);
+        Contact contact2 = jsonDatabaseUtility.getContactHash().get(2);
         jsonDatabaseUtility.addOpportunity(Product.FLATBED, 50, contact2);
-        Opportunity opportunity2=jsonDatabaseUtility.getOpportunityHash().get(2);
+        Opportunity opportunity2 = jsonDatabaseUtility.getOpportunityHash().get(2);
         jsonDatabaseUtility.addAccount(Industry.MEDICAL, 12, "Warsaw", "Poland", contact2, opportunity2);
         jsonDatabaseUtility.save();
-        File file = new File("DatabaseUtility.json");
+        File file = new File("src/main/java/com/ironhack/homework_2/database/dummy.json");
         assertTrue(file.exists());
-        Scanner scan = new Scanner(file);
-        assertTrue(scan.hasNextLine());
-        scan.close();
-    }
 
-    @Test
-    void loadJsonDatabaseFromJsonFile() throws FileNotFoundException {
-        JsonDatabaseUtility jsonDatabaseUtility2 = new JsonDatabaseUtility();
-        jsonDatabaseUtility2.load();
-        System.out.println(jsonDatabaseUtility2.getContactHash().get(1).getEmail());
-        assertEquals("john@gmail.com",jsonDatabaseUtility2.getContactHash().get(1).getEmail());
+        JsonDatabaseUtility afterSaving = new JsonDatabaseUtility("dummy");
+        afterSaving.load();
+        assertTrue(jsonDatabaseUtility.equals(afterSaving));
     }
-
 }

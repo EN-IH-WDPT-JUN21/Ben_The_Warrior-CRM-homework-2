@@ -5,6 +5,7 @@ import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
 import com.ironhack.homework_2.utils.JsonDatabaseUtility;
 import com.ironhack.homework_2.utils.PrinterMenu;
+import jdk.jshell.execution.JdiInitiator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +22,9 @@ class MenuTest {
     Menu menu;
 
     @BeforeEach
-    void setUp() throws FileNotFoundException {
-        initialDatabase = JsonDatabaseUtility.loadDatabaseInJson();
+    void setUp() throws IOException {
+        initialDatabase = new JsonDatabaseUtility("dummy");
+        initialDatabase.load();
 
         input = new ByteArrayInputStream("new lead\nBen\n123456789\nben@ironhack.com\nIronhack\n \nexit\n ".getBytes());
 
@@ -33,14 +35,14 @@ class MenuTest {
 
     @AfterEach
     void tearDown() throws IOException {
-        JsonDatabaseUtility.saveDatabaseInJson(initialDatabase);
+        initialDatabase.save();
     }
 
 
     @Test
     @DisplayName("Start menu with nonexistent database")
     void mainMenu_UnavailableDatabase_OpenEmptyDatabase(){
-        File file = new File("src/main/java/com/ironhack/homework_2/database/database.json");
+        File file = new File("src/main/java/com/ironhack/homework_2/database/dummy.json");
         boolean fileDeleted = file.delete();
 
         assertTrue(fileDeleted);
@@ -79,9 +81,11 @@ class MenuTest {
 
     @Test
     @DisplayName("Add prompted lead to the database")
-    void mainMenu_NewLeadCommand_AddNewLead() throws FileNotFoundException {
+    void mainMenu_NewLeadCommand_AddNewLead() throws IOException {
 
-        JsonDatabaseUtility databaseBeforeAddingLead = JsonDatabaseUtility.loadDatabaseInJson();
+        JsonDatabaseUtility databaseBeforeAddingLead = new JsonDatabaseUtility("dummy");
+        databaseBeforeAddingLead.load();
+
         int initialSize = databaseBeforeAddingLead.getLeadHash().size();
 
         input = new ByteArrayInputStream("new lead\nJohn\n987654321\njohn@ironhack.com\nIronhack\n \nexit\n ".getBytes());
@@ -89,7 +93,9 @@ class MenuTest {
 
         menu.mainMenu();
 
-        JsonDatabaseUtility databaseAfterAddingLead = JsonDatabaseUtility.loadDatabaseInJson();
+        JsonDatabaseUtility databaseAfterAddingLead = new JsonDatabaseUtility("dummy");
+        databaseAfterAddingLead.load();
+
         int finalSize = databaseAfterAddingLead.getLeadHash().size();
 
         assertEquals(initialSize + 1, finalSize);
@@ -97,8 +103,9 @@ class MenuTest {
 
     @Test
     @DisplayName("Add Contact, Opportunity and Account when converting Lead")
-    void mainMenu_ConvertCommand_NewLOpportunityAccountContact() throws FileNotFoundException {
-        JsonDatabaseUtility databaseBeforeConverting = JsonDatabaseUtility.loadDatabaseInJson();
+    void mainMenu_ConvertCommand_NewLOpportunityAccountContact() throws IOException {
+        JsonDatabaseUtility databaseBeforeConverting = new JsonDatabaseUtility("dummy");
+        databaseBeforeConverting.load();
         int initialLeadSize = databaseBeforeConverting.getLeadHash().size();
         int initialContactSize = databaseBeforeConverting.getContactHash().size();
         int initialOpportunitySize = databaseBeforeConverting.getOpportunityHash().size();
@@ -109,7 +116,8 @@ class MenuTest {
 
         menu.mainMenu();
 
-        JsonDatabaseUtility databaseAfterConverting = JsonDatabaseUtility.loadDatabaseInJson();
+        JsonDatabaseUtility databaseAfterConverting = new JsonDatabaseUtility("dummy");
+        databaseAfterConverting.load();
         int finalLeadSize = databaseAfterConverting.getLeadHash().size();
         int finalContactSize = databaseAfterConverting.getContactHash().size();
         int finalOpportunitySize = databaseAfterConverting.getOpportunityHash().size();
@@ -141,28 +149,30 @@ class MenuTest {
 
     @Test
     @DisplayName("Change status to close-won")
-    void mainMenu_CloseWon_ChangeStatusToCloseWon() throws FileNotFoundException {
+    void mainMenu_CloseWon_ChangeStatusToCloseWon() throws IOException {
 
         input = new ByteArrayInputStream("convert 1\nhybrid\n200\n \nOtHer\n1\nLisbon\nPortugal\n \nclose-won 1\nexit\n ".getBytes());
         menu = new Menu(input);
 
         menu.mainMenu();
 
-        JsonDatabaseUtility databaseAfterStatusChange = JsonDatabaseUtility.loadDatabaseInJson();
+        JsonDatabaseUtility databaseAfterStatusChange = new JsonDatabaseUtility("dummy");
+        databaseAfterStatusChange.load();
 
         assertEquals(Status.CLOSED_WON, databaseAfterStatusChange.getOpportunityHash().get(1).getStatus());
     }
 
     @Test
     @DisplayName("Change status to close-lost")
-    void mainMenu_CloseLost_ChangeStatusToCloseLost() throws FileNotFoundException {
+    void mainMenu_CloseLost_ChangeStatusToCloseLost() throws IOException {
 
         input = new ByteArrayInputStream("convert 1\nhybrid\n200\n \nOtHer\n1\nLisbon\nPortugal\n \nclose-lost 1\nexit\n ".getBytes());
         menu = new Menu(input);
 
         menu.mainMenu();
 
-        JsonDatabaseUtility databaseAfterStatusChange = JsonDatabaseUtility.loadDatabaseInJson();
+        JsonDatabaseUtility databaseAfterStatusChange = new JsonDatabaseUtility("dummy");
+        databaseAfterStatusChange.load();
 
         assertEquals(Status.CLOSED_LOST, databaseAfterStatusChange.getOpportunityHash().get(1).getStatus());
     }
@@ -248,9 +258,10 @@ class MenuTest {
 
     @Test
     @DisplayName("Compute new lead command")
-    void computeCommand_NewLeadCommand_AddNewLead() throws FileNotFoundException {
+    void computeCommand_NewLeadCommand_AddNewLead() throws IOException {
 
-        JsonDatabaseUtility databaseBeforeAddingLead = JsonDatabaseUtility.loadDatabaseInJson();
+        JsonDatabaseUtility databaseBeforeAddingLead = new JsonDatabaseUtility("dummy");
+        databaseBeforeAddingLead.load();
         int initialSize = databaseBeforeAddingLead.getLeadHash().size();
 
         input = new ByteArrayInputStream("John\n987654321\njohn@ironhack.com\nIronhack\n ".getBytes());
@@ -266,8 +277,9 @@ class MenuTest {
 
     @Test
     @DisplayName("Compute convert command")
-    void computeCommand_ConvertCommand_NewLOpportunityAccountContact() throws FileNotFoundException {
-        JsonDatabaseUtility databaseBeforeConverting = JsonDatabaseUtility.loadDatabaseInJson();
+    void computeCommand_ConvertCommand_NewLOpportunityAccountContact() throws IOException {
+        JsonDatabaseUtility databaseBeforeConverting = new JsonDatabaseUtility("dummy");
+        databaseBeforeConverting.load();
         int initialLeadSize = databaseBeforeConverting.getLeadHash().size();
         int initialContactSize = databaseBeforeConverting.getContactHash().size();
         int initialOpportunitySize = databaseBeforeConverting.getOpportunityHash().size();

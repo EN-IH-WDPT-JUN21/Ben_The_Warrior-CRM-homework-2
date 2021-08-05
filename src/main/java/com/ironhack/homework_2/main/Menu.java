@@ -26,25 +26,23 @@ public class Menu {
 
     public Menu(){
         scanner = new Scanner(System.in);
-        JsonDatabaseUtility temporary;
+        db  = new JsonDatabaseUtility();
         try {
-            temporary = JsonDatabaseUtility.loadDatabaseInJson();
-        } catch (FileNotFoundException e) {
-            temporary = new JsonDatabaseUtility();
+            db.load();
+        } catch (IOException e) {
+            PrinterMenu.setWarning(e.getMessage());
         }
-        db = temporary;
         setShowHelp(false);
     }
 
     public Menu(InputStream inputStream){
         scanner = new Scanner(inputStream);
-        JsonDatabaseUtility temporary;
+        db  = new JsonDatabaseUtility("dummy");
         try {
-            temporary = JsonDatabaseUtility.loadDatabaseInJson();
-        } catch (FileNotFoundException e) {
-            temporary = new JsonDatabaseUtility();
+            db.load();
+        } catch (IOException e) {
+            PrinterMenu.setWarning(e.getMessage());
         }
-        db = temporary;
         setShowHelp(false);
     }
 
@@ -198,7 +196,7 @@ public class Menu {
                 // sava database into json file
             case "save":
                 try{
-                    JsonDatabaseUtility.saveDatabaseInJson(db);
+                    db.save();
                 }catch (IOException e){
                     PrinterMenu.setWarning("An error as occurred. Database was not successfully saved!");
                 }
@@ -207,7 +205,7 @@ public class Menu {
                 PrinterMenu.printMenu("exit");
                 if (promptDecision("exit")){
                     try{
-                        JsonDatabaseUtility.saveDatabaseInJson(db);
+                        db.save();
                     }catch (IOException e){
                         PrinterMenu.setWarning("An error as occurred. Database was not successfully saved!");
                     }

@@ -21,32 +21,35 @@ import java.util.*;
 
 public class JsonDatabaseUtility {
     private Integer leadId;
-    private Integer contactId;
     private Integer opportunityId;
     private Integer accountId;
     private Map<Integer, Lead> leadHash;
     private Map<Integer, Contact> contactHash;
     private Map<Integer, Opportunity> opportunityHash;
     private Map<Integer, Account> accountHash;
+    private transient final String DATABASE_DIRECTORY;
 
     // ========== CONSTRUCTORS ==========
     public JsonDatabaseUtility() {
+        DATABASE_DIRECTORY = "src/main/java/com/ironhack/homework_2/database/database.json";
         leadHash = new HashMap<>();
         contactHash = new HashMap<>();
         opportunityHash = new HashMap<>();
         accountHash = new HashMap<>();
-        leadId = 0;
-        contactId = 0;
-        opportunityId = 0;
-        accountId = 0;
+        setLeadId(0);
+        setOpportunityId(0);
+        setAccountId(0);
     }
 
-    public JsonDatabaseUtility(Map<Integer, Lead> leadHash, Map<Integer, Contact> contactHash,
-                               Map<Integer, Opportunity> opportunityHash, Map<Integer, Account> accountHash) {
-        setLeadHash(leadHash);
-        setContactHash(contactHash);
-        setOpportunityHash(opportunityHash);
-        setAccountHash(accountHash);
+    public JsonDatabaseUtility(String database) {
+        DATABASE_DIRECTORY = "src/main/java/com/ironhack/homework_2/database/" + database + ".json";
+        leadHash = new HashMap<>();
+        contactHash = new HashMap<>();
+        opportunityHash = new HashMap<>();
+        accountHash = new HashMap<>();
+        setLeadId(0);
+        setOpportunityId(0);
+        setAccountId(0);
     }
 
     // ========== GETTERS AND SETTERS ==========
@@ -82,12 +85,78 @@ public class JsonDatabaseUtility {
         this.accountHash = accountHash;
     }
 
-    // Save database
+    public String getDATABASE_DIRECTORY() {
+        return DATABASE_DIRECTORY;
+    }
+
+    public Integer getLeadId() {
+        return leadId;
+    }
+
+    public void setLeadId(Integer leadId) {
+        this.leadId = leadId;
+    }
+
+    public Integer getOpportunityId() {
+        return opportunityId;
+    }
+
+    public void setOpportunityId(Integer opportunityId) {
+        this.opportunityId = opportunityId;
+    }
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
+
+    // ==================== Save Methods for Leads, Contacts, Opportunities and Accounts class into a Json files ====================
+    // save database in a json file
+    public void save() throws IOException {
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+        File file = new File(getDATABASE_DIRECTORY());
+        FileWriter writer = new FileWriter(file, false);
+        String jsonData = gson.toJson(this);
+        writer.write(jsonData);
+        writer.close();
+    }
+
+    //load method that gives maps from Database in json file to actual JsonDatabaseUtility class
+    public void load() throws IOException {
+        Gson gson = new Gson();
+        File file = new File(getDATABASE_DIRECTORY());
+        JsonDatabaseUtility jsonDatabaseUtility;
+        try{
+            FileReader reader = new FileReader(file);
+            char[] chars = new char[(int) file.length()];
+            reader.read(chars);
+            String jsonData = new String(chars);
+            jsonDatabaseUtility = gson.fromJson(jsonData, JsonDatabaseUtility.class);
+            reader.close();
+        }catch (IOException e){
+            throw new IOException("Database could not be loaded! Empty database created!");
+        }
+
+        setLeadHash(jsonDatabaseUtility.getLeadHash());
+        setContactHash(jsonDatabaseUtility.getContactHash());
+        setOpportunityHash(jsonDatabaseUtility.getOpportunityHash());
+        setAccountHash(jsonDatabaseUtility.getAccountHash());
+        setLeadId(jsonDatabaseUtility.getLeadId());
+        setOpportunityId(jsonDatabaseUtility.getOpportunityId());
+        setAccountId(jsonDatabaseUtility.getAccountId());
+    }
+
+    /*// Save database
     public static void saveDatabaseInJson(JsonDatabaseUtility database) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
-        File file = new File("src/main/java/com/ironhack/homework_2/database/database.json");
+        File file = new File(DATABASE_DIRECTORY);
         FileWriter writer = new FileWriter(file, false);
         String jsonData = gson.toJson(database);
         writer.write(jsonData);
@@ -97,7 +166,7 @@ public class JsonDatabaseUtility {
     // Load database
     public static JsonDatabaseUtility loadDatabaseInJson() throws FileNotFoundException {
         Gson gson = new Gson();
-        File file = new File("src/main/java/com/ironhack/homework_2/database/database.json");
+        File file = new File(DATABASE_DIRECTORY);
         FileReader reader = new FileReader(file);
         try{
             char[] chars = new char[(int) file.length()];
@@ -109,7 +178,7 @@ public class JsonDatabaseUtility {
         }catch (Exception e){
             return new JsonDatabaseUtility();
         }
-    }
+    }*/
 
     // ==================== Adds new Lead to HashMap for Leads====================
     //count of elements in HashMap for Leads nad Contacts (as they are converted into Contacts to get new ID (plus checks if this number is not used)
@@ -313,65 +382,13 @@ public class JsonDatabaseUtility {
         }
     }
 
-    // ==================== Save Methods for Leads, Contacts, Opportunities and Accounts class into a Json files ====================
-    // save database in a json file
-    public void save() throws IOException {
-        File file = new File("DatabaseUtility.json");
-        FileWriter writer = new FileWriter("DatabaseUtility.json", false);
-        String jsonData = new Gson().toJson(this);
-        if(isInJson(this,file)){
-            System.out.println("This Database is already saved in the Json file");
-            writer.close();
-        }
-        else{
-            writer.write(jsonData);
-            writer.append("\n");
-            writer.close();
-            System.out.println("Database has been saved correctly");
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JsonDatabaseUtility that = (JsonDatabaseUtility) o;
+        return Objects.equals(opportunityId, that.opportunityId) && Objects.equals(accountId, that.accountId) && Objects.equals(leadHash, that.leadHash) && Objects.equals(contactHash, that.contactHash) && Objects.equals(opportunityHash, that.opportunityHash) && Objects.equals(accountHash, that.accountHash);
     }
-
-    //load method that gives maps from Database in json file to actual JsonDatabaseUtility class
-    public void load() throws FileNotFoundException {
-        Gson gson = new Gson();
-        JsonDatabaseUtility jsonDatabaseUtility1 = new JsonDatabaseUtility();
-
-
-        File file = new File("DatabaseUtility.json");
-        Scanner sc = new Scanner(file);
-
-        while (sc.hasNext()){
-            String jsonString = sc.nextLine();
-            jsonDatabaseUtility1 = gson.fromJson(jsonString, JsonDatabaseUtility.class);
-
-        }
-        sc.close();
-
-        setLeadHash(jsonDatabaseUtility1.getLeadHash());
-        setContactHash(jsonDatabaseUtility1.getContactHash());
-        setOpportunityHash(jsonDatabaseUtility1.getOpportunityHash());
-        setAccountHash(jsonDatabaseUtility1.getAccountHash());
-    }
-
-    //In order to avoid duplicate object in our Json Files we check if the object is already in the json file
-    public boolean isInJson(Object obj, File file)throws FileNotFoundException {
-        boolean isInFile = false;
-        String objJson = new Gson().toJson(obj);
-        Scanner scanner = new Scanner(file);
-        while (scanner.hasNext()){
-            if(objJson.equals(scanner.nextLine())){
-                isInFile = true;
-                break;
-            }
-            else{
-                isInFile = false;
-            }
-        }
-
-        scanner.close();
-        return isInFile;
-    }
-
 }
 
 

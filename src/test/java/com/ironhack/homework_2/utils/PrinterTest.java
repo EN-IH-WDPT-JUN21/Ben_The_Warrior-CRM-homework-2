@@ -51,7 +51,7 @@ class PrinterTest {
     @ValueSource(strings = {"", " ", "   "})
     @DisplayName("Print centered - Empty text")
     void printCenterString_noTextWithBorderStyle_emptyLine() {
-        Printer.printCenterString2("", 20, BG_RED, "");
+        Printer.printCenterString("", 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + "                " + RESET + BG_RED + "  " + RESET + "\r\n";
         assertEquals(output, outputStreamCaptor.toString());
     }
@@ -59,7 +59,7 @@ class PrinterTest {
     @Test
     @DisplayName("Print centered - Simple text")
     void printCenterString_textWithBorderStyle_simpleLine() {
-        Printer.printCenterString2("Test", 20, BG_RED, "");
+        Printer.printCenterString("Test", 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + "      Test      " + RESET + BG_RED + "  " + RESET + "\r\n";
         assertEquals(output, outputStreamCaptor.toString());
     }
@@ -67,7 +67,7 @@ class PrinterTest {
     @Test
     @DisplayName("Print centered - Big word")
     void printCenterString_bigWordWithBorderStyle_multipleLines() {
-        Printer.printCenterString2("TestTestTestTestTestTestTestTestTest", 20, BG_RED, "");
+        Printer.printCenterString("TestTestTestTestTestTestTestTestTest", 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + "TestTestTestTest" + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "TestTestTestTest" + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "      Test      " + RESET + BG_RED + "  " + RESET + "\r\n";
@@ -77,7 +77,7 @@ class PrinterTest {
     @Test
     @DisplayName("Print centered - Big text")
     void printCenterString_bigTextWithBorderStyle_multipleLines() {
-        Printer.printCenterString2("Test Test Test Test Test Test Test Test Test", 20, BG_RED, "");
+        Printer.printCenterString("Test Test Test Test Test Test Test Test Test", 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + " Test Test Test " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + " Test Test Test " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + " Test Test Test " + RESET + BG_RED + "  " + RESET + "\r\n";
@@ -87,7 +87,7 @@ class PrinterTest {
     @Test
     @DisplayName("Print centered - Big word colored")
     void printCenterString_bigWordColoredWithBorderStyle_multipleLines() {
-        Printer.printCenterString2(RED + "TestTe" + BRIGHT_GREEN + "stTestTestT" + RESET + "estTestTestTe" + RED + "stTest", 20, BG_RED, "");
+        Printer.printCenterString(RED + "TestTe" + BRIGHT_GREEN + "stTestTestT" + RESET + "estTestTestTe" + RED + "stTest", 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + RED + "TestTe" + BRIGHT_GREEN + "stTestTest" + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + RED + BRIGHT_GREEN + "T" + RESET + "estTestTestTe" + RED + "st" + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "      " + RED + BRIGHT_GREEN + RESET + RED + "Test      " + RESET + BG_RED + "  " + RESET + "\r\n";
@@ -97,7 +97,7 @@ class PrinterTest {
     @Test
     @DisplayName("Print centered - Big text colored")
     void printCenterString_bigTextColoredWithBorderStyle_multipleLines() {
-        Printer.printCenterString2(RED + "Test Test Test " + BRIGHT_GREEN + "Test Test Test Test " + RESET + "Test Test", 20, BG_RED, "");
+        Printer.printCenterString(RED + "Test Test Test " + BRIGHT_GREEN + "Test Test Test Test " + RESET + "Test Test", 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + " " + RED + "Test Test Test " + BRIGHT_GREEN + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + " " + RED + BRIGHT_GREEN + "Test Test Test " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + " " + RED + BRIGHT_GREEN + "Test " + RESET + "Test Test " + RESET + BG_RED + "  " + RESET + "\r\n";
@@ -109,7 +109,7 @@ class PrinterTest {
     @ValueSource(strings = {"", " ", "   "})
     @DisplayName("Print on left - Empty text")
     void printLeftString_noTextWithBorderStyle_emptyLine() {
-        Printer.printLeftString2("", 0, 20, BG_RED, "");
+        Printer.printLeftString("", 0, 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + "                " + RESET + BG_RED + "  " + RESET + "\r\n";
         assertEquals(output, outputStreamCaptor.toString());
     }
@@ -117,7 +117,7 @@ class PrinterTest {
     @Test
     @DisplayName("Print on left - Simple text and format")
     void printLeftString_textWithBorderStyle_simpleLine() {
-        Printer.printLeftString2("Test", 2, 20, BG_RED, "");
+        Printer.printLeftString("Test", 2, 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + "  Test          " + RESET + BG_RED + "  " + RESET + "\r\n";
         assertEquals(output, outputStreamCaptor.toString());
     }
@@ -125,7 +125,7 @@ class PrinterTest {
     @Test
     @DisplayName("Print on left - Big word")
     void printLeftString_bigWordWithBorderStyle_multipleLines() {
-        Printer.printLeftString2("TestTestTestTestTestTestTestTest", 2, 20, BG_RED, "");
+        Printer.printLeftString("TestTestTestTestTestTestTestTest", 2, 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + "  TestTestTest  " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "  TestTestTest  " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "  TestTest      " + RESET + BG_RED + "  " + RESET + "\r\n";
@@ -135,7 +135,7 @@ class PrinterTest {
     @Test
     @DisplayName("Print on left - Big text")
     void printLeftString_bigTextWithBorderStyle_multipleLines() {
-        Printer.printLeftString2("Test Test Test Test Test Test Test Test Test", 2, 20, BG_RED, "");
+        Printer.printLeftString("Test Test Test Test Test Test Test Test Test", 2, 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + "  Test Test     " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "  Test Test     " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "  Test Test     " + RESET + BG_RED + "  " + RESET + "\r\n" +
@@ -147,7 +147,7 @@ class PrinterTest {
     @Test
     @DisplayName("Print on left - Big word colored")
     void printLeftString_bigWordColoredWithBorderStyle_multipleLines() {
-        Printer.printLeftString2(RED + "TestTe" + BRIGHT_GREEN + "stTestTestT" + RESET + "estTestTestTe" + RED + "stTest", 2, 20, BG_RED, "");
+        Printer.printLeftString(RED + "TestTe" + BRIGHT_GREEN + "stTestTestT" + RESET + "estTestTestTe" + RED + "stTest", 2, 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + "  " + RED + "TestTe" + BRIGHT_GREEN + "stTest  " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "  " + RED + BRIGHT_GREEN + "TestT" + RESET + "estTest  " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "  " + RED + BRIGHT_GREEN + RESET + "TestTe" + RED + "stTest  " + RESET + BG_RED + "  " + RESET + "\r\n";
@@ -157,7 +157,7 @@ class PrinterTest {
     @Test
     @DisplayName("Print on left - Big text colored")
     void printLeftString_bigTextColoredWithBorderStyle_multipleLines() {
-        Printer.printLeftString2(RED + "Test Test Test " + BRIGHT_GREEN + "Test Test Test Test " + RESET + "Test Test", 2, 20, BG_RED, "");
+        Printer.printLeftString(RED + "Test Test Test " + BRIGHT_GREEN + "Test Test Test Test " + RESET + "Test Test", 2, 20, BG_RED, "");
         String output = BG_RED + "  " + RESET + "  " + RED + "Test Test     " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "  " + RED + "Test " + BRIGHT_GREEN + "Test     " + RESET + BG_RED + "  " + RESET + "\r\n" +
             BG_RED + "  " + RESET + "  " + RED + BRIGHT_GREEN + "Test Test     " + RESET + BG_RED + "  " + RESET + "\r\n" +

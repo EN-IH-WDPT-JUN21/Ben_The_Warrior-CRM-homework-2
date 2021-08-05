@@ -80,34 +80,14 @@ public class Printer {
 
 
     // ======================================== 3. SIMPLIFIED PRINTERS ========================================
-    // TODO JA: If not in use -> delete
-    // Print in the main style. Side borders colored and text with a margin to the left.
-    public static void print() {
-        printLeftString("", 0, PROGRAM_WIDTH, BORDER_COLOR, "");
-    }
 
     public static void print(String text) {
         printLeftString(text, BORDER_TO_TEXT_SPACES, PROGRAM_WIDTH, BORDER_COLOR, "");
     }
 
-    // TODO JA: If not in use -> delete
-    public static void print(String text, int margin) {
-        printLeftString(text, margin, PROGRAM_WIDTH, BORDER_COLOR, "");
-    }
-
     // Print line with full background color. Side borders and content with color and text with a margin to the left.
     public static void printFull() {
         printLeftString("", 0, PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR);
-    }
-
-    // TODO JA: If not in use -> delete
-    public static void printFull(String text) {
-        printLeftString(text, 4, PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR);
-    }
-
-    // TODO JA: If not in use -> delete
-    public static void printFull(String text, int margin) {
-        printLeftString(text, margin, PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR);
     }
 
     // Print program title colored. Filled with color and text black.
@@ -116,25 +96,6 @@ public class Printer {
         printCenterString("CRM by Ben the Warrior", PROGRAM_WIDTH, BORDER_COLOR, BORDER_COLOR + ANSI_BLACK);
         printFull();
     }
-
-    // TODO JA: If not in use -> delete
-    // Print line without formatting
-    public static void printEmpty() {
-        System.out.println();
-    }
-
-    // TODO JA: If not in use -> delete
-    // Return a colored Warning without new line. (useful for presenting small error situations)
-    public static String printWarning() {
-        return (ANSI_YELLOW + "[WARNING] " + ANSI_RESET);
-    }
-
-    // TODO JA: If not in use -> delete
-    // Return a colored Error without new line. (useful for presenting error situations)
-    public static String printError() {
-        return (ANSI_RED + "[ERROR] " + ANSI_RESET);
-    }
-
 
     // ======================================== 4. MAIN PRINTERS ========================================
     // Clear command line. In Intellij adds spacing between menus.
@@ -151,33 +112,6 @@ public class Printer {
     // If text has color, keeps it to next line. (Used for printing variable size text)
     // Uses recursion to print the different lines. (uses aux method -> divideText(text, maxWidth) )
     public static void printCenterString(String text, int width, String borderStyle, String innerStyle) {
-        // Divide the text if it is larger than program width.
-        String newText = divideText(text, width - 3)[0];
-        // Recursion!
-        while (!newText.equals(text.trim())) {  //loops while it is larger than width
-            printCenterString(newText, width, borderStyle, innerStyle);  //prints first line
-            text = text.trim().substring(newText.length());  //removes first line
-            if (newText.contains("\u001B") && !newText.contains("\u001B[0m"))  //adds style if it has it (not the reset style)
-                text = newText.substring(newText.indexOf("\u001B"), newText.indexOf("\u001B") + 5) + text;
-            newText = divideText(text, width - 3)[0];  //divides new text if larger
-        }
-        // Prints the given text centered by defining empty space and dividing it by 2 for each side. Stylizes the text.
-        StringBuilder str = new StringBuilder(borderStyle + " " + ANSI_RESET + innerStyle);
-        int emptySpaces = width - text.replaceAll("(\\x9B|\\x1B\\[)[0-?]*[ -\\/]*[@-~]", "").length() - 2; // empty spaces don't count the ANSIS codes
-        boolean even = emptySpaces % 2 == 0;
-        str.append(String.join("", Collections.nCopies(emptySpaces / 2, " ")));
-        str.append(text);
-        str.append(String.join("", Collections.nCopies(even ? emptySpaces / 2 : (emptySpaces / 2) + 1, " ")));
-        str.append(ANSI_RESET).append(borderStyle).append(" ").append(ANSI_RESET);
-        System.out.println(str);
-    }
-
-    // Print a stylish text line with the text on the left. Has a margin option.
-    // If text exceeds program width, wraps to the next line, no cut words unless single big word.
-    // If text has color, keeps it to next lines. (Used for printing variable size text)
-    public static void printLeftString(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
-    // TODO JA: If to be used rename and overwrite the original (keep initial comments)
-    public static void printCenterString2(String text, int width, String borderStyle, String innerStyle) {
         // Divides input text in multiple rows.
         ArrayList<String> rows = createTextRows(text, width - 2 * BORDER_WIDTH);
         // Prints all rows stylized.
@@ -197,7 +131,11 @@ public class Printer {
         }
     }
 
-    // TODO JA: If to be used rename and overwrite the original (keep initial comments)
+
+    // Print a stylish text line with the text on the left. Has a margin option.
+    // If text exceeds program width, wraps to the next line, no cut words unless single big word.
+    // If text has color, keeps it to next lines. (Used for printing variable size text)
+    public static void printLeftString(String text, int leftSpaces, int width, String borderStyle, String contentStyle) {
         // Divides input text in multiple rows.
         ArrayList<String> rows = createTextRows(text, width - 2 * leftSpaces - 2 * BORDER_WIDTH);
         // Prints all rows stylized.
@@ -213,7 +151,6 @@ public class Printer {
             System.out.println(str);
         }
     }
-
 
     // ======================================== 5. AUX METHODS ========================================
     // Defines the different rows that the printLeftString() and printCenterString() methods will print.
@@ -324,11 +261,5 @@ public class Printer {
             wordLength += code.length(); // Add size of colors that were removed
         }
         return colorCodes;
-    }
-
-    // TODO JA: If not in use -> delete
-    public static int textDividedInto(String text) {
-        text = text.replace(HIGHLIGHT_COLOR, "").replace(ANSI_RESET, "").replace(INSERT_HIGHLIGHT_COLOR, "");
-        return (text.trim().length() / (PROGRAM_WIDTH - 2 * BORDER_WIDTH - 2 * BORDER_TO_TEXT_SPACES)) + 1;
     }
 }
