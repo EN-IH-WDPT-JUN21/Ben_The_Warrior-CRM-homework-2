@@ -1,9 +1,17 @@
 {
-  "leadId": 0,
+  "leadId": 1,
   "contactId": 0,
   "opportunityId": 0,
   "accountId": 0,
-  "leadHash": {},
+  "leadHash": {
+    "1": {
+      "id": 1,
+      "name": "Ben",
+      "phoneNumber": "123456789",
+      "email": "ben@ironhack.com",
+      "companyName": "Ironhack"
+    }
+  },
   "contactHash": {},
   "opportunityHash": {},
   "accountHash": {}

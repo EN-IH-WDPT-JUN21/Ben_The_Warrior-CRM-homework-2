@@ -51,7 +51,7 @@ public class Utils {
         return phoneNumRegexes.matcher(phone).find();
     }
     // Method to validate a generic string inputted by the user
-    public static boolean validString(String str){
+    public static boolean validLocation(String str){
         if (str.length() < 1) return false;
         return Pattern.compile("^[A-ZÀ-Ü]+([a-zA-Z\\u0080-\\u024F]+(?:. |-| |'))*[a-zA-Z\\u0080-\\u024F]+$").matcher(str).find();
     }

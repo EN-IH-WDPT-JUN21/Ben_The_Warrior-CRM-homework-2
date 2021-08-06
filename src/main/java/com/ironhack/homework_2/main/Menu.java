@@ -635,9 +635,9 @@ public class Menu {
             PrinterMenu.printMenu("convert", "industry", industry.toString());
             int employeeCount = promptPositiveNumber();
             PrinterMenu.printMenu("convert", "employees", Integer.toString(employeeCount));
-            String city = promptString("");
+            String city = promptString("location");
             PrinterMenu.printMenu("convert", "city", city);
-            String country = promptString("");
+            String country = promptString("location");
             PrinterMenu.printMenu("convert", "country", country);
             if (promptDecision("enter back")) {
                 db.convertLead(id, product, quantity, industry, employeeCount, city, country);
@@ -763,7 +763,7 @@ public class Menu {
     private String promptString(String checkCondition) {
         String input;
         switch (checkCondition) {
-            case "phoneNumber":
+            case "phone":
                 input = scanner.nextLine().trim();
                 while (!validPhone(input)) {
                     PrinterMenu.setWarning("Please input a valid Phone Number!");
@@ -790,9 +790,18 @@ public class Menu {
                     input = scanner.nextLine().trim();
                 }
                 return input;
+            case "location":
+                input = scanner.nextLine().trim();
+                while (!validLocation(input)) {
+                    PrinterMenu.setWarning("Please input a valid location (case sensitive)!");
+                    PrinterMenu.printMenu("");
+                    PrinterMenu.clearWarning();
+                    input = scanner.nextLine().trim();
+                }
+                return input;
             default:
                 input = scanner.nextLine().trim();
-                while (!validPhone(input)) {
+                while (input.isEmpty()) {
                     PrinterMenu.setWarning("Please input a non empty string!");
                     PrinterMenu.printMenu("");
                     PrinterMenu.clearWarning();

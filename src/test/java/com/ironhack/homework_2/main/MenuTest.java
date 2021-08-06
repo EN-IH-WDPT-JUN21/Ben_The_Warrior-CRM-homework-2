@@ -199,14 +199,14 @@ class MenuTest {
     }
 
     @Test
-    @DisplayName("Display error message of nonexistent object to lookup")
+    @DisplayName("Display object when looking up")
     void mainMenu_LookupExistentObject_ValidLookup() {
 
         PrintStream sysOutBackup = System.out;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        input = new ByteArrayInputStream(("new lead\nZe\n101\nze@bino.com\nCompany\n \nconvert 2\nbox\n100\n \nEcommerce" +
+        input = new ByteArrayInputStream(("new lead\nZe\n123321456\nze@bino.com\nCompany\n \nconvert 2\nbox\n100\n \nEcommerce" +
                 "\n200\nMadrid\nSpain\n \nlookup lead 1\n \nlookup contact 1\n \nlookup opportunity 1\nback\n" +
                 "lookup account 1\nback\nexit\nexit").getBytes());
         menu = new Menu(input);
@@ -216,7 +216,7 @@ class MenuTest {
         String output = outputStream.toString();
         assertTrue(output.contains("Ben") && output.contains("123456789") &&
                 output.contains("ben@ironhack.com") && output.contains("Ironhack"));
-        assertTrue(output.contains("Ze") && output.contains("101") &&
+        assertTrue(output.contains("Ze") && output.contains("123321456") &&
                 output.contains("ze@bino.com") && output.contains("Company"));
         assertTrue(output.contains("BOX") && output.contains("100") && output.contains("OPEN"));
         assertTrue(output.contains("ECOMMERCE") && output.contains("200") &&

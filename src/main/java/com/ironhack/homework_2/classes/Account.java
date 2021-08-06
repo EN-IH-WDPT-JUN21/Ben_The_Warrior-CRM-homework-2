@@ -73,16 +73,8 @@ public class Account {
         return contactList;
     }
 
-    public void setContactList(ArrayList<Contact> contactList) {
-        this.contactList = contactList;
-    }
-
     public ArrayList<Opportunity> getOpportunityList() {
         return opportunityList;
-    }
-
-    public void setOpportunityList(ArrayList<Opportunity> opportunityList) {
-        this.opportunityList = opportunityList;
     }
 
     // ============================== METHODS ==============================
