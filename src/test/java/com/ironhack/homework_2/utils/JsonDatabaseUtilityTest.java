@@ -69,18 +69,13 @@ class JsonDatabaseUtilityTest {
 
     @Test
     void setIdForNewLeadTest() {
-        int leadHashSize = jsonDatabaseUtility.getLeadHash().size();
-        System.out.println(leadHashSize);
-        int newId = jsonDatabaseUtility.setIdForNewLead();
-        System.out.println(newId);
-        assertEquals(0, newId - leadHashSize);
+        int oldId = jsonDatabaseUtility.getLeadId();
+        int newIdSet = jsonDatabaseUtility.setIdForNewLead();
+        int currentId = jsonDatabaseUtility.getLeadId();
+        assertEquals(oldId + 1, newIdSet);
+        assertEquals(newIdSet, currentId);
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
-        int leadHashSize1 = jsonDatabaseUtility.getLeadHash().size();
-        System.out.println(leadHashSize1);
-        int newId1 = jsonDatabaseUtility.setIdForNewLead();
-        System.out.println(newId1);
-        assertEquals(1, newId1);
-        assertEquals(0, newId1 - leadHashSize1);
+        assertEquals(currentId + 1, jsonDatabaseUtility.getLeadId());
     }
 
     @Test

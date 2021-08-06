@@ -25,6 +25,6 @@ class AccountTest {
         Contact c = new Contact("John Smith", "2460247246", "johnthewarrior@fighters.com", "The smiths");
         Opportunity o = new Opportunity(Product.HYBRID, 30000, c, Status.OPEN);
         a = new Account(Industry.ECOMMERCE, 100, "Madrid", "Spain", c, o);
-        assertEquals("Id: null, Industry: ECOMMERCE, Number of Employees: 100, City: Madrid, Country: Spain, Contacts: John Smith, Opportunities: HYBRID", a.toString());
+        assertEquals("Id: null, Industry: ECOMMERCE, Number of Employees: 100, City: Madrid, Country: Spain, Number of Contacts: 1, Number of Opportunities: 1", a.toString());
     }
 }

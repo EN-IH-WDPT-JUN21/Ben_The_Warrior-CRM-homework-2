@@ -249,6 +249,7 @@ public class Printer {
         return new String[]{text, ""}; // Only used to have a return. Never used.
     }   // Note: For it to work with the print method and color mapping this method will always count the space after a word.
 
+    // Method to call divideText method when the empty space corresponds to the maximum possible text width
     public static String[] divideText(String text){
         return divideText(text, PROGRAM_WIDTH - 2 * BORDER_WIDTH);
     }

@@ -89,7 +89,7 @@ public class Account {
     @Override
     public String toString() {
         return "Id: " + id + ", Industry: " + industry + ", Number of Employees: " + employeeCount + ", City: " + city +
-            ", Country: " + country + ", Number of contacts: " + contactList.size() + ", Number of opportunities: " + opportunityList.size();
+            ", Country: " + country + ", Number of Contacts: " + contactList.size() + ", Number of Opportunities: " + opportunityList.size();
     }
 
     @Override

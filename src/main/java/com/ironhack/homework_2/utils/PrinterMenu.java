@@ -23,7 +23,7 @@ public class PrinterMenu extends Printer {
     private static final int PRINT_MULTIPLE_OBJECTS_MAX = 13;
     private static final int ERROR_LINE = 23;
     // String array to print the menu
-    private static String[] menuLine = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
+    private static final String[] menuLine = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
 
     // Set one or multiple lines of the menu String array to the String passed in
     public static void setMenuLines(String str, int... lines) {
@@ -277,6 +277,7 @@ public class PrinterMenu extends Printer {
         } else {
             setMenuLines(HIGHLIGHT_COLOR + "Available Leads" + HIGHLIGHT_COLOR, 4);
         }
+        // String is built with the current page of leads and then the corresponding menu String lines are set
         int initialLine = 6;
         StringBuilder leadString = new StringBuilder("");
         for (Lead lead : leads) {
@@ -307,6 +308,7 @@ public class PrinterMenu extends Printer {
         } else {
             setMenuLines(HIGHLIGHT_COLOR + "Available Opportunities" + HIGHLIGHT_COLOR, 4);
         }
+        // String is built with the current page of opportunities and then the corresponding menu String lines are set
         int initialLine = 6;
         StringBuilder opportunityString = new StringBuilder("");
         for (Opportunity opportunity : opportunities) {
@@ -336,6 +338,7 @@ public class PrinterMenu extends Printer {
         } else {
             setMenuLines(HIGHLIGHT_COLOR + "Available Contacts" + HIGHLIGHT_COLOR, 4);
         }
+        // String is built with the current page of contacts and then the corresponding menu String lines are set
         int initialLine = 6;
         StringBuilder contactString = new StringBuilder("");
         for (Contact contact : contacts) {
@@ -365,7 +368,7 @@ public class PrinterMenu extends Printer {
         } else {
             setMenuLines(HIGHLIGHT_COLOR + "Available Accounts" + HIGHLIGHT_COLOR, 4);
         }
-
+        // String is built with the current page of accounts and then the corresponding menu String lines are set
         int initialLine = 6;
         StringBuilder accountString = new StringBuilder("");
         for (Account account : accounts) {
@@ -388,6 +391,7 @@ public class PrinterMenu extends Printer {
         PrinterMenu.printMenu("");
     }
 
+    // Set menu lines from a concatenated String starting from the index passed in
     public static void setLinesFromConcatString(String str, int index){
         String[] stringArr = str.split("\n");
         for (String singleString : stringArr){
