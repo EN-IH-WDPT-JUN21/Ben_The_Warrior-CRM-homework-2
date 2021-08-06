@@ -29,7 +29,7 @@ public class Menu {
         db  = new JsonDatabaseUtility();
         try {
             db.load();
-        } catch (IOException e) {
+        } catch (Exception e) {
             PrinterMenu.setWarning(e.getMessage());
         }
         setShowHelp(false);
@@ -40,7 +40,7 @@ public class Menu {
         db  = new JsonDatabaseUtility("dummy");
         try {
             db.load();
-        } catch (IOException e) {
+        } catch (Exception e) {
             PrinterMenu.setWarning(e.getMessage());
         }
         setShowHelp(false);
@@ -88,7 +88,7 @@ public class Menu {
         // commands are computed word by word and the appropriate method is called
         switch (inputArray[0]) {
             case "new":
-                if (inputArray[1].equals("lead")) {
+                if (inputArray[1].equals("lead")){
                     promptLead();
                 }
                 break;

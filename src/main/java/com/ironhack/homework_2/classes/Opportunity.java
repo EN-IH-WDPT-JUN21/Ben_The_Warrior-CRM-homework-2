@@ -73,6 +73,12 @@ public class Opportunity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Opportunity that = (Opportunity) o;
-        return quantity == that.quantity && Objects.equals(id, that.id) && product == that.product && Objects.equals(decisionMaker, that.decisionMaker) && status == that.status;
+        return quantity == that.quantity && product == that.product &&
+                Objects.equals(decisionMaker, that.decisionMaker) && status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(product, quantity, decisionMaker, status);
     }
 }

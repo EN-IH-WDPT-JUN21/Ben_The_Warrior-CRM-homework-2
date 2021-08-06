@@ -69,6 +69,12 @@ public class Contact {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contact contact = (Contact) o;
-        return Objects.equals(id, contact.id) && Objects.equals(name, contact.name) && Objects.equals(phoneNumber, contact.phoneNumber) && Objects.equals(email, contact.email) && Objects.equals(companyName, contact.companyName);
+        return Objects.equals(name, contact.name) && Objects.equals(phoneNumber, contact.phoneNumber) &&
+                Objects.equals(email, contact.email) && Objects.equals(companyName, contact.companyName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, phoneNumber, email, companyName);
     }
 }

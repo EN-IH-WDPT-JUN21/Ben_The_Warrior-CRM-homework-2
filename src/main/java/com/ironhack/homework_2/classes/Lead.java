@@ -69,6 +69,12 @@ public class Lead {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Lead lead = (Lead) o;
-        return Objects.equals(id, lead.id) && Objects.equals(name, lead.name) && Objects.equals(phoneNumber, lead.phoneNumber) && Objects.equals(email, lead.email) && Objects.equals(companyName, lead.companyName);
+        return Objects.equals(name, lead.name) && Objects.equals(phoneNumber, lead.phoneNumber) &&
+                Objects.equals(email, lead.email) && Objects.equals(companyName, lead.companyName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, phoneNumber, email, companyName);
     }
 }

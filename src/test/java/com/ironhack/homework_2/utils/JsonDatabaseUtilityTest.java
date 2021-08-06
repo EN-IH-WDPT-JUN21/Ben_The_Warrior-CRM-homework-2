@@ -71,13 +71,13 @@ class JsonDatabaseUtilityTest {
     void setIdForNewLeadTest() {
         int leadHashSize = jsonDatabaseUtility.getLeadHash().size();
         System.out.println(leadHashSize);
-        int newId = jsonDatabaseUtility.setIdForNewLead(jsonDatabaseUtility.getLeadHash());
+        int newId = jsonDatabaseUtility.setIdForNewLead();
         System.out.println(newId);
         assertEquals(0, newId - leadHashSize);
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
         int leadHashSize1 = jsonDatabaseUtility.getLeadHash().size();
         System.out.println(leadHashSize1);
-        int newId1 = jsonDatabaseUtility.setIdForNewLead(jsonDatabaseUtility.getLeadHash());
+        int newId1 = jsonDatabaseUtility.setIdForNewLead();
         System.out.println(newId1);
         assertEquals(1, newId1);
         assertEquals(0, newId1 - leadHashSize1);

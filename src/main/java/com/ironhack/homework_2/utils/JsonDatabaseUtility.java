@@ -21,6 +21,7 @@ import java.util.*;
 
 public class JsonDatabaseUtility {
     private Integer leadId;
+    private Integer contactId;
     private Integer opportunityId;
     private Integer accountId;
     private Map<Integer, Lead> leadHash;
@@ -37,6 +38,7 @@ public class JsonDatabaseUtility {
         opportunityHash = new HashMap<>();
         accountHash = new HashMap<>();
         setLeadId(0);
+        setContactId(0);
         setOpportunityId(0);
         setAccountId(0);
     }
@@ -48,6 +50,7 @@ public class JsonDatabaseUtility {
         opportunityHash = new HashMap<>();
         accountHash = new HashMap<>();
         setLeadId(0);
+        setContactId(0);
         setOpportunityId(0);
         setAccountId(0);
     }
@@ -97,6 +100,14 @@ public class JsonDatabaseUtility {
         this.leadId = leadId;
     }
 
+    public Integer getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(Integer contactId) {
+        this.contactId = contactId;
+    }
+
     public Integer getOpportunityId() {
         return opportunityId;
     }
@@ -142,33 +153,25 @@ public class JsonDatabaseUtility {
             throw new IOException("Database could not be loaded! Empty database created!");
         }
 
-        setLeadHash(jsonDatabaseUtility.getLeadHash());
-        setContactHash(jsonDatabaseUtility.getContactHash());
-        setOpportunityHash(jsonDatabaseUtility.getOpportunityHash());
-        setAccountHash(jsonDatabaseUtility.getAccountHash());
-        setLeadId(jsonDatabaseUtility.getLeadId());
-        setOpportunityId(jsonDatabaseUtility.getOpportunityId());
-        setAccountId(jsonDatabaseUtility.getAccountId());
+        try{
+            setLeadHash(jsonDatabaseUtility.getLeadHash());
+            setContactHash(jsonDatabaseUtility.getContactHash());
+            setOpportunityHash(jsonDatabaseUtility.getOpportunityHash());
+            setAccountHash(jsonDatabaseUtility.getAccountHash());
+            setLeadId(jsonDatabaseUtility.getLeadId());
+            setContactId(jsonDatabaseUtility.getContactId());
+            setOpportunityId(jsonDatabaseUtility.getOpportunityId());
+            setAccountId(jsonDatabaseUtility.getAccountId());
+        } catch (NullPointerException e){
+            throw new NullPointerException("Database file is empty. New database was created!");
+        }
     }
 
     // ==================== Adds new Lead to HashMap for Leads====================
-    //count of elements in HashMap for Leads nad Contacts (as they are converted into Contacts to get new ID (plus checks if this number is not used)
-    public Integer setIdForNewLead(Map<Integer, Lead> leadHash) {
-        Integer currentLeadSize = leadHash.size();
-        Integer currentContactSize = contactHash.size();
-        Integer currentSize = currentLeadSize + currentContactSize;
-        for (Integer idLead : leadHash.keySet()) {
-            if (idLead > currentSize) {
-                currentSize = idLead;
-            }
-        }
-        for (Integer idContact : contactHash.keySet()) {
-            if (idContact > currentSize) {
-                currentSize = idContact;
-            }
-        }
-        return currentSize;
-
+    //Increments Lead's id counter and returns the new id
+    public Integer setIdForNewLead() {
+        setLeadId(getLeadId() + 1);
+        return getLeadId();
     }
 
     //first version from already created lead
@@ -180,9 +183,11 @@ public class JsonDatabaseUtility {
     //second version with creating new lead
     public void addLead(String name, String phoneNumber, String email, String companyName) {
         Lead newLead = new Lead(name, phoneNumber, email, companyName);
-        Integer id = setIdForNewLead(leadHash) + 1;
-        newLead.setId(id);
-        leadHash.putIfAbsent(id, newLead);
+        if (!leadHash.containsValue(newLead)) {
+            Integer id = setIdForNewLead();
+            newLead.setId(id);
+            leadHash.putIfAbsent(id, newLead);
+        }
     }
 
     // ==================== Removes Lead from HashMap for Leads====================
@@ -235,6 +240,12 @@ public class JsonDatabaseUtility {
     }
 
     // ==================== Adds new Contact to HashMap for Contacts====================
+    //Increments Contact's id counter and returns the new id
+    public Integer setIdForNewContact() {
+        setContactId(getContactId() + 1);
+        return getAccountId();
+    }
+
     //first version from already created contact
     public void addContact(Contact contact) {
         Integer id = contact.getId();
@@ -242,31 +253,37 @@ public class JsonDatabaseUtility {
     }
 
     //second version with creating new contact (from lead)
-    public void addContact(Integer id) {
+    public int addContact(Integer id) {
         Lead leadToConvert = leadHash.get(id);
         Contact newContact = new Contact(leadToConvert.getName(),
             leadToConvert.getPhoneNumber(),
             leadToConvert.getEmail(),
             leadToConvert.getCompanyName());
-        newContact.setId(id);
-
-        contactHash.putIfAbsent(id, newContact);
-        if (contactHash.get(id).getName().equals(leadToConvert.getName())) {
+        if (contactHash.containsValue(newContact)){
+            return getContactKey(newContact);
+        } else {
+            id = setIdForNewContact();
+            newContact.setId(id);
+            contactHash.putIfAbsent(id, newContact);
             removeLead(id);
+            return id;
         }
+    }
+
+    private int getContactKey(Contact newContact) {
+        for (Map.Entry<Integer, Contact> entry: contactHash.entrySet()){
+            if (newContact.equals(entry.getValue())){
+                return entry.getKey();
+            }
+        }
+        return -1;
     }
 
     // ==================== Adds new Opportunity to HashMap for Opportunities====================
     //count of elements in HashMap for Opportunities (plus checks if this number is not used)
-    public Integer setIdForNewOpportunity(Map<Integer, Opportunity> opportunityHash) {
-        Integer currentOpportunitySize = opportunityHash.size();
-        for (Integer idOpportunity : opportunityHash.keySet()) {
-            if (idOpportunity > currentOpportunitySize) {
-                currentOpportunitySize = idOpportunity;
-            }
-        }
-        return currentOpportunitySize;
-
+    public Integer setIdForNewOpportunity() {
+        setOpportunityId(getOpportunityId() + 1);
+        return getOpportunityId();
     }
 
     //first version from already created opportunity
@@ -278,7 +295,7 @@ public class JsonDatabaseUtility {
     //second version with creating new opportunity
     public Opportunity addOpportunity(Product product, int quantity, Contact decisionMaker) {
         Opportunity newOpportunity = new Opportunity(product, quantity, decisionMaker, Status.OPEN);
-        Integer id = setIdForNewOpportunity(opportunityHash) + 1;
+        Integer id = setIdForNewOpportunity();
         newOpportunity.setId(id);
         opportunityHash.putIfAbsent(id, newOpportunity);
         return newOpportunity;
@@ -286,15 +303,9 @@ public class JsonDatabaseUtility {
 
     // ==================== Adds new Account to HashMap for Accounts====================
     //count of elements in HashMap for Accounts (plus checks if this number is not used)
-    public Integer setIdForNewAccount(Map<Integer, Account> accountHash) {
-        Integer currentAccountSize = accountHash.size();
-        for (Integer idAccount : accountHash.keySet()) {
-            if (idAccount > currentAccountSize) {
-                currentAccountSize = idAccount;
-            }
-        }
-        return currentAccountSize;
-
+    public Integer setIdForNewAccount() {
+        setAccountId(getAccountId() + 1);
+        return getAccountId();
     }
 
     //first version from already created account
@@ -306,14 +317,14 @@ public class JsonDatabaseUtility {
     //second version with creating new account
     public void addAccount(Industry industry, int employeeCount, String city, String country, Contact contact, Opportunity opportunity) {
         Account newAccount = new Account(industry, employeeCount, city, country, contact, opportunity);
-        Integer id = setIdForNewAccount(accountHash) + 1;
+        Integer id = setIdForNewAccount();
         newAccount.setId(id);
         accountHash.putIfAbsent(id, newAccount);
     }
 
     // ==================== Converts Lead -> calls: addOpportunity, addAccount, addContact, removeLead====================
     public void convertLead(Integer id, Product product, int quantity, Industry industry, int employeeCount, String city, String country) {
-        addContact(id);
+        id = addContact(id);
         Contact decisionMaker = contactHash.get(id);
         Opportunity newOpportunity = addOpportunity(product, quantity, decisionMaker);
         addAccount(industry, employeeCount, city, country, decisionMaker, newOpportunity);
@@ -359,6 +370,11 @@ public class JsonDatabaseUtility {
         if (o == null || getClass() != o.getClass()) return false;
         JsonDatabaseUtility that = (JsonDatabaseUtility) o;
         return Objects.equals(opportunityId, that.opportunityId) && Objects.equals(accountId, that.accountId) && Objects.equals(leadHash, that.leadHash) && Objects.equals(contactHash, that.contactHash) && Objects.equals(opportunityHash, that.opportunityHash) && Objects.equals(accountHash, that.accountHash);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(opportunityId, accountId, leadHash, contactHash, opportunityHash, accountHash);
     }
 }
 
