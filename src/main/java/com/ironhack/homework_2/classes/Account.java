@@ -3,6 +3,7 @@ package com.ironhack.homework_2.classes;
 import com.ironhack.homework_2.enums.Industry;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 public class Account {
@@ -88,7 +89,7 @@ public class Account {
     @Override
     public String toString() {
         return "Id: " + id + ", Industry: " + industry + ", Number of Employees: " + employeeCount + ", City: " + city +
-            ", Country: " + country + ", Contacts: " + contactList.get(0).getName() + ", Opportunities: " + opportunityList.get(0).getProduct();
+            ", Country: " + country + ", Number of contacts: " + contactList.size() + ", Number of opportunities: " + opportunityList.size();
     }
 
     @Override
@@ -104,5 +105,22 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(industry, employeeCount, city, country, contactList, opportunityList);
+    }
+
+    public boolean hasNullValues(){
+        if (getIndustry() == null || getCity() == null || getCountry() == null || getContactList() == null || getOpportunityList() == null){
+            return true;
+        }
+        for (Opportunity opportunity : getOpportunityList()){
+            if (opportunity.hasNullValues()){
+                return true;
+            }
+        }
+        for (Contact contact : getContactList()){
+            if (contact.hasNullValues()){
+                return true;
+            }
+        }
+        return false;
     }
 }

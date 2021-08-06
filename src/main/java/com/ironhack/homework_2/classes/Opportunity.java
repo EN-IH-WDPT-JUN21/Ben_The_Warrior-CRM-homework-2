@@ -81,4 +81,8 @@ public class Opportunity {
     public int hashCode() {
         return Objects.hash(product, quantity, decisionMaker, status);
     }
+
+    public boolean hasNullValues(){
+        return getProduct() == null || getStatus() == null || getDecisionMaker().hasNullValues();
+    }
 }

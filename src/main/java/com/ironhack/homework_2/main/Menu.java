@@ -8,6 +8,7 @@ import com.ironhack.homework_2.enums.Industry;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
 import com.ironhack.homework_2.utils.JsonDatabaseUtility;
+import com.ironhack.homework_2.utils.Printer;
 import com.ironhack.homework_2.utils.PrinterMenu;
 
 import java.io.FileNotFoundException;
@@ -251,7 +252,8 @@ public class Menu {
         listListLead.add(new ArrayList<>());
         Set<Map.Entry<Integer, Lead>> entryLeadSet = leadTreeMap.entrySet();
         for (Map.Entry<Integer, Lead> entry : entryLeadSet) {
-            if (currentIndex++ < maxElements) {
+            if ((currentIndex + Printer.numberOfTextRows(entry.getValue().toString())) < maxElements) {
+                currentIndex += PrinterMenu.numberOfTextRows(entry.getValue().toString());
                 listListLead.get(currentPage).add(entry.getValue());
             } else {
                 listListLead.add(new ArrayList<>());
@@ -652,6 +654,7 @@ public class Menu {
         String name = promptString("name");
         PrinterMenu.printMenu("lead", "name", name);
         String phoneNumber = promptString("phone");
+        phoneNumber = phoneNumber.replaceAll(" ", "");
         PrinterMenu.printMenu("lead", "phone", phoneNumber);
         String email = promptString("email");
         PrinterMenu.printMenu("lead", "email", email);

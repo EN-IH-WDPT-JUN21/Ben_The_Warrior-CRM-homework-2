@@ -278,9 +278,12 @@ public class PrinterMenu extends Printer {
             setMenuLines(HIGHLIGHT_COLOR + "Available Leads" + HIGHLIGHT_COLOR, 4);
         }
         int initialLine = 6;
+        StringBuilder leadString = new StringBuilder("");
         for (Lead lead : leads) {
-            setMenuLines(lead.toString(), initialLine++);
+            leadString.append(lead.toString()).append("\n");
         }
+        setLinesFromConcatString(leadString.toString(), initialLine);
+
         if (firstPage && lastPage) {
             setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu", 20);
         } else if (firstPage) {
@@ -305,9 +308,11 @@ public class PrinterMenu extends Printer {
             setMenuLines(HIGHLIGHT_COLOR + "Available Opportunities" + HIGHLIGHT_COLOR, 4);
         }
         int initialLine = 6;
+        StringBuilder opportunityString = new StringBuilder("");
         for (Opportunity opportunity : opportunities) {
-            setMenuLines(opportunity.toString(), initialLine++);
+            opportunityString.append(opportunity.toString()).append("\n");
         }
+        setLinesFromConcatString(opportunityString.toString(), initialLine);
         if (firstPage && lastPage) {
             setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + (fromAccount ? "- return to Account" : "- return to the main menu"), 20);
         } else if (firstPage) {
@@ -332,9 +337,11 @@ public class PrinterMenu extends Printer {
             setMenuLines(HIGHLIGHT_COLOR + "Available Contacts" + HIGHLIGHT_COLOR, 4);
         }
         int initialLine = 6;
+        StringBuilder contactString = new StringBuilder("");
         for (Contact contact : contacts) {
-            setMenuLines(contact.toString(), initialLine++);
+            contactString.append(contact.toString()).append("\n");
         }
+        setLinesFromConcatString(contactString.toString(), initialLine);
         if (firstPage && lastPage) {
             setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + (fromAccount ? "- return to Account" : "- return to the main menu"), 20);
         } else if (firstPage) {
@@ -358,10 +365,13 @@ public class PrinterMenu extends Printer {
         } else {
             setMenuLines(HIGHLIGHT_COLOR + "Available Accounts" + HIGHLIGHT_COLOR, 4);
         }
+
         int initialLine = 6;
+        StringBuilder accountString = new StringBuilder("");
         for (Account account : accounts) {
-            setMenuLines(account.toString(), initialLine++);
+            accountString.append(account.toString()).append("\n");
         }
+        setLinesFromConcatString(accountString.toString(), initialLine);
         if (firstPage && lastPage) {
             setMenuLines(HIGHLIGHT_COLOR + "ENTER " + ANSI_RESET + "- return to the main menu", 20);
         } else if (firstPage) {
@@ -377,6 +387,19 @@ public class PrinterMenu extends Printer {
         }
         PrinterMenu.printMenu("");
     }
+
+    public static void setLinesFromConcatString(String str, int index){
+        String[] stringArr = str.split("\n");
+        for (String singleString : stringArr){
+            String[] dividedString = divideText(singleString);
+            setMenuLines(dividedString[0], index++);
+            while (!dividedString[1].equals("")){
+                dividedString = divideText(dividedString[1]);
+                setMenuLines(dividedString[0], index++);
+            }
+        }
+    }
+
     // Set the warning
     public static void setWarning(String message) {
         setMenuLines(ANSI_BRIGHT_RED + message + ANSI_RESET, ERROR_LINE);

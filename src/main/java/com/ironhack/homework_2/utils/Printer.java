@@ -223,6 +223,10 @@ public class Printer {
         return count;
     }
 
+    public static int numberOfTextRows(String text){
+        return numberOfTextRows(text, PROGRAM_WIDTH - 2 * BORDER_WIDTH);
+    }
+
     // Divides text to fill empty spaces. Returns [0] split string, and [1] remaining string.
     public static String[] divideText(String text, int emptySpaces) {
         if (text.trim().length() <= emptySpaces)    // If input size fits program with returns input.
@@ -244,6 +248,10 @@ public class Printer {
         }
         return new String[]{text, ""}; // Only used to have a return. Never used.
     }   // Note: For it to work with the print method and color mapping this method will always count the space after a word.
+
+    public static String[] divideText(String text){
+        return divideText(text, PROGRAM_WIDTH - 2 * BORDER_WIDTH);
+    }
 
     // Saves and returns all color codes and their indexes in a string.
     public static TreeMap<Integer, String> getColorCodes(String textString) {

@@ -20,14 +20,14 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class JsonDatabaseUtility {
-    private Integer leadId;
-    private Integer contactId;
-    private Integer opportunityId;
-    private Integer accountId;
-    private Map<Integer, Lead> leadHash;
-    private Map<Integer, Contact> contactHash;
-    private Map<Integer, Opportunity> opportunityHash;
-    private Map<Integer, Account> accountHash;
+    private Integer leadId = 0;
+    private Integer contactId = 0;
+    private Integer opportunityId = 0;
+    private Integer accountId = 0;
+    private final Map<Integer, Lead> leadHash;
+    private final Map<Integer, Contact> contactHash;
+    private final Map<Integer, Opportunity> opportunityHash;
+    private final Map<Integer, Account> accountHash;
     private transient final String DATABASE_DIRECTORY;
 
     // ========== CONSTRUCTORS ==========
@@ -37,10 +37,6 @@ public class JsonDatabaseUtility {
         contactHash = new HashMap<>();
         opportunityHash = new HashMap<>();
         accountHash = new HashMap<>();
-        setLeadId(0);
-        setContactId(0);
-        setOpportunityId(0);
-        setAccountId(0);
     }
 
     public JsonDatabaseUtility(String database) {
@@ -61,7 +57,13 @@ public class JsonDatabaseUtility {
     }
 
     public void setLeadHash(Map<Integer, Lead> leadHash) {
-        this.leadHash = leadHash;
+        TreeMap<Integer, Lead> leadTreeMap = new TreeMap<>(leadHash);
+        for (Map.Entry<Integer, Lead> entry: leadTreeMap.entrySet()){
+            if (!this.leadHash.containsValue(entry.getValue()) && !entry.getValue().hasNullValues()){
+                this.leadHash.put(entry.getKey(), entry.getValue());
+                setLeadId(entry.getKey());
+            }
+        }
     }
 
     public Map<Integer, Contact> getContactHash() {
@@ -69,7 +71,14 @@ public class JsonDatabaseUtility {
     }
 
     public void setContactHash(Map<Integer, Contact> contactHash) {
-        this.contactHash = contactHash;
+        TreeMap<Integer, Contact> contactTreeMap = new TreeMap<>(contactHash);
+        for (Map.Entry<Integer, Contact> entry: contactTreeMap.entrySet()){
+            if (!this.contactHash.containsValue(entry.getValue()) && !entry.getValue().hasNullValues()){
+                this.contactHash.put(entry.getKey(), entry.getValue());
+                setLeadId(entry.getKey());
+                setContactId(entry.getKey());
+            }
+        }
     }
 
     public Map<Integer, Opportunity> getOpportunityHash() {
@@ -77,7 +86,13 @@ public class JsonDatabaseUtility {
     }
 
     public void setOpportunityHash(Map<Integer, Opportunity> opportunityHash) {
-        this.opportunityHash = opportunityHash;
+        TreeMap<Integer, Opportunity> opportunityTreeMap = new TreeMap<>(opportunityHash);
+        for (Map.Entry<Integer, Opportunity> entry: opportunityTreeMap.entrySet()){
+            if (!this.opportunityHash.containsValue(entry.getValue()) && !entry.getValue().hasNullValues()){
+                this.opportunityHash.put(entry.getKey(), entry.getValue());
+                setOpportunityId(entry.getKey());
+            }
+        }
     }
 
     public Map<Integer, Account> getAccountHash() {
@@ -85,7 +100,13 @@ public class JsonDatabaseUtility {
     }
 
     public void setAccountHash(Map<Integer, Account> accountHash) {
-        this.accountHash = accountHash;
+        TreeMap<Integer, Account> accountTreeMap = new TreeMap<>(accountHash);
+        for (Map.Entry<Integer, Account> entry: accountTreeMap.entrySet()){
+            if (!this.accountHash.containsValue(entry.getValue()) && !entry.getValue().hasNullValues()){
+                this.accountHash.put(entry.getKey(), entry.getValue());
+                setAccountId(entry.getKey());
+            }
+        }
     }
 
     public String getDATABASE_DIRECTORY() {
@@ -97,7 +118,9 @@ public class JsonDatabaseUtility {
     }
 
     public void setLeadId(Integer leadId) {
-        this.leadId = leadId;
+        if (leadId > getLeadId()){
+            this.leadId = leadId;
+        }
     }
 
     public Integer getContactId() {
@@ -105,7 +128,9 @@ public class JsonDatabaseUtility {
     }
 
     public void setContactId(Integer contactId) {
-        this.contactId = contactId;
+        if (contactId > getContactId()){
+            this.contactId = contactId;
+        }
     }
 
     public Integer getOpportunityId() {
@@ -113,7 +138,9 @@ public class JsonDatabaseUtility {
     }
 
     public void setOpportunityId(Integer opportunityId) {
-        this.opportunityId = opportunityId;
+        if (opportunityId > getOpportunityId()){
+            this.opportunityId = opportunityId;
+        }
     }
 
     public Integer getAccountId() {
@@ -121,7 +148,9 @@ public class JsonDatabaseUtility {
     }
 
     public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
+        if (accountId > getAccountId()){
+            this.accountId = accountId;
+        }
     }
 
     // ==================== Save Methods for Leads, Contacts, Opportunities and Accounts class into a Json files ====================
@@ -150,7 +179,9 @@ public class JsonDatabaseUtility {
             jsonDatabaseUtility = gson.fromJson(jsonData, JsonDatabaseUtility.class);
             reader.close();
         }catch (IOException e){
-            throw new IOException("Database could not be loaded! Empty database created!");
+            throw new IOException("Database could not be loaded! New database created!");
+        }catch (NumberFormatException e){
+            throw new NumberFormatException("Database corrupted! New database created!");
         }
 
         try{
@@ -163,7 +194,7 @@ public class JsonDatabaseUtility {
             setOpportunityId(jsonDatabaseUtility.getOpportunityId());
             setAccountId(jsonDatabaseUtility.getAccountId());
         } catch (NullPointerException e){
-            throw new NullPointerException("Database file is empty. New database was created!");
+            throw new NullPointerException("Database file is empty. New database created!");
         }
     }
 
@@ -243,7 +274,7 @@ public class JsonDatabaseUtility {
     //Increments Contact's id counter and returns the new id
     public Integer setIdForNewContact() {
         setContactId(getContactId() + 1);
-        return getAccountId();
+        return getContactId();
     }
 
     //first version from already created contact
@@ -259,19 +290,20 @@ public class JsonDatabaseUtility {
             leadToConvert.getPhoneNumber(),
             leadToConvert.getEmail(),
             leadToConvert.getCompanyName());
+        removeLead(id);
         if (contactHash.containsValue(newContact)){
             return getContactKey(newContact);
         } else {
             id = setIdForNewContact();
             newContact.setId(id);
             contactHash.putIfAbsent(id, newContact);
-            removeLead(id);
             return id;
         }
     }
 
     private int getContactKey(Contact newContact) {
-        for (Map.Entry<Integer, Contact> entry: contactHash.entrySet()){
+        TreeMap<Integer, Contact> contactTreeMap = new TreeMap<>(contactHash);
+        for (Map.Entry<Integer, Contact> entry: contactTreeMap.entrySet()){
             if (newContact.equals(entry.getValue())){
                 return entry.getKey();
             }
@@ -328,7 +360,6 @@ public class JsonDatabaseUtility {
         Contact decisionMaker = contactHash.get(id);
         Opportunity newOpportunity = addOpportunity(product, quantity, decisionMaker);
         addAccount(industry, employeeCount, city, country, decisionMaker, newOpportunity);
-//        removeLead(id);
     }
 
     // Method to check if a lead exists with a specific id

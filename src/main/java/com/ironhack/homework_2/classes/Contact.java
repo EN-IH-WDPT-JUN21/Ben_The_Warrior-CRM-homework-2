@@ -77,4 +77,8 @@ public class Contact {
     public int hashCode() {
         return Objects.hash(name, phoneNumber, email, companyName);
     }
+
+    public boolean hasNullValues(){
+        return getName() == null || getPhoneNumber() == null || getEmail() == null || getCompanyName() == null;
+    }
 }
