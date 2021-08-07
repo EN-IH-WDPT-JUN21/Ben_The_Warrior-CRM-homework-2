@@ -1,5 +1,7 @@
 package com.ironhack.homework_2.classes;
 
+import java.util.Objects;
+
 public class Contact {
     private Integer id;
     private String name;
@@ -60,5 +62,23 @@ public class Contact {
     @Override
     public String toString() {
         return "Id: " + id + ", Name: " + name + ", Email: " + email + ", Phone: " + phoneNumber + ", Company: " + companyName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(name, contact.name) && Objects.equals(phoneNumber, contact.phoneNumber) &&
+                Objects.equals(email, contact.email) && Objects.equals(companyName, contact.companyName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, phoneNumber, email, companyName);
+    }
+
+    public boolean hasNullValues(){
+        return getName() == null || getPhoneNumber() == null || getEmail() == null || getCompanyName() == null;
     }
 }

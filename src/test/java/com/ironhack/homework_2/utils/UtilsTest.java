@@ -1,3 +1,4 @@
+
 package com.ironhack.homework_2.utils;
 
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +26,7 @@ class UtilsTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"new lead", "show leads", "lookup lead 10", "convert 20", "close-won 30", "close-lost 1",
-        "help", "exit"})
+            "help", "exit"})
     @DisplayName("Valid commands identified")
     void isValidCommand_ValidCommand_True(String command) {
         assertTrue(Utils.isValidCommand(command));
@@ -92,11 +93,11 @@ class UtilsTest {
     @ValueSource(strings = {"London", "Ashby-de-la-Zouch", "King's Norton", "Provence-Alpes-Côte d'Azur",
             "Sauðárkrókur", "Übach-Palenberg"})
     @DisplayName("Valid Address identified")
-    void isValidString_True(String address) {assertTrue(Utils.validString(address));}
+    void isValidString_True(String address) {assertTrue(Utils.validLocation(address));}
 
     @ParameterizedTest
     @ValueSource(strings = {"", "//", "london", "London2", "Somewhere?",
             "Anywhere-", "übach-Palenberg"})
     @DisplayName("Invalid Address identified")
-    void isValidString_False(String address) {assertFalse(Utils.validString(address));}
+    void isValidString_False(String address) {assertFalse(Utils.validLocation(address));}
 }

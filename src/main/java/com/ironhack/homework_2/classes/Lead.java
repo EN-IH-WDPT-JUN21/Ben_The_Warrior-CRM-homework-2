@@ -1,5 +1,7 @@
 package com.ironhack.homework_2.classes;
 
+import java.util.Objects;
+
 public class Lead {
     private Integer id;
     private String name;
@@ -60,5 +62,23 @@ public class Lead {
     @Override
     public String toString() {
         return "Id: " + id + ", Name: " + name + ", Email: " + email + ", Phone: " + phoneNumber + ", Company: " + companyName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lead lead = (Lead) o;
+        return Objects.equals(name, lead.name) && Objects.equals(phoneNumber, lead.phoneNumber) &&
+                Objects.equals(email, lead.email) && Objects.equals(companyName, lead.companyName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, phoneNumber, email, companyName);
+    }
+
+    public boolean hasNullValues(){
+        return getName() == null || getPhoneNumber() == null || getEmail() == null || getCompanyName() == null;
     }
 }

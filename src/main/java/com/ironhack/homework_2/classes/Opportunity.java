@@ -3,6 +3,8 @@ package com.ironhack.homework_2.classes;
 import com.ironhack.homework_2.enums.Product;
 import com.ironhack.homework_2.enums.Status;
 
+import java.util.Objects;
+
 public class Opportunity {
     private Integer id;
     private Product product;
@@ -66,4 +68,21 @@ public class Opportunity {
             decisionMaker.getName() + ", Status: " + status;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Opportunity that = (Opportunity) o;
+        return quantity == that.quantity && product == that.product &&
+                Objects.equals(decisionMaker, that.decisionMaker) && status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(product, quantity, decisionMaker, status);
+    }
+
+    public boolean hasNullValues(){
+        return getProduct() == null || getStatus() == null || getDecisionMaker().hasNullValues();
+    }
 }
