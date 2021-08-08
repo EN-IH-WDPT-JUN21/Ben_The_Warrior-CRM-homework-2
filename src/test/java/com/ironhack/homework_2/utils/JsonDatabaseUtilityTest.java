@@ -106,7 +106,6 @@ class JsonDatabaseUtilityTest {
     void showLeadsTest() {
         jsonDatabaseUtility.addLead("John", "505-098-654", "john@gmail.com", "Xerox");
         jsonDatabaseUtility.addLead("Sara", "505-100-654", "sara@gmail.com", "Dell");
-        jsonDatabaseUtility.showLeads();
 
     }
 

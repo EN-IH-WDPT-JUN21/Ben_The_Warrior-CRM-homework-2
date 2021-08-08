@@ -11,7 +11,6 @@ import com.ironhack.homework_2.utils.JsonDatabaseUtility;
 import com.ironhack.homework_2.utils.Printer;
 import com.ironhack.homework_2.utils.PrinterMenu;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -74,7 +73,7 @@ public class Menu {
             }
             // get a user input, if it is valid compute the command otherwise print a warning message
             input = scanner.nextLine();
-            if (isValidCommand(input)) {
+            if (validCommand(input)) {
                 PrinterMenu.clearWarning();
                 running = computeCommand(input);
             } else {

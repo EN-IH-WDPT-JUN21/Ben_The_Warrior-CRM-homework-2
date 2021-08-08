@@ -205,12 +205,6 @@ public class JsonDatabaseUtility {
         return getLeadId();
     }
 
-    //first version from already created lead
-    public void addLead(Lead lead) {
-        Integer id = lead.getId();
-        leadHash.putIfAbsent(id, lead);
-    }
-
     //second version with creating new lead
     public void addLead(String name, String phoneNumber, String email, String companyName) {
         Lead newLead = new Lead(name, phoneNumber, email, companyName);
@@ -226,17 +220,6 @@ public class JsonDatabaseUtility {
         leadHash.remove(id);
     }
 
-    // ====================  List of all Leads’ id and name ====================
-    public void showLeads() {
-        if (leadHash.size() > 0) {
-            Printer.print("List of all Leads’ id and name");
-            for (Lead lead : leadHash.values()) {
-                Printer.print("id: " + lead.getId() + ", name: " + lead.getName());
-            }
-        } else {
-            Printer.print("List of Leads is empty");
-        }
-    }
     // Search a lead from id. If it doesn't exist throw exception
     public Lead lookupLeadId(Integer id) {
         if (!hasLead(id)) {
@@ -277,12 +260,6 @@ public class JsonDatabaseUtility {
         return getContactId();
     }
 
-    //first version from already created contact
-    public void addContact(Contact contact) {
-        Integer id = contact.getId();
-        contactHash.putIfAbsent(id, contact);
-    }
-
     //second version with creating new contact (from lead)
     public int addContact(Integer id) {
         Lead leadToConvert = leadHash.get(id);
@@ -301,6 +278,7 @@ public class JsonDatabaseUtility {
         }
     }
 
+    // Get key from contactHash containing a specific Contact
     private int getContactKey(Contact newContact) {
         TreeMap<Integer, Contact> contactTreeMap = new TreeMap<>(contactHash);
         for (Map.Entry<Integer, Contact> entry: contactTreeMap.entrySet()){
@@ -318,12 +296,6 @@ public class JsonDatabaseUtility {
         return getOpportunityId();
     }
 
-    //first version from already created opportunity
-    public void addOpportunity(Opportunity opportunity) {
-        Integer id = opportunity.getId();
-        opportunityHash.putIfAbsent(id, opportunity);
-    }
-
     //second version with creating new opportunity
     public Opportunity addOpportunity(Product product, int quantity, Contact decisionMaker) {
         Opportunity newOpportunity = new Opportunity(product, quantity, decisionMaker, Status.OPEN);
@@ -338,12 +310,6 @@ public class JsonDatabaseUtility {
     public Integer setIdForNewAccount() {
         setAccountId(getAccountId() + 1);
         return getAccountId();
-    }
-
-    //first version from already created account
-    public void addAccount(Account account) {
-        Integer id = account.getId();
-        accountHash.put(id, account);
     }
 
     //second version with creating new account

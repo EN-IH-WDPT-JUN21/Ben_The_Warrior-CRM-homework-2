@@ -29,14 +29,14 @@ class UtilsTest {
             "help", "exit"})
     @DisplayName("Valid commands identified")
     void isValidCommand_ValidCommand_True(String command) {
-        assertTrue(Utils.isValidCommand(command));
+        assertTrue(Utils.validCommand(command));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"new lead blah", "", "convert x", "close won 1", "show"})
     @DisplayName("Invalid commands identified")
     void isValidCommand_InvalidCommand_False(String command) {
-        assertFalse(Utils.isValidCommand(command));
+        assertFalse(Utils.validCommand(command));
     }
 
     @ParameterizedTest

@@ -58,7 +58,7 @@ public class Utils {
 
 
     // Check for the command syntax in terms of number of parameters and validity of parameters
-    public static boolean isValidCommand(String command) {
+    public static boolean validCommand(String command) {
 
         String[] commandWords = command.trim().toLowerCase().split(" ");
         if (commandWords.length > 1) {
