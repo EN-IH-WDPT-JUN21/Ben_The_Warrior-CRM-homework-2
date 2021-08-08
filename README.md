@@ -34,7 +34,7 @@ Run the Main.java file on the path:
 
 ## Introduction
 
-Currently, companies seek to be able to keep their customers through a one-to-one relationship and thus be able to provide a better service and a shorter response time. In order to achieve this task, this project was born as a collaborative assignment work for the Ironhack bootcamp. This program called CRM (Customer Relationship Management) is aimed at improving the performance and relationship with customers of a company that sells trucks, the software allows you to keep track of all prospects, contacts, opportunities and accounts, through the visualization of the status of each of them. 
+Currently, companies seek to be able to deal with their customers on a one-to-one basis and thus be able to provide a better service with a shorter response time. In order to achieve this, this CRM (Customer Relationship Manager) was born as a collaborative assignment for the Ironhack bootcamp. This program aims to improve the relationship management with customers of a company that sells trucks. The software allows you to keep track of all prospects, contacts, opportunities and accounts; and update information about each database entry.
 
 ### Functions
 
@@ -46,7 +46,7 @@ Currently, companies seek to be able to keep their customers through a one-to-on
 
 ## Menu
 
-For a better experience, a Menu was implemented where interaction with the user is friendly. This Menu consists of a help section where all the possible actions provided by the program are shown. This Menu consists of a help section where all the possible actions provided by the program are shown. Once a CRM operation has been selected, the menu prompts you to enter information about the topic of interest. Once you have finished using the CRM, it gives you the option to exit the program and save the entered records.
+This Menu consists of an interpreter that listens and recognizes keywords that allow the user to create, update or delete data. It can also display information to help the user navigate the software. Once a CRM operation has been selected, the menu prompts you to enter information about the topic of interest. Once you have finished using the CRM, it gives you the option to exit the program and save the entered records.
 
 ### How to navigate the menu
 
