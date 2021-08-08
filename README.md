@@ -22,7 +22,9 @@
     6. [List all Leads, Opportunities, Accounts or Contacts](#List-all-Leads,-Opportunities,-Accounts-or-Contacts)
     7. [Save the changed data](#Save-the-changed-data)
     8. [Save and exit the program](#Save-and-exit-the-program)
-7. [**The Team**](#The-Team)
+7. [**Use Case Diagram**](#Use-Case-Diagram)
+8. [**Class Diagram**](#Class-Diagram)
+9. [**The Team**](#The-Team)
 
 ## Installation
 Download the project from the repository.
@@ -426,6 +428,14 @@ Please hit:
 * **exit** – to exit without saving
   
 and the program stops.
+
+## Use Case Diagram
+
+![Use Case Diagram](https://user-images.githubusercontent.com/84567251/128645874-090c8890-2091-489b-ba51-d1bf88a2222e.png)
+
+## Class Diagram
+
+![Class Diagram](https://user-images.githubusercontent.com/84567251/128645939-aa22a449-5c6f-498b-8fa5-702bc6e89c25.png)
 
 ## The Team
 
