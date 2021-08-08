@@ -4,11 +4,11 @@
 
 1. [**Installation**](#Installation)
 2. [**Introduction**](#Introduction)
-    1. [Overview of Features](#Overview-of-Features)
+    1. [Functions](#Functions)
 3. [**Menu**](#Menu)
     1. [How to navigate the menu](#How-to-navigate-the-menu)
-4. [**Party Management**](#Party-Management)
-    1. [Import Party](#Import-Party)
+4. [**Description of the CRM Components**](#Description-of-the-CRM-Components)
+    1. [Lead](#Lead)
 5. [**The Team**](#The-Team)
 
 ## Installation
@@ -50,7 +50,9 @@ Enter exit to close the application!
 - If the player wants to see the commands of the CRM, he must input: **help**.
 - If the player wants to exit the program, he must input: **exit**.
 
-## 
+## Description of the CRM Components
+
+### Lead
 
 ## The Team
 
