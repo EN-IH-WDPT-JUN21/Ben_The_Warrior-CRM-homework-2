@@ -12,6 +12,7 @@
     1. [Lead](#Lead)
     2. [Contact](#Contact)
     3. [Opportunity](#Opportunity)
+    4. [Account](#Account)
 6. [**Walkthrough CRM**](#Walkthrough-CRM)
     1. [Create New Lead](#Create-New-Lead)
     2. [Convert a Lead into an Opportunity](#Convert-a-Lead-into-an-Opportunity)
