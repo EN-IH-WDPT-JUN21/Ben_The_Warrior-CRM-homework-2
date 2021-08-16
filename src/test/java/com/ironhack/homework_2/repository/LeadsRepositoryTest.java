@@ -38,5 +38,7 @@ class LeadsRepositoryTest {
         leadsRepository.save(lead);
         leadsRepository.save(lead2);
         assertEquals(2, leadsRepository.findBySalesRep(howardRep).size());
+        System.out.print(howardRep.getName());
+        System.out.println(leadsRepository.findBySalesRep(howardRep).size());
     }
 }
